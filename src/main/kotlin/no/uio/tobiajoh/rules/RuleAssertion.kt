@@ -1,5 +1,6 @@
 package no.uio.tobiajoh.rules
 
+// one assertion as part of a derivation rule
 class RuleAssertion(
     private val relation: String,
     public val variables: Set<RuleVariable>) {

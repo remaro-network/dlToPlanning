@@ -9,7 +9,7 @@ class Main : CliktCommand() {
     override fun run() {
         val manager = OWLManager.createOWLOntologyManager()
 
-        val ont = manager.loadOntologyFromOntologyDocument(File("examples/example_no_Abox.ttl"))
+        val ont = manager.loadOntologyFromOntologyDocument(File("examples/firstDomain/example_no_Abox.ttl"))
 
         val translator = OntologyTranslator()
         translator.translateOWL(ont)
