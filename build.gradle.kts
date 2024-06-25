@@ -13,6 +13,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("net.sourceforge.owlapi:owlapi-distribution:5.5.0")
     implementation("org.slf4j:slf4j-nop:2.0.0-alpha1")
+    implementation("com.github.ajalt.clikt:clikt:4.3.0")
+
 }
 
 tasks.test {

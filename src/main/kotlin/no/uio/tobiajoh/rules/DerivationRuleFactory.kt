@@ -1,6 +1,7 @@
-package no.uio.tobiajoh
+package no.uio.tobiajoh.rules
 
 import org.semanticweb.owlapi.model.OWLAxiom
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom
 import org.semanticweb.owlapi.model.SWRLRule
 
 
@@ -8,6 +9,7 @@ class DerivationRuleFactory {
     fun derivationRule(axiom: OWLAxiom): DerivationRule? {
         return when (axiom) {
             is SWRLRule -> parseSWRLRule(axiom)
+            is OWLSubClassOfAxiom -> parseSubClassOfAxiom(axiom)
             else -> {
                 println("WARNING: can not parse axiom $axiom.")
                 null
@@ -46,7 +48,6 @@ class DerivationRuleFactory {
         }
 
 
-
         return DerivationRule(
             variables,
             head,
@@ -55,6 +56,33 @@ class DerivationRuleFactory {
         )
     }
 
+
+    private fun parseSubClassOfAxiom(axiom: OWLSubClassOfAxiom) : DerivationRule? {
+        // check if subclass axiom only refers to OWL classes and not complex class descriptions
+        if (!axiom.superClass.isOWLClass || ! axiom.subClass.isOWLClass) {
+            println("WARNING: complex subclass axioms are not supported yet. axiom: $axiom")
+            return null
+        }
+
+
+        val headClass = axiom.superClass.asOWLClass()
+        val conditionClass = axiom.subClass.asOWLClass()
+
+        // select arbitrary name for variable
+        val variable = RuleVariable("?x")
+        val variables: MutableSet<RuleVariable> = mutableSetOf(variable)
+
+        val head = RuleAssertionFactory().ruleAssertion(headClass, variable)
+        val condition = listOf(RuleAssertionFactory().ruleAssertion(conditionClass, variable))
+        val boundedVariables : Set<RuleVariable> = setOf()
+
+        return DerivationRule(
+            variables,
+            head,
+            condition,
+            boundedVariables
+        )
+    }
 
 
 }

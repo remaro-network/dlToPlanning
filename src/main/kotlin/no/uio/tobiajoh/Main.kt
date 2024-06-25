@@ -1,16 +1,21 @@
 package no.uio.tobiajoh
 
 import org.semanticweb.owlapi.apibinding.OWLManager
+import com.github.ajalt.clikt.core.CliktCommand
 import java.io.File
 
+class Main : CliktCommand() {
 
-fun main() {
-    val manager = OWLManager.createOWLOntologyManager()
+    override fun run() {
+        val manager = OWLManager.createOWLOntologyManager()
 
-    val ont = manager.loadOntologyFromOntologyDocument(File("examples/example_no_Abox.ttl"))
+        val ont = manager.loadOntologyFromOntologyDocument(File("examples/example_no_Abox.ttl"))
 
-    val translator = OntologyTranslator()
-    translator.translateOWL(ont)
+        val translator = OntologyTranslator()
+        translator.translateOWL(ont)
 
-    println("Hello World!")
+    }
 }
+
+
+fun main(args: Array<String>) = Main().main(args)
