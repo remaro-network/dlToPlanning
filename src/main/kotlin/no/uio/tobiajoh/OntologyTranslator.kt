@@ -22,8 +22,8 @@ class OntologyTranslator {
         for (a in ont.logicalAxioms())
             DerivationRuleFactory().derivationRule(a)?.let { rules.add(it) }
 
-        for (r in rules)
-            println(r.toPDDL())
+        //for (r in rules)
+       //     println(r.toPDDL())
 
         return rules.toSet()
     }

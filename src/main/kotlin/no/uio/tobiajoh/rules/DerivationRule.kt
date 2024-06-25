@@ -11,7 +11,7 @@ class DerivationRule(
     private val boundedVariables : Set<RuleVariable>) {
 
     // our condition is a list, as one can add more arguments in the future
-    private val condition =
+    private val condition : MutableList<List<RuleAssertion>> =
         if (singleCondition!=null)
             mutableListOf(singleCondition)
         else
@@ -44,6 +44,17 @@ class DerivationRule(
 
     fun addCondition(newCondition: List<RuleAssertion>) {
         condition.add(newCondition)
+    }
+
+    // the predicates used in this rule
+    fun usedPredicates() : Map<String, Int> {
+        val pred = head.usedPredicates().toMutableMap()
+        condition.forEach { disjunct ->
+            disjunct.forEach { assertion ->
+                pred += assertion.usedPredicates()
+            }
+        }
+        return pred
     }
 
     override fun toString(): String {

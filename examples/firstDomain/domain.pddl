@@ -6,7 +6,6 @@
         :existential-preconditions
         :disjunctive-preconditions
     )
-
     
     (:predicates
         (robot ?x)
@@ -14,10 +13,10 @@
         (available ?x)
         (function ?x)
         (functionalDesign ?x)
- (requiresThruster ?x)
+        (requiresThruster ?x)
         (robotPart ?x)
         (thruster ?x)
- (isAt ?r ?wp)
+        (isAt ?r ?wp)
         (hasPart ?r ?x)
         (solves ?fd ?f)
         (requires ?fd ?r)
@@ -28,7 +27,7 @@
         :precondition (and
             (robot ?auv)
             (function ?f)
-            (inferredAvailable ?f)
+            (inferred-Available ?f)
             (waypoint ?wp1)
             (waypoint ?wp2)
             (isAt ?auv ?wp1)

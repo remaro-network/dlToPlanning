@@ -76,6 +76,6 @@ class RuleAssertionFactory {
             else it.toString()
         }
 
-        return "inferred$capitalizedName"
+        return "inferred-$capitalizedName"
     }
 }
