@@ -1,0 +1,230 @@
+@prefix : <http://www.ifi.uio.no/tobiajoh/gustavoExample#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix example: <http://www.ifi.uio.no/tobiajoh/gustavoExample#> .
+@base <http://www.ifi.uio.no/tobiajoh/gustavoExample> .
+
+<http://www.ifi.uio.no/tobiajoh/gustavoExample> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled
+<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#hasPart
+example:hasPart rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf owl:topObjectProperty ;
+                rdfs:range example:RobotPart .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#requires
+example:requires rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdfs:range example:Requirement .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#solves
+example:solves rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               rdfs:domain example:FunctionalDesign ;
+               rdfs:range example:Function .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#AbstractThing
+example:AbstractThing rdf:type owl:Class ;
+                      owl:disjointWith example:ConcreteThing .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Available
+example:Available rdf:type owl:Class ;
+                  rdfs:subClassOf example:Status .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#ConcreteThing
+example:ConcreteThing rdf:type owl:Class .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Function
+example:Function rdf:type owl:Class ;
+                 rdfs:subClassOf example:AbstractThing .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#FunctionalDesign
+example:FunctionalDesign rdf:type owl:Class ;
+                         rdfs:subClassOf example:AbstractThing .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Requirement
+example:Requirement rdf:type owl:Class ;
+                    rdfs:subClassOf example:AbstractThing .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#RequiresThruster
+example:RequiresThruster rdf:type owl:Class ;
+                         rdfs:subClassOf example:Requirement .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Robot
+example:Robot rdf:type owl:Class ;
+              rdfs:subClassOf example:ConcreteThing ;
+              owl:disjointWith example:RobotPart .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#RobotPart
+example:RobotPart rdf:type owl:Class ;
+                  rdfs:subClassOf example:ConcreteThing .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Satisfied
+example:Satisfied rdf:type owl:Class ;
+                  rdfs:subClassOf example:Status .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Status
+example:Status rdf:type owl:Class ;
+               rdfs:subClassOf example:AbstractThing .
+
+
+###  http://www.ifi.uio.no/tobiajoh/gustavoExample#Thruster
+example:Thruster rdf:type owl:Class ;
+                 rdfs:subClassOf example:RobotPart .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( example:Function
+                example:FunctionalDesign
+                example:Requirement
+              )
+] .
+
+
+#################################################################
+#    Rules
+#################################################################
+
+<fd> rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+<r> rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+<f> rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+<rt> rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+<t> rdf:type <http://www.w3.org/2003/11/swrl#Variable> .
+
+[ <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "S2"^^xsd:string ;
+   rdf:type <http://www.w3.org/2003/11/swrl#Imp> ;
+   <http://www.w3.org/2003/11/swrl#body> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> example:RequiresThruster ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> <rt>
+                                                     ] ;
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#classPredicate> example:Robot ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> <r>
+                                                                ] ;
+                                                      rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                                 rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                             <http://www.w3.org/2003/11/swrl#propertyPredicate> example:hasPart ;
+                                                                             <http://www.w3.org/2003/11/swrl#argument1> <r> ;
+                                                                             <http://www.w3.org/2003/11/swrl#argument2> <t>
+                                                                           ] ;
+                                                                 rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                                                        <http://www.w3.org/2003/11/swrl#classPredicate> example:Thruster ;
+                                                                                        <http://www.w3.org/2003/11/swrl#argument1> <t>
+                                                                                      ] ;
+                                                                            rdf:rest rdf:nil
+                                                                          ]
+                                                               ]
+                                                    ]
+                                         ] ;
+   <http://www.w3.org/2003/11/swrl#head> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> example:Satisfied ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> <rt>
+                                                     ] ;
+                                           rdf:rest rdf:nil
+                                         ]
+ ] .
+
+[ <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "S1"^^xsd:string ;
+   rdf:type <http://www.w3.org/2003/11/swrl#Imp> ;
+   <http://www.w3.org/2003/11/swrl#body> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> example:FunctionalDesign ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> <fd>
+                                                     ] ;
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#classPredicate> example:Requirement ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> <r>
+                                                                ] ;
+                                                      rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                                 rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                                             <http://www.w3.org/2003/11/swrl#classPredicate> example:Satisfied ;
+                                                                             <http://www.w3.org/2003/11/swrl#argument1> <r>
+                                                                           ] ;
+                                                                 rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                                        <http://www.w3.org/2003/11/swrl#propertyPredicate> example:requires ;
+                                                                                        <http://www.w3.org/2003/11/swrl#argument1> <fd> ;
+                                                                                        <http://www.w3.org/2003/11/swrl#argument2> <r>
+                                                                                      ] ;
+                                                                            rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                                                       rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                                                                   <http://www.w3.org/2003/11/swrl#classPredicate> example:Function ;
+                                                                                                   <http://www.w3.org/2003/11/swrl#argument1> <f>
+                                                                                                 ] ;
+                                                                                       rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                                                                  rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
+                                                                                                              <http://www.w3.org/2003/11/swrl#propertyPredicate> example:solves ;
+                                                                                                              <http://www.w3.org/2003/11/swrl#argument1> <fd> ;
+                                                                                                              <http://www.w3.org/2003/11/swrl#argument2> <f>
+                                                                                                            ] ;
+                                                                                                  rdf:rest rdf:nil
+                                                                                                ]
+                                                                                     ]
+                                                                          ]
+                                                               ]
+                                                    ]
+                                         ] ;
+   <http://www.w3.org/2003/11/swrl#head> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                           rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#ClassAtom> ;
+                                                       <http://www.w3.org/2003/11/swrl#classPredicate> example:Available ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> <f>
+                                                     ] ;
+                                           rdf:rest rdf:nil
+                                         ]
+ ] .
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
