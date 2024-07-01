@@ -2,7 +2,7 @@ package no.uio.tobiajoh.rules
 
 
 
-class RuleVariable (private val name: String) {
+open class RuleVariable (private val name: String) {
     override fun toString(): String {
         return name
     }

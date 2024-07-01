@@ -71,7 +71,7 @@ class DerivationRuleFactory {
         for (element in rule.body){
             val newCondition = assertionFactory.inferredRuleAssertion(element)
             condition.add(newCondition)
-            newCondition.variables.forEach{ boundedVariables.add(it) }
+            newCondition.variables.forEach{ if (it !is RuleConstant) boundedVariables.add(it) }
         }
 
         // parse head
