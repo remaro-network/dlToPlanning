@@ -1,6 +1,7 @@
 package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.rules.DerivationRule
+import no.uio.tobiajoh.rules.RuleVariable
 import java.io.File
 import java.util.regex.Pattern
 
@@ -11,6 +12,7 @@ class SplitDomain(val domain : File) {
     // the file will be split in these four parts, which will be edited separately
     var beforePredicates : MutableList<String> = mutableListOf()
     var predicates : MutableList<String> = mutableListOf()
+    var declaredConstants : MutableList<String> = mutableListOf()
     var derivedRules : MutableList<String> = mutableListOf()
     var rest : MutableList<String> = mutableListOf()
 
@@ -57,6 +59,10 @@ class SplitDomain(val domain : File) {
 
     }
 
+    fun addConstants(constants : Set<RuleVariable>) {
+        constants.forEach { declaredConstants.add("$it")}
+    }
+
 
     // returns the predicate declarations that are necessary, because the derivation rules might contain
     // predicates that are not defined in planning domain so far
@@ -73,7 +79,7 @@ class SplitDomain(val domain : File) {
         val usedPredicatesNames = usedPredicates.keys.map { it.lowercase() }
         //println(usedPredicates)
         // predicates that need to be added
-        val neededPredicatesNames = usedPredicatesNames.minus(existingPredicates.toSet())
+        val neededPredicatesNames = usedPredicatesNames.minus(existingPredicates.toSet()).minus(setOf("="))
         val neededPredicates = usedPredicates.filterKeys { key ->
             val lowerKey = key.lowercase()
             neededPredicatesNames.contains(lowerKey)
@@ -100,6 +106,7 @@ class SplitDomain(val domain : File) {
          */
             out.writeText(
                 beforePredicates.joinToString("\n", "", "\n") +
+                declaredConstants.joinToString( " ", "\t(:constants ", ")\n\n")   +
                 predicates.joinToString("\n", "", "\n") +
                 derivedRules.joinToString("\n", "", "\n") +
                 rest.joinToString("\n", "", "\n")

@@ -1,7 +1,10 @@
 package no.uio.tobiajoh.rules
 
+import org.eclipse.jgit.lib.Constants
+import org.semanticweb.owlapi.model.DataRangeType
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLClass
+import org.semanticweb.owlapi.model.OWLDataProperty
 import org.semanticweb.owlapi.model.OWLNamedIndividual
 import org.semanticweb.owlapi.model.OWLObjectProperty
 import org.semanticweb.owlapi.model.SWRLAtom
@@ -19,13 +22,16 @@ class RuleAssertionFactory {
     fun inconsistentAssertion() : RuleAssertion {
         val relation = "inferredInconsistent"
         val variables: MutableSet<RuleVariable> = mutableSetOf()
-        return RuleAssertion(relation, variables)
+        val constants: Set<RuleConstant> = setOf()
+        return RuleAssertion(relation, variables, constants)
     }
 
     // creates rule assertion from swrlAtom
     // operates on lifted names for rules
     fun inferredRuleAssertion(ruleAtom : SWRLAtom) : RuleAssertion {
         val variables: MutableSet<RuleVariable> = mutableSetOf()
+        val constants: MutableSet<RuleConstant> = mutableSetOf()
+
 
         val predicate = ruleAtom.predicate
         // parse head
@@ -49,37 +55,52 @@ class RuleAssertionFactory {
                     RuleVariable(it.toString())
                 }
             }
-        }.forEach {
-            if (it != null)
-                variables.add( it )
+        }.forEach { variable ->
+            variables.add( variable )
+            if (variable is RuleConstant)
+                constants.add(variable)
         }
-        return RuleAssertion(relation, variables)
+        return RuleAssertion(relation, variables, constants)
     }
 
     // parses one data argument into a constant
+    // the string of the constant contains the original content as well as the data tyoe
     private fun parseSWRLLiteral(literalArgument: SWRLLiteralArgument) : RuleConstant {
         val literal = literalArgument.literal
-        return RuleConstant(literal.literal)
+        val dataType = literalArgument.literal.datatype
+        val typeName = dataType.iri.shortForm
+        return RuleConstant("${literal.literal}_${typeName}")
     }
 
-    // create an assertion for a class with the given variable
+
+
+
+    // create an assertion for an inferred class with the given variable
     fun inferredRuleAssertion(className : OWLClass, variable : RuleVariable) : RuleAssertion {
         val relation = inferredName(className.iri.shortForm)
-        return RuleAssertion(relation, mutableSetOf(variable))
+        return RuleAssertion(relation, mutableSetOf(variable), setOf())
     }
 
-    // create an assertion for a class with the given variable
+    // create an assertion for an inferred property with the given variable
     fun inferredRuleAssertion(predicateName : OWLObjectProperty,
                               variable1 : RuleVariable,
                               variable2 : RuleVariable) : RuleAssertion {
         val relation = inferredName(predicateName.iri.shortForm)
-        return RuleAssertion(relation, mutableSetOf(variable1, variable2))
+        return RuleAssertion(relation, mutableSetOf(variable1, variable2), setOf())
+    }
+
+    // create an assertion for an inferred property with the given variable
+    fun inferredRuleAssertion(predicateName : OWLDataProperty,
+                              variable1 : RuleVariable,
+                              variable2 : RuleVariable) : RuleAssertion {
+        val relation = inferredName(predicateName.iri.shortForm)
+        return RuleAssertion(relation, mutableSetOf(variable1, variable2), setOf())
     }
 
     // create an assertion for a class with the given variable
     fun ruleAssertion(className : OWLClass, variable : RuleVariable) : RuleAssertion {
         val relation = className.iri.shortForm
-        return RuleAssertion(relation, mutableSetOf(variable))
+        return RuleAssertion(relation, mutableSetOf(variable), setOf())
     }
 
     // create an assertion for a class with the given variable
@@ -87,7 +108,14 @@ class RuleAssertionFactory {
                       variable1 : RuleVariable,
                       variable2 : RuleVariable) : RuleAssertion {
         val relation = predicateName.iri.shortForm
-        return RuleAssertion(relation, mutableSetOf(variable1, variable2))
+        return RuleAssertion(relation, mutableSetOf(variable1, variable2), setOf())
+    }
+
+    // create an assertion for a generic relation with the given variable
+    fun ruleAssertion(relation : String,
+                      variable1 : RuleVariable,
+                      variable2 : RuleVariable) : RuleAssertion {
+        return RuleAssertion(relation, mutableSetOf(variable1, variable2), setOf())
     }
 
     private fun inferredName(name: String) : String {

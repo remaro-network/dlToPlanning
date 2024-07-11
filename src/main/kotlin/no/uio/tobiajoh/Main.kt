@@ -58,8 +58,12 @@ class Main : CliktCommand() {
         val translator = OntologyTranslator()
         val rules = translator.translateOWL(ont)
 
+        val usedConstants = rules.flatMap { it.usedConstants }.toSet()
+
         val rI = RuleInjector()
         rI.addRules(rules)
+        rI.addConstants(usedConstants)
+
         rI.addToDomain(
             inputPDDL,
             outputPDDL

@@ -1,5 +1,7 @@
 package no.uio.tobiajoh.rules
 
+import arrow.core.extensions.id.applicative.map
+import org.eclipse.jgit.lib.Constants
 import org.semanticweb.owlapi.model.*
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectPropertyImpl
@@ -22,7 +24,7 @@ class DerivationRule(
                 condition : List<RuleAssertion>) : this(
                     head,
                     condition,
-                    setOf()
+                    setOf(),
                 )
 
     // constructor with only one assertion in condition
@@ -30,7 +32,7 @@ class DerivationRule(
                 condition : RuleAssertion) : this(
         head,
         listOf(condition),
-        setOf()
+        setOf(),
     )
 
     // constructor with only one assertion in condition
@@ -39,8 +41,19 @@ class DerivationRule(
                 boundedVariables : Set<RuleVariable>) : this(
         head,
         listOf(condition),
-        boundedVariables
+        boundedVariables,
     )
+
+
+    // collects all constants used in the contained assertions
+    val usedConstants : Set<RuleConstant>
+        get() = condition.flatMap{ clause ->
+            clause.flatMap { it.constants }
+        }.toSet().union(usedHeadConstants)
+
+    val usedHeadConstants : Set<RuleConstant>
+        get() = head.constants
+
 
     fun addCondition(newCondition: List<RuleAssertion>) {
         condition.add(newCondition)
@@ -57,18 +70,32 @@ class DerivationRule(
         return pred
     }
 
+
     override fun toString(): String {
         return "$head <- ${condition.forEach { it.joinToString("&") + " | "}}"
     }
 
     // output PDDL syntax with initial tab indentation
     fun toPDDL(initialTabCount : Int) : String {
-        var tabCount = initialTabCount
-        var s = "${tabs(tabCount)}(:derived ${head.toPDDL()} \n"
-
-        // if there is no condition --> empty "or" --> always false --> no rule creatd
+        // if there is no condition --> empty "or" --> always false --> no rule created
         if (condition.size == 0)
             return ""
+
+        var tabCount = initialTabCount
+
+        // use in head version, where constants are turned into variables
+        var s = "${tabs(tabCount)}(:derived ${head.toPDDLAllVariables()} \n"
+
+
+        // input equality for head constants
+        if (usedHeadConstants.isNotEmpty()){
+            tabCount++
+            s += "${tabs(tabCount)}(and\n" +
+                    usedHeadConstants.joinToString(separator = "\n", postfix = "\n") { const ->
+                "${tabs(tabCount+1)}(= ${const.variableName()} $const)"
+            }
+        }
+
 
         // introduce existential operator, if necessary
         if (boundedVariables.isNotEmpty()) {
@@ -103,6 +130,12 @@ class DerivationRule(
             s += "${tabs(tabCount)})\n "
             tabCount--
         }
+
+        if (usedHeadConstants.isNotEmpty()){
+            s += "${tabs(tabCount)})\n "
+            tabCount--
+        }
+
         s += "${tabs(tabCount)})\n"
 
        return s
