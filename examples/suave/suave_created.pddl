@@ -17,6 +17,7 @@
 
 	(:constants IN_ERROR_NFR_string water_visibility IN_ERROR_COMPONENT_string IN_ERROR_FR_string FALSE_string false_boolean RECOVERED_string true_boolean INTERNAL_ERROR_string)
 
+
     (:predicates
         (pipeline_found ?p - pipeline)
         (pipeline_inspected ?p - pipeline)
@@ -238,7 +239,62 @@
  	)
 
 
-	(:derived (inferredInconsistent ) 
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-SolvesF ?x ?y)
+				(inferred-SolvesF ?x ?z)
+				(= ?y ?z)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-TypeFD ?x ?y)
+				(inferred-TypeFD ?x ?z)
+				(= ?y ?z)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-IsQAtype ?x ?y)
+				(inferred-IsQAtype ?x ?z)
+				(= ?y ?z)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-Binding_component ?x ?y)
+				(inferred-Binding_component ?x ?z)
+				(= ?y ?z)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-RoleDef ?x ?y)
+				(inferred-RoleDef ?x ?z)
+				(= ?y ?z)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
 		(exists (?x ?y ?z)
  			(and
 				(inferred-TypeF ?x ?y)
@@ -249,11 +305,11 @@
  	)
 
 
-	(:derived (inferredInconsistent ) 
+	(:derived (inferred-Inconsistent ) 
 		(exists (?x ?y ?z)
  			(and
-				(inferred-TypeFD ?x ?y)
-				(inferred-TypeFD ?x ?z)
+				(inferred-Binding_role ?x ?y)
+				(inferred-Binding_role ?x ?z)
 				(= ?y ?z)
 			)
 		)
@@ -291,6 +347,51 @@
 		(exists (?x)
  			(and
 				(inferred-Fd_error_log ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QAvalue ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-HasQAvalue ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-FunctionDesign ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-TypeFD ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Component ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-Binding_component ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QAvalue ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-HasNFR ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QualityAttributeType ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-IsQAtype ?x ?y)
 			)
 		)
  	)
@@ -566,10 +667,10 @@
  	)
 
 
-	(:derived (inferred-Objective ?x) 
+	(:derived (inferred-Binding ?x) 
 		(exists (?y)
  			(and
-				(inferred-TypeF ?x ?y)
+				(inferred-Binding_component ?x ?y)
 			)
 		)
  	)
@@ -672,10 +773,10 @@
 			(= ?IN_ERROR_COMPONENT_string IN_ERROR_COMPONENT_string)
 			(exists (?fg)
  				(and
+					(inferred-Objective ?o)
 					(inferred-FunctionGrounding ?fg)
 					(inferred-SolvesO ?fg ?o)
-					(inferred-Fg_status ?fg IN_ERROR_COMPONENT_string)
-					(inferred-Objective ?o)
+					(inferred-Fg_status ?fg IN_ERROR_FR_string)
 				)
 			)
  		)
@@ -828,7 +929,6 @@
       :parameters (?a - action ?p - pipeline ?r - robot ?f1 ?f2 ?fd1 ?fd2)
       :precondition (and
         (a_search_pipeline_requires_f ?a ?f1 ?f2)
-
         (Function ?f1)
         (Function ?f2)
         (FunctionDesign ?fd1)
