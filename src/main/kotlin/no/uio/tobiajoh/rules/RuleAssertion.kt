@@ -4,10 +4,15 @@ package no.uio.tobiajoh.rules
 // one assertion as part of a derivation rule
 class RuleAssertion(
     private val relation: String,
-    public val variables: Set<RuleVariable>,
-    public val constants: Set<RuleConstant>) {
+    public val variables: Set<RuleVariable>) {
 
     private var negated = false // flag that indicates if the assertion is negated or not
+
+    private val constants = variables.filterIsInstance<RuleConstant>().toSet()
+
+    // introduce getter whose name is in line with other classes
+    val usedConstants : Set<RuleConstant> get() = constants
+
     // return predicate with arity
     fun usedPredicates() : Map<String, Int> {
         return mapOf(Pair(relation, variables.size))

@@ -48,11 +48,11 @@ class DerivationRule(
     // collects all constants used in the contained assertions
     val usedConstants : Set<RuleConstant>
         get() = condition.flatMap{ clause ->
-            clause.flatMap { it.constants }
+            clause.flatMap { it.usedConstants }
         }.toSet().union(usedHeadConstants)
 
     val usedHeadConstants : Set<RuleConstant>
-        get() = head.constants
+        get() = head.usedConstants
 
 
     fun addCondition(newCondition: List<RuleAssertion>) {

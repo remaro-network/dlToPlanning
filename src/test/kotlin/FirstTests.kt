@@ -1,6 +1,6 @@
 import io.kotlintest.specs.StringSpec
 import no.uio.tobiajoh.OntologyTranslator
-import no.uio.tobiajoh.pddl.RuleInjector
+import no.uio.tobiajoh.pddl.PDDLInjector
 import org.semanticweb.owlapi.apibinding.OWLManager
 import java.io.File
 
@@ -16,9 +16,9 @@ class FirstTests : StringSpec() {
             val ont = manager.loadOntologyFromOntologyDocument(exampleOntology)
 
             val translator = OntologyTranslator()
-            val rules = translator.translateOWL(ont)
+            val rules = translator.extractRules(ont)
 
-            val rI = RuleInjector()
+            val rI = PDDLInjector()
             rI.addRules(rules)
             rI.addToDomain(
                 inputPDDL,

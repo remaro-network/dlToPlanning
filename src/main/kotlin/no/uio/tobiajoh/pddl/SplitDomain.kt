@@ -66,7 +66,7 @@ class SplitDomain(val domain : File) {
 
     // returns the predicate declarations that are necessary, because the derivation rules might contain
     // predicates that are not defined in planning domain so far
-    fun requiredPredicateDeclarations(rules: MutableSet<DerivationRule>) : List<String> {
+    private fun requiredPredicateDeclarations(rules: MutableSet<DerivationRule>) : List<String> {
         // add new predicates to list of predicates
         // we transform all predicates to lower case, as this is the standard notation
         // predicates already defined in domain
@@ -77,15 +77,14 @@ class SplitDomain(val domain : File) {
             usedPredicates += it.usedPredicates()
         }
         val usedPredicatesNames = usedPredicates.keys.map { it.lowercase() }
-        //println(usedPredicates)
+
         // predicates that need to be added
         val neededPredicatesNames = usedPredicatesNames.minus(existingPredicates.toSet()).minus(setOf("="))
         val neededPredicates = usedPredicates.filterKeys { key ->
             val lowerKey = key.lowercase()
             neededPredicatesNames.contains(lowerKey)
         }
-        //println(neededPredicatesNames)
-        //println(neededPredicates)
+
 
         return neededPredicates.map { predicate ->
             "(" + predicate.key + when(predicate.value) {
@@ -115,7 +114,7 @@ class SplitDomain(val domain : File) {
     }
 
     // returns a set containing all predicates
-    fun extractPredicates() : Set<String> {
+    private fun extractPredicates() : Set<String> {
         val pred : MutableSet<String> = mutableSetOf()
         for (p in predicates) {
             // add predicate, if it can be identified
@@ -129,7 +128,7 @@ class SplitDomain(val domain : File) {
 
         // pattern that matches the name of a predicate
         // assumption: only one predicate is defined per line!
-        val pattern = Pattern.compile("\\s+\\(([A-Za-z]+)\\s+.*\\)\\s*")
+        val pattern = Pattern.compile("\\s+\\(([A-Za-z_\\-]+)\\s+.*\\)\\s*")
 
         val matcher = pattern.matcher(line)
         if (matcher.find()) {
@@ -141,7 +140,7 @@ class SplitDomain(val domain : File) {
     }
 
     // count number of opening brackets vs. number of closing brackets
-    fun bracketCount(s : String) : Int {
+    private fun bracketCount(s : String) : Int {
         return s.count {it == '('} - s.count { it == ')'}
     }
 }
