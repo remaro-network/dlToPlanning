@@ -57,12 +57,12 @@ class Main : CliktCommand() {
 
         if (insertABox) {
             if (inputProblemFile == null || !inputProblemFile!!.exists()) {
-                println("ERROR: Please provide an existing input PDDL file.")
+                println("ERROR: Please provide an existing input PDDL problem file.")
                 return
             }
 
             if (outputProblemFile == null) {
-                println("ERROR: Please provide an output PDDL file.")
+                println("ERROR: Please provide an output PDDL problem file.")
                 return
             }
 
