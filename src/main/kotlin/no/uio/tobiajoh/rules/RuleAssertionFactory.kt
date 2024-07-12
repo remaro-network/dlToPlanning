@@ -20,7 +20,7 @@ import java.util.*
 class RuleAssertionFactory {
 
     fun inconsistentAssertion() : RuleAssertion {
-        val relation = "inferredInconsistent"
+        val relation = inferredName("Inconsistent")
         val variables: MutableSet<RuleVariable> = mutableSetOf()
         val constants: Set<RuleConstant> = setOf()
         return RuleAssertion(relation, variables, constants)
