@@ -180,23 +180,9 @@
 	)
 
 
-	(:derived (inferred-AbstractThing ?x) 
+	(:derived (inferred-Status ?x) 
 		(and
-			(inferred-FunctionalDesign ?x)
-		)
-	)
-
-
-	(:derived (inferred-ConcreteThing ?x) 
-		(and
-			(inferred-Robot ?x)
-		)
-	)
-
-
-	(:derived (inferred-ConcreteThing ?x) 
-		(and
-			(inferred-RobotPart ?x)
+			(inferred-Satisfied ?x)
 		)
 	)
 
@@ -208,13 +194,6 @@
 	)
 
 
-	(:derived (inferred-Status ?x) 
-		(and
-			(inferred-Available ?x)
-		)
-	)
-
-
 	(:derived (inferred-AbstractThing ?x) 
 		(and
 			(inferred-Status ?x)
@@ -222,16 +201,9 @@
 	)
 
 
-	(:derived (inferred-Status ?x) 
+	(:derived (inferred-ConcreteThing ?x) 
 		(and
-			(inferred-Satisfied ?x)
-		)
-	)
-
-
-	(:derived (inferred-AbstractThing ?x) 
-		(and
-			(inferred-Requirement ?x)
+			(inferred-Robot ?x)
 		)
 	)
 
@@ -246,6 +218,34 @@
 	(:derived (inferred-AbstractThing ?x) 
 		(and
 			(inferred-Function ?x)
+		)
+	)
+
+
+	(:derived (inferred-AbstractThing ?x) 
+		(and
+			(inferred-FunctionalDesign ?x)
+		)
+	)
+
+
+	(:derived (inferred-AbstractThing ?x) 
+		(and
+			(inferred-Requirement ?x)
+		)
+	)
+
+
+	(:derived (inferred-ConcreteThing ?x) 
+		(and
+			(inferred-RobotPart ?x)
+		)
+	)
+
+
+	(:derived (inferred-Status ?x) 
+		(and
+			(inferred-Available ?x)
 		)
 	)
 
