@@ -7,6 +7,7 @@ class RuleAssertion(
     public val variables: Set<RuleVariable>,
     public val constants: Set<RuleConstant>) {
 
+    private var negated = false // flag that indicates if the assertion is negated or not
     // return predicate with arity
     fun usedPredicates() : Map<String, Int> {
         return mapOf(Pair(relation, variables.size))
@@ -20,16 +21,28 @@ class RuleAssertion(
     }
 
     fun toPDDL() : String {
-        return "($relation ${variables.joinToString(" ")})"
+        return if (negated)
+                "(not ($relation ${variables.joinToString(" ")}))"
+            else
+                "($relation ${variables.joinToString(" ")})"
     }
 
     // produces PDDL representation, but constants also get turned into corresponding variables
     fun toPDDLAllVariables() : String {
-        return "($relation ${variables.joinToString(" ") {v ->
+        val vars = variables.joinToString(" ") {v ->
             if (v is RuleConstant)
                 v.variableName()
             else
                 v.toString()
-        }})"
+        }
+
+        return if (negated)
+                "(not ($relation $vars))"
+            else
+                "($relation $vars)"
+    }
+
+    fun negate() {
+        negated = !negated
     }
 }

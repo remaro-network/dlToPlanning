@@ -261,6 +261,7 @@ class DerivationRuleFactory {
         val conditionY = assertionFactory.inferredRuleAssertion(conditionProperty, variableX, variableY)
         val conditionZ = assertionFactory.inferredRuleAssertion(conditionProperty, variableX, variableZ)
         val distinct = assertionFactory.ruleAssertion("=", variableY, variableZ)
+        distinct.negate()
 
         // rule: two distinct variables that are in relation with ?x
         return DerivationRule(
