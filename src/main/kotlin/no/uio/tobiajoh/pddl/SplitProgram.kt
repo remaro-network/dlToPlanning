@@ -1,0 +1,130 @@
+package no.uio.tobiajoh.pddl
+
+import no.uio.tobiajoh.rules.RuleAssertion
+import no.uio.tobiajoh.rules.RuleConstant
+import java.io.File
+
+
+// class to represent split up program
+// parsing is very simple and based on an approach by ChatGPT, so be careful when using it
+class SplitProgram(val problem : File) {
+
+    var problemName = ""
+    var domain = ""
+    val objects = mutableMapOf<String, String>()
+    val initialCond = mutableListOf<String>()
+    val goal = mutableListOf<String>()
+
+    var section = ""
+
+    init {
+        problem.forEachLine{ line ->
+            val trimmedLine = line.trim().lowercase()
+
+            when {
+                trimmedLine.startsWith("(define") -> {
+                    problemName = trimmedLine.substringAfter("problem").trim().removeSuffix(")")
+                }
+
+                trimmedLine.startsWith("(:domain") -> {
+                    domain = trimmedLine.substringAfter("(:domain").trim().removeSuffix(")")
+                }
+
+                trimmedLine.startsWith("(:objects") -> {
+                    section = "objects"
+                }
+
+                trimmedLine.startsWith("(:init") -> {
+                    section = "init"
+                }
+
+                trimmedLine.startsWith("(:goal") -> {
+                    section = "goal"
+                }
+
+                trimmedLine == ")" -> {
+                    section = ""
+                }
+
+                section == "objects" -> {
+                    val parts = trimmedLine.split(" ")
+                    var currentType = "object"
+                    for (part in parts) {
+                        if (part == "-") continue
+                        if (part.startsWith("(") || part.endsWith(")")) {
+                            currentType = part.removePrefix("(").removeSuffix(")")
+                        } else if (parts.contains("-")) {
+                            val typeIndex = parts.indexOf("-")
+                            val objectParts = parts.subList(0, typeIndex)
+                            currentType = parts[typeIndex + 1]
+                            objectParts.forEach { obj ->
+                                objects[obj] = currentType
+                            }
+                            break
+                        } else {
+                            objects[part] = currentType
+                        }
+                    }
+                }
+
+                section == "init" -> {
+                    initialCond.add(trimmedLine)
+                }
+
+                section == "goal" -> {
+                    goal.add(trimmedLine.removePrefix("(and").removePrefix("(").removeSuffix(")"))
+                }
+            }
+        }
+    }
+
+    fun addInitialAssertions(assertions: Set<RuleAssertion>) {
+        initialCond.add("") // add empty line to make it easier to find generated assertions
+        assertions.forEach { initialCond.add(it.toPDDL()) }
+    }
+
+    fun addObjects(newObjects: Set<RuleConstant>) {
+        // add objects that are not already contained
+        newObjects.forEach { o ->
+            if (!objects.containsKey(o.toString()))
+                objects[o.toString()] = "object"
+        }
+    }
+
+    fun outputToFile(outFile: File) {
+        outFile.printWriter().use { out ->
+            out.println("(define (problem ${problemName})")
+            out.println("  (:domain ${domain})\n")
+
+            if (objects.isNotEmpty()) {
+                out.print("  (:objects \n")
+                objects.entries.groupBy { it.value }.forEach { (type, objs) ->
+                    out.print("    ")
+                    objs.forEach { (obj, _) ->
+                        out.print("$obj ")
+                    }
+                    out.print("- $type \n")
+                }
+                out.println(")\n")
+            }
+
+            if (initialCond.isNotEmpty()) {
+                out.println("  (:init")
+                initialCond.forEach {
+                    out.println("    $it")
+                }
+                out.println("  )\n")
+            }
+
+            if (goal.isNotEmpty()) {
+                out.println("  (:goal (and")
+                goal.forEach {
+                    out.println("    ($it)")
+                }
+                out.println("  ))")
+            }
+
+            out.println(")")
+        }
+    }
+}

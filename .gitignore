@@ -1,3 +1,6 @@
+sas_plan
+symk.sif
+catalog-*.xml
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar

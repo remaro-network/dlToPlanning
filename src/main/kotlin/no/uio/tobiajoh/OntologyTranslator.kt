@@ -2,29 +2,46 @@ package no.uio.tobiajoh
 
 import no.uio.tobiajoh.rules.DerivationRule
 import no.uio.tobiajoh.rules.DerivationRuleFactory
+import no.uio.tobiajoh.rules.RuleAssertion
+import no.uio.tobiajoh.rules.RuleAssertionFactory
 import org.semanticweb.owlapi.model.OWLOntology
 
 class OntologyTranslator {
     private val rules : MutableSet<DerivationRule> = mutableSetOf()
+    private val assertions : MutableSet<RuleAssertion> = mutableSetOf()
 
-    fun translateOWL(ont: OWLOntology) : Set<DerivationRule> {
+
+    fun addRules(ont: OWLOntology) : Set<DerivationRule> {
+
+        val ruleFactory = DerivationRuleFactory()
 
         // lift all class assertions
         for (c in ont.classesInSignature())
-            rules.add(DerivationRuleFactory().liftAssertion(c))
+            rules.add(ruleFactory.liftAssertion(c))
 
         // lift all class assertions
         for (p in ont.objectPropertiesInSignature)
-            rules.add(DerivationRuleFactory().liftAssertion(p))
+            rules.add(ruleFactory.liftAssertion(p))
 
 
         // translate TBox-axioms
         for (a in ont.logicalAxioms())
-            DerivationRuleFactory().derivationRule(a)?.let { rules.add(it) }
+            ruleFactory.derivationRule(a)?.let { rules.add(it) }
+
 
         //for (r in rules)
        //     println(r.toPDDL())
 
         return rules.toSet()
+    }
+
+    fun addAssertions(ont: OWLOntology, addDataProperties : Boolean) : Set<RuleAssertion> {
+
+        val assertionFactory = DerivationRuleFactory()
+
+        for (a in ont.logicalAxioms)
+            RuleAssertionFactory().parseOWLABoxAxiom(a, addDataProperties)?.let { assertions.add(it) }
+
+        return assertions.toSet()
     }
 }
