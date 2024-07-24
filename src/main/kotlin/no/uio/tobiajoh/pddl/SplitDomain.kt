@@ -44,8 +44,9 @@ class SplitDomain(val domain : File) {
     fun addRules(rules : MutableSet<DerivationRule>) {
         // add rules to derived rules
         derivedRules.add("\n")
-        for (r in rules)
-            derivedRules.add("${r.toPDDL(1)}\n")
+        val sortedPDDLRules = rules.map { it.toPDDL() }.sorted()
+        for (r in sortedPDDLRules)
+            derivedRules.add("$r\n")
 
         // compute necessary declarations and add all of them to the domain
         val declarations = requiredPredicateDeclarations(rules)
@@ -60,7 +61,8 @@ class SplitDomain(val domain : File) {
     }
 
     fun addConstants(constants : Set<RuleVariable>) {
-        constants.forEach { declaredConstants.add("$it")}
+        val sortedStringConstants = constants.map{ it.toString()}.sorted()
+        sortedStringConstants.forEach { declaredConstants.add(it)}
     }
 
 

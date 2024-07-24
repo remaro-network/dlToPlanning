@@ -80,14 +80,16 @@ class SplitProgram(val problem : File) {
 
     fun addInitialAssertions(assertions: Set<RuleAssertion>) {
         initialCond.add("") // add empty line to make it easier to find generated assertions
-        assertions.forEach { initialCond.add(it.toPDDL()) }
+        val sortedAssertions = assertions.map { it.toPDDL() }.sorted()
+        sortedAssertions.forEach { initialCond.add(it) }
     }
 
     fun addObjects(newObjects: Set<RuleConstant>) {
         // add objects that are not already contained
-        newObjects.forEach { o ->
-            if (!objects.containsKey(o.toString()))
-                objects[o.toString()] = "object"
+        val sortedObjects = newObjects.map { it.toString() }.sorted()
+        sortedObjects.forEach { o ->
+            if (!objects.containsKey(o))
+                objects[o] = "object"
         }
     }
 
