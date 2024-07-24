@@ -15,7 +15,7 @@
         action
     )
 
-	(:constants RECOVERED_string true_boolean IN_ERROR_COMPONENT_string FALSE_string false_boolean IN_ERROR_FR_string INTERNAL_ERROR_string IN_ERROR_NFR_string water_visibility)
+	(:constants RECOVERED_string true_boolean IN_ERROR_FR_string water_visibility IN_ERROR_NFR_string INTERNAL_ERROR_string IN_ERROR_COMPONENT_string FALSE_string false_boolean)
 
     (:predicates
         (pipeline_found ?p - pipeline)
@@ -63,16 +63,16 @@
 		(inferred-TypeFD ?x ?y)
 		(typeFD ?x ?y)
 		(inferred-Inconsistent)
-		(inferred-HasValue ?x ?y)
 		(inferred-Fg_status ?x ?y)
-		(inferred-Fd_efficacy ?x ?y)
-		(inferred-O_always_improve ?x ?y)
+		(inferred-Fd_realisability ?x ?y)
+		(inferred-C_status ?x ?y)
 		(inferred-Qa_comparison_operator ?x ?y)
 		(inferred-O_updatable ?x ?y)
 		(inferred-Qa_critical ?x ?y)
-		(inferred-Fd_realisability ?x ?y)
+		(inferred-O_always_improve ?x ?y)
 		(inferred-O_status ?x ?y)
-		(inferred-C_status ?x ?y)
+		(inferred-HasValue ?x ?y)
+		(inferred-Fd_efficacy ?x ?y)
 		(inferred-LessThan ?x ?y)
     )
 
@@ -206,28 +206,6 @@
 	(:derived (inferred-Inconsistent ) 
 		(exists (?x ?y ?z)
  			(and
-				(inferred-SolvesO ?x ?y)
-				(inferred-SolvesO ?x ?z)
-				(= ?y ?z)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Inconsistent ) 
-		(exists (?x ?y ?z)
- 			(and
-				(inferred-TypeF ?x ?y)
-				(inferred-TypeF ?x ?z)
-				(= ?y ?z)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Inconsistent ) 
-		(exists (?x ?y ?z)
- 			(and
 				(inferred-TypeFD ?x ?y)
 				(inferred-TypeFD ?x ?z)
 				(= ?y ?z)
@@ -250,6 +228,17 @@
 	(:derived (inferred-Inconsistent ) 
 		(exists (?x ?y ?z)
  			(and
+				(inferred-TypeF ?x ?y)
+				(inferred-TypeF ?x ?z)
+				(= ?y ?z)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
 				(inferred-IsQAtype ?x ?y)
 				(inferred-IsQAtype ?x ?z)
 				(= ?y ?z)
@@ -258,19 +247,12 @@
  	)
 
 
-	(:derived (inferred-QAvalue ?y) 
-		(exists (?x)
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
  			(and
-				(inferred-HasQAestimation ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-FunctionDesign ?y) 
-		(exists (?x)
- 			(and
-				(inferred-TypeFD ?x ?y)
+				(inferred-SolvesO ?x ?y)
+				(inferred-SolvesO ?x ?z)
+				(= ?y ?z)
 			)
 		)
  	)
@@ -279,7 +261,16 @@
 	(:derived (inferred-Objective ?y) 
 		(exists (?x)
  			(and
-				(inferred-Fd_error_log ?x ?y)
+				(inferred-SolvesO ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Function ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-SolvesF ?x ?y)
 			)
 		)
  	)
@@ -297,25 +288,34 @@
 	(:derived (inferred-Function ?y) 
 		(exists (?x)
  			(and
-				(inferred-SolvesF ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Function ?y) 
-		(exists (?x)
- 			(and
 				(inferred-TypeF ?x ?y)
 			)
 		)
  	)
 
 
-	(:derived (inferred-Objective ?y) 
+	(:derived (inferred-FunctionDesign ?y) 
 		(exists (?x)
  			(and
-				(inferred-RequiresO ?x ?y)
+				(inferred-TypeFD ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QualityAttributeType ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-IsQAtype ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QAvalue ?y) 
+		(exists (?x)
+ 			(and
+				(inferred-HasQAestimation ?x ?y)
 			)
 		)
  	)
@@ -330,10 +330,10 @@
  	)
 
 
-	(:derived (inferred-Component ?y) 
+	(:derived (inferred-Objective ?y) 
 		(exists (?x)
  			(and
-				(inferred-RequiresC ?x ?y)
+				(inferred-RequiresO ?x ?y)
 			)
 		)
  	)
@@ -341,6 +341,78 @@
 
 	(:derived (inferred-QAvalue ?y) 
 		(exists (?x)
+ 			(and
+				(inferred-HasNFR ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-FunctionGrounding ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-Fg_status ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-FunctionDesign ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-Fd_realisability ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Component ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-C_status ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QualityAttributeType ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-Qa_comparison_operator ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Objective ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-RequiresC ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-QualityAttributeType ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-Qa_critical ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Objective ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-O_always_improve ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Objective ?x) 
+		(exists (?y)
  			(and
 				(inferred-HasNFR ?x ?y)
 			)
@@ -366,104 +438,10 @@
  	)
 
 
-	(:derived (inferred-FunctionGrounding ?x) 
-		(exists (?y)
- 			(and
-				(inferred-Fg_status ?x ?y)
-			)
-		)
- 	)
-
-
 	(:derived (inferred-FunctionDesign ?x) 
 		(exists (?y)
  			(and
 				(inferred-Fd_efficacy ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Objective ?x) 
-		(exists (?y)
- 			(and
-				(inferred-O_always_improve ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-QualityAttributeType ?x) 
-		(exists (?y)
- 			(and
-				(inferred-Qa_comparison_operator ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Objective ?x) 
-		(exists (?y)
- 			(and
-				(inferred-O_updatable ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-QualityAttributeType ?x) 
-		(exists (?y)
- 			(and
-				(inferred-Qa_critical ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-FunctionDesign ?x) 
-		(exists (?y)
- 			(and
-				(inferred-Fd_realisability ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Objective ?x) 
-		(exists (?y)
- 			(and
-				(inferred-O_status ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Component ?x) 
-		(exists (?y)
- 			(and
-				(inferred-C_status ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Inconsistent ) 
-		(exists (?x ?y ?z)
- 			(and
-				(inferred-O_status ?x ?y)
-				(inferred-O_status ?x ?z)
-				(not (= ?y ?z))
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Inconsistent ) 
-		(exists (?x ?y ?z)
- 			(and
-				(inferred-Qa_comparison_operator ?x ?y)
-				(inferred-Qa_comparison_operator ?x ?z)
-				(not (= ?y ?z))
 			)
 		)
  	)
@@ -474,28 +452,6 @@
  			(and
 				(inferred-O_always_improve ?x ?y)
 				(inferred-O_always_improve ?x ?z)
-				(not (= ?y ?z))
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Inconsistent ) 
-		(exists (?x ?y ?z)
- 			(and
-				(inferred-Fg_status ?x ?y)
-				(inferred-Fg_status ?x ?z)
-				(not (= ?y ?z))
-			)
-		)
- 	)
-
-
-	(:derived (inferred-Inconsistent ) 
-		(exists (?x ?y ?z)
- 			(and
-				(inferred-Fd_realisability ?x ?y)
-				(inferred-Fd_realisability ?x ?z)
 				(not (= ?y ?z))
 			)
 		)
@@ -516,8 +472,30 @@
 	(:derived (inferred-Inconsistent ) 
 		(exists (?x ?y ?z)
  			(and
+				(inferred-C_status ?x ?y)
+				(inferred-C_status ?x ?z)
+				(not (= ?y ?z))
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
 				(inferred-HasValue ?x ?y)
 				(inferred-HasValue ?x ?z)
+				(not (= ?y ?z))
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-O_updatable ?x ?y)
+				(inferred-O_updatable ?x ?z)
 				(not (= ?y ?z))
 			)
 		)
@@ -538,8 +516,30 @@
 	(:derived (inferred-Inconsistent ) 
 		(exists (?x ?y ?z)
  			(and
-				(inferred-O_updatable ?x ?y)
-				(inferred-O_updatable ?x ?z)
+				(inferred-Qa_comparison_operator ?x ?y)
+				(inferred-Qa_comparison_operator ?x ?z)
+				(not (= ?y ?z))
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-Fd_realisability ?x ?y)
+				(inferred-Fd_realisability ?x ?z)
+				(not (= ?y ?z))
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-Inconsistent ) 
+		(exists (?x ?y ?z)
+ 			(and
+				(inferred-O_status ?x ?y)
+				(inferred-O_status ?x ?z)
 				(not (= ?y ?z))
 			)
 		)
@@ -555,15 +555,6 @@
  	)
 
 
-	(:derived (inferred-FunctionGrounding ?x) 
-		(exists (?y)
- 			(and
-				(inferred-SolvesO ?x ?y)
-			)
-		)
- 	)
-
-
 	(:derived (inferred-Objective ?x) 
 		(exists (?y)
  			(and
@@ -573,19 +564,10 @@
  	)
 
 
-	(:derived (inferred-FunctionDesign ?x) 
+	(:derived (inferred-Objective ?x) 
 		(exists (?y)
  			(and
-				(inferred-SolvesF ?x ?y)
-			)
-		)
- 	)
-
-
-	(:derived (inferred-FunctionGrounding ?x) 
-		(exists (?y)
- 			(and
-				(inferred-RequiresO ?x ?y)
+				(inferred-TypeF ?x ?y)
 			)
 		)
  	)
@@ -636,10 +618,37 @@
  	)
 
 
-	(:derived (inferred-QAvalue ?x) 
+	(:derived (inferred-FunctionGrounding ?x) 
 		(exists (?y)
  			(and
-				(inferred-IsQAtype ?x ?y)
+				(inferred-RequiresO ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-FunctionGrounding ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-TypeFD ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-FunctionGrounding ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-SolvesO ?x ?y)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-FunctionDesign ?x) 
+		(exists (?y)
+ 			(and
+				(inferred-SolvesF ?x ?y)
 			)
 		)
  	)
@@ -653,35 +662,6 @@
 					(inferred-C_status ?c RECOVERED_string)
 					(inferred-Component ?c)
 					(inferred-Objective ?o)
-				)
-			)
- 		)
- 	)
-
-
-	(:derived (inferred-Fg_status ?fg ?IN_ERROR_COMPONENT_string) 
-		(and
-			(= ?IN_ERROR_COMPONENT_string IN_ERROR_COMPONENT_string)
-			(exists (?o)
- 				(and
-					(inferred-FunctionGrounding ?fg)
-					(inferred-RequiresO ?fg ?o)
-					(inferred-O_status ?o IN_ERROR_COMPONENT_string)
-					(inferred-Objective ?o)
-				)
-			)
- 		)
- 	)
-
-
-	(:derived (inferred-Fd_realisability ?fd ?false_boolean) 
-		(and
-			(= ?false_boolean false_boolean)
-			(exists (?c)
- 				(and
-					(inferred-C_status ?c FALSE_string)
-					(inferred-Component ?c)
-					(inferred-RequiresC ?fd ?c)
 				)
 			)
  		)
@@ -734,42 +714,48 @@
 	(:derived (inferred-Fg_status ?fg ?IN_ERROR_NFR_string) 
 		(and
 			(= ?IN_ERROR_NFR_string IN_ERROR_NFR_string)
-			(exists (?o)
+			(exists (?mqa ?eqa ?mqav ?fd ?eqav)
  				(and
 					(inferred-FunctionGrounding ?fg)
-					(inferred-RequiresO ?fg ?o)
-					(inferred-O_status ?o IN_ERROR_NFR_string)
-					(inferred-Objective ?o)
+					(inferred-HasQAvalue ?fg ?mqa)
+					(inferred-IsQAtype ?eqa water_visibility)
+					(inferred-HasValue ?mqa ?mqav)
+					(inferred-TypeFD ?fg ?fd)
+					(inferred-HasValue ?eqa ?eqav)
+					(inferred-HasQAestimation ?fd ?eqa)
+					(inferred-IsQAtype ?mqa water_visibility)
+					(inferred-FunctionDesign ?fd)
+					(inferred-QAvalue ?mqa)
+					(inferred-QAvalue ?eqa)
+					(inferred-LessThan ?mqav ?eqav)
 				)
 			)
  		)
+ 	)
+
+
+	(:derived (inferred-Fd_error_log ?fd ?o) 
+		(exists (?fg)
+ 			(and
+				(inferred-TypeFD ?fg ?fd)
+				(inferred-FunctionGrounding ?fg)
+				(inferred-SolvesO ?fg ?o)
+				(inferred-Objective ?o)
+				(inferred-FunctionDesign ?fd)
+				(inferred-O_status ?o INTERNAL_ERROR_string)
+			)
+		)
  	)
 
 
 	(:derived (inferred-Fg_status ?fg ?IN_ERROR_COMPONENT_string) 
 		(and
 			(= ?IN_ERROR_COMPONENT_string IN_ERROR_COMPONENT_string)
-			(exists (?c ?fd)
+			(exists (?o)
  				(and
 					(inferred-FunctionGrounding ?fg)
-					(inferred-C_status ?c FALSE_string)
-					(inferred-TypeFD ?fg ?fd)
-					(inferred-Component ?c)
-					(inferred-RequiresC ?fd ?c)
-				)
-			)
- 		)
- 	)
-
-
-	(:derived (inferred-O_status ?o ?IN_ERROR_COMPONENT_string) 
-		(and
-			(= ?IN_ERROR_COMPONENT_string IN_ERROR_COMPONENT_string)
-			(exists (?fg)
- 				(and
-					(inferred-FunctionGrounding ?fg)
-					(inferred-SolvesO ?fg ?o)
-					(inferred-Fg_status ?fg IN_ERROR_COMPONENT_string)
+					(inferred-RequiresO ?fg ?o)
+					(inferred-O_status ?o IN_ERROR_COMPONENT_string)
 					(inferred-Objective ?o)
 				)
 			)
@@ -792,23 +778,59 @@
  	)
 
 
-	(:derived (inferred-Fg_status ?fg ?IN_ERROR_NFR_string) 
+	(:derived (inferred-Fd_error_log ?fd ?o) 
+		(exists (?fg)
+ 			(and
+				(inferred-FunctionDesign ?fd)
+				(inferred-O_status ?o IN_ERROR_FR_string)
+				(inferred-FunctionGrounding ?fg)
+				(inferred-TypeFD ?fg ?fd)
+				(inferred-SolvesO ?fg ?o)
+				(inferred-Objective ?o)
+			)
+		)
+ 	)
+
+
+	(:derived (inferred-O_status ?o ?IN_ERROR_COMPONENT_string) 
 		(and
-			(= ?IN_ERROR_NFR_string IN_ERROR_NFR_string)
-			(exists (?mqa ?eqa ?mqav ?fd ?eqav)
+			(= ?IN_ERROR_COMPONENT_string IN_ERROR_COMPONENT_string)
+			(exists (?fg)
  				(and
 					(inferred-FunctionGrounding ?fg)
-					(inferred-HasQAvalue ?fg ?mqa)
-					(inferred-IsQAtype ?eqa water_visibility)
-					(inferred-HasValue ?mqa ?mqav)
+					(inferred-SolvesO ?fg ?o)
+					(inferred-Fg_status ?fg IN_ERROR_COMPONENT_string)
+					(inferred-Objective ?o)
+				)
+			)
+ 		)
+ 	)
+
+
+	(:derived (inferred-Fg_status ?fg ?IN_ERROR_COMPONENT_string) 
+		(and
+			(= ?IN_ERROR_COMPONENT_string IN_ERROR_COMPONENT_string)
+			(exists (?c ?fd)
+ 				(and
+					(inferred-FunctionGrounding ?fg)
+					(inferred-C_status ?c FALSE_string)
 					(inferred-TypeFD ?fg ?fd)
-					(inferred-HasValue ?eqa ?eqav)
-					(inferred-HasQAestimation ?fd ?eqa)
-					(inferred-IsQAtype ?mqa water_visibility)
-					(inferred-FunctionDesign ?fd)
-					(inferred-QAvalue ?mqa)
-					(inferred-QAvalue ?eqa)
-					(inferred-LessThan ?mqav ?eqav)
+					(inferred-Component ?c)
+					(inferred-RequiredBy ?c ?fd)
+				)
+			)
+ 		)
+ 	)
+
+
+	(:derived (inferred-Fd_realisability ?fg ?false_boolean) 
+		(and
+			(= ?false_boolean false_boolean)
+			(exists (?c)
+ 				(and
+					(inferred-C_status ?c FALSE_string)
+					(inferred-Component ?c)
+					(inferred-RequiredBy ?c ?fg)
 				)
 			)
  		)
@@ -823,6 +845,21 @@
 					(inferred-Fg_status ?fg IN_ERROR_FR_string)
 					(inferred-FunctionGrounding ?fg)
 					(inferred-SolvesO ?fg ?o)
+					(inferred-Objective ?o)
+				)
+			)
+ 		)
+ 	)
+
+
+	(:derived (inferred-Fg_status ?fg ?IN_ERROR_NFR_string) 
+		(and
+			(= ?IN_ERROR_NFR_string IN_ERROR_NFR_string)
+			(exists (?o)
+ 				(and
+					(inferred-FunctionGrounding ?fg)
+					(inferred-RequiresO ?fg ?o)
+					(inferred-O_status ?o IN_ERROR_NFR_string)
 					(inferred-Objective ?o)
 				)
 			)

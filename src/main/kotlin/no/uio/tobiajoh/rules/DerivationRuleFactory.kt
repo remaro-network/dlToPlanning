@@ -12,6 +12,7 @@ import org.semanticweb.owlapi.model.OWLObjectProperty
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom
 import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom
+import org.semanticweb.owlapi.model.OWLProperty
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom
 import org.semanticweb.owlapi.model.SWRLRule
@@ -35,7 +36,7 @@ class DerivationRuleFactory {
     }
 
     // lift assertion from property to inferred property
-    fun liftAssertion(prop: OWLObjectProperty) : DerivationRule {
+    fun liftAssertion(prop: OWLProperty) : DerivationRule {
         // select arbitrary name for variable
         val variable1 = RuleVariable("?x")
         val variable2 = RuleVariable("?y")
