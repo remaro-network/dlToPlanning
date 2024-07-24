@@ -26,8 +26,8 @@
       (fd_available fd_recover_thrusters)
       (fd_available fd_follow_pipeline)
 
-      (a_search_pipeline_requires_f a_search_pipeline f_generate_search_path f_maintain_motion)
-      (a_inspect_pipeline_requires_f a_inspect_pipeline f_follow_pipeline f_maintain_motion)
+      (action_requires a_search_pipeline f_generate_search_path f_maintain_motion)
+      (action_requires a_inspect_pipeline f_follow_pipeline f_maintain_motion)
     )
 
     (:goal (and
