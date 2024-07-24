@@ -9,12 +9,7 @@
     )
 
     (:init
-      (fd_available fd_spiral_low)
-      (fd_available fd_spiral_medium)
-      (fd_available fd_spiral_high)
-      (fd_available fd_all_thrusters)
-      (fd_available fd_recover_thrusters)
-      (fd_available fd_follow_pipeline)
+      (inferred-C_status c_thruster_4 FALSE_string)
 
       (action_requires a_search_pipeline f_generate_search_path f_maintain_motion)
       (action_requires a_inspect_pipeline f_follow_pipeline f_maintain_motion)

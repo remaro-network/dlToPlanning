@@ -35,10 +35,10 @@
     )
 
     (:action search_pipeline
-      :parameters (?a - action ?p - pipeline ?r - robot)
+      :parameters (?a - action ?p - pipeline ?r - robot ?fd1 ?fd2)
       :precondition (and
         (= ?a a_search_pipeline)
-        (exists (?f1 ?f2 ?fd1 ?fd2)
+        (exists (?f1 ?f2)
           (and
             (action_requires ?a ?f1 ?f2)
             (Function ?f1)
@@ -47,8 +47,8 @@
             (FunctionDesign ?fd2)
             (solvesF ?fd1 ?f1)
             (solvesF ?fd2 ?f2)
-            (fd_available ?fd1)
-            (fd_available ?fd2)
+            (not (inferred-Fd_realisability ?fd1 false_boolean))
+            (not (inferred-Fd_realisability ?fd2 false_boolean))
           )
         )
         (robot_started ?r)
@@ -59,10 +59,10 @@
     )
 
     (:action inspect_pipeline
-      :parameters (?a - action ?p - pipeline ?r - robot)
+      :parameters (?a - action ?p - pipeline ?r - robot ?fd1 ?fd2)
       :precondition (and
         (= ?a a_inspect_pipeline)
-        (exists (?f1 ?f2 ?fd1 ?fd2)
+        (exists (?f1 ?f2)
           (and
             (action_requires ?a ?f1 ?f2)
             (Function ?f1)
@@ -71,8 +71,8 @@
             (FunctionDesign ?fd2)
             (solvesF ?fd1 ?f1)
             (solvesF ?fd2 ?f2)
-            (fd_available ?fd1)
-            (fd_available ?fd2)
+            (not (inferred-Fd_realisability ?fd1 false_boolean))
+            (not (inferred-Fd_realisability ?fd2 false_boolean))
           )
         )
 
