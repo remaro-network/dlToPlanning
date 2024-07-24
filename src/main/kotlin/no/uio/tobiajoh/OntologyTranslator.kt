@@ -19,8 +19,12 @@ class OntologyTranslator {
         for (c in ont.classesInSignature())
             rules.add(ruleFactory.liftAssertion(c))
 
-        // lift all class assertions
+        // lift all object property assertions
         for (p in ont.objectPropertiesInSignature)
+            rules.add(ruleFactory.liftAssertion(p))
+
+        // lift all data property assertions
+        for (p in ont.dataPropertiesInSignature)
             rules.add(ruleFactory.liftAssertion(p))
 
 
@@ -37,10 +41,10 @@ class OntologyTranslator {
 
     fun addAssertions(ont: OWLOntology, addDataProperties : Boolean) : Set<RuleAssertion> {
 
-        val assertionFactory = DerivationRuleFactory()
+        val assertionFactory = RuleAssertionFactory()
 
         for (a in ont.logicalAxioms)
-            RuleAssertionFactory().parseOWLABoxAxiom(a, addDataProperties)?.let { assertions.add(it) }
+            assertionFactory.parseOWLABoxAxiom(a, addDataProperties)?.let { assertions.add(it) }
 
         return assertions.toSet()
     }

@@ -1,18 +1,6 @@
 package no.uio.tobiajoh.rules
 
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.model.OWLClass
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom
-import org.semanticweb.owlapi.model.OWLDataProperty
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom
-import org.semanticweb.owlapi.model.OWLLiteral
-import org.semanticweb.owlapi.model.OWLLogicalAxiom
-import org.semanticweb.owlapi.model.OWLNamedIndividual
-import org.semanticweb.owlapi.model.OWLObjectProperty
-import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom
-import org.semanticweb.owlapi.model.SWRLAtom
-import org.semanticweb.owlapi.model.SWRLLiteralArgument
-import org.semanticweb.owlapi.model.SWRLVariable
+import org.semanticweb.owlapi.model.*
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl
 import uk.ac.manchester.cs.owl.owlapi.OWLDataPropertyImpl
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectPropertyImpl
@@ -80,15 +68,7 @@ class RuleAssertionFactory {
     }
 
     // create an assertion for an inferred property with the given variable
-    fun inferredRuleAssertion(predicateName : OWLObjectProperty,
-                              variable1 : RuleVariable,
-                              variable2 : RuleVariable) : RuleAssertion {
-        val relation = inferredName(predicateName.iri.shortForm)
-        return RuleAssertion(relation, mutableSetOf(variable1, variable2))
-    }
-
-    // create an assertion for an inferred property with the given variable
-    fun inferredRuleAssertion(predicateName : OWLDataProperty,
+    fun inferredRuleAssertion(predicateName : OWLProperty,
                               variable1 : RuleVariable,
                               variable2 : RuleVariable) : RuleAssertion {
         val relation = inferredName(predicateName.iri.shortForm)
@@ -102,7 +82,7 @@ class RuleAssertionFactory {
     }
 
     // create an assertion for a class with the given variable
-    fun ruleAssertion(predicateName : OWLObjectProperty,
+    fun ruleAssertion(predicateName : OWLProperty,
                       variable1 : RuleVariable,
                       variable2 : RuleVariable) : RuleAssertion {
         val relation = predicateName.iri.shortForm
@@ -127,23 +107,23 @@ class RuleAssertionFactory {
     }
 
     private fun parseClassAssertionAxiom(axiom : OWLClassAssertionAxiom) : RuleAssertion {
-        val OWLclass = axiom.classExpression.asOWLClass()
+        val owlClass = axiom.classExpression.asOWLClass()
         val individual = axiom.individual.asOWLNamedIndividual().iri.shortForm
-        return this.ruleAssertion(OWLclass, RuleConstant(individual))
+        return this.ruleAssertion(owlClass, RuleConstant(individual))
     }
 
     private fun parseObjectPropertyAxiom(axiom : OWLObjectPropertyAssertionAxiom) : RuleAssertion {
-        val OWLproperty = axiom.property.asOWLObjectProperty()
-        val OWLsubject = axiom.subject.asOWLNamedIndividual().iri.shortForm
-        val OWLobject = axiom.`object`.asOWLNamedIndividual().iri.shortForm
-        return this.ruleAssertion(OWLproperty, RuleConstant(OWLsubject), RuleConstant(OWLobject))
+        val owlProperty = axiom.property.asOWLObjectProperty()
+        val owlSubject = axiom.subject.asOWLNamedIndividual().iri.shortForm
+        val owlObject = axiom.`object`.asOWLNamedIndividual().iri.shortForm
+        return this.ruleAssertion(owlProperty, RuleConstant(owlSubject), RuleConstant(owlObject))
     }
 
     private fun parseDataPropertyAxiom(axiom : OWLDataPropertyAssertionAxiom) : RuleAssertion {
-        val OWLproperty = axiom.property.asOWLDataProperty().iri.shortForm
-        val OWLsubject = axiom.subject.asOWLNamedIndividual().iri.shortForm
+        val owlProperty = axiom.property.asOWLDataProperty().iri.shortForm
+        val owlSubject = axiom.subject.asOWLNamedIndividual().iri.shortForm
         val literal = parseOWLLiteral(axiom.`object`)
-        return this.ruleAssertion(OWLproperty, RuleConstant(OWLsubject), literal)
+        return this.ruleAssertion(owlProperty, RuleConstant(owlSubject), literal)
     }
 
     private fun inferredName(name: String) : String {
