@@ -2,16 +2,6 @@
     (:domain suave)
 
     (:objects
-      f_generate_search_path - object
-      f_follow_pipeline - object
-      f_maintain_motion - object
-      fd_spiral_low - object
-      fd_spiral_medium - object
-      fd_spiral_high - object
-      fd_all_thrusters - object
-      fd_recover_thrusters - object
-      fd_follow_pipeline - object
-
       a_search_pipeline - action
       a_inspect_pipeline - action
       pipeline - pipeline
