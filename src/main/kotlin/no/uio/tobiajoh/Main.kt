@@ -123,8 +123,8 @@ class Main : CliktCommand() {
     }
 
     private fun putABoxIntoPDDL(owlFile : File,
-                                inputPDDL : File,
-                                outputPDDL : File) {
+                                inputPDDLProblem : File,
+                                outputPDDLProblem : File) {
 
         val manager = OWLManager.createOWLOntologyManager()
         val ont = manager.loadOntologyFromOntologyDocument(owlFile)
@@ -137,8 +137,8 @@ class Main : CliktCommand() {
         rI.addAssertions(assertions)
 
         rI.addToProblem(
-            inputPDDL,
-            outputPDDL
+            inputPDDLProblem,
+            outputPDDLProblem
         )
     }
 }
