@@ -68,10 +68,9 @@ class RuleAssertionFactory {
     private fun parseOWLLiteral(literalArgument: OWLLiteral) : RuleConstant {
         val dataType = literalArgument.datatype
         val typeName = dataType.iri.shortForm
-        return RuleConstant("${literalArgument.literal}_${typeName}")
+        val literal = literalArgument.literal
+        return RuleConstant("${literal}_${typeName}")
     }
-
-
 
 
     // create an assertion for an inferred class with the given variable

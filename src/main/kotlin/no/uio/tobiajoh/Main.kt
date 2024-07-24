@@ -26,6 +26,8 @@ class Main : CliktCommand() {
     private val overwriteOutput by option("--replace-output", "-r",
         help = "Set flag to replace output PDDL file if it already exists").flag()
 
+    private val ignoreDataProperties by option("--ignore-data-props",
+        help = "Set flag to ignore data properties in ABox when translating to PDDL problem.").flag()
     
     private val rI = PDDLInjector()
 
@@ -129,7 +131,7 @@ class Main : CliktCommand() {
 
         val translator = OntologyTranslator()
 
-        val addDataProperties = false
+        val addDataProperties = !ignoreDataProperties
         val assertions = translator.addAssertions(ont, addDataProperties)
 
         rI.addAssertions(assertions)
