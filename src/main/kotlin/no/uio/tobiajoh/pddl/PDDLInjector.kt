@@ -15,9 +15,14 @@ class PDDLInjector {
 
     private val assertions : MutableSet<OwlAssertion> = mutableSetOf()
 
+    // relation, that is used for the comparison operator
+    private val leqRelation = "leq"
+
     // objects that new objects minus the ones that are already constants
     private val objects get() = assertions.flatMap {
         it.usedConstants }.toSet().minus(constants)
+
+    private val numbers get() = assertions.flatMap { it.usedNumbers }.toSet()
 
     fun addRules(newRules : Set<DerivationRule>) {
         newRules.forEach {rules.add(it) }
@@ -40,8 +45,24 @@ class PDDLInjector {
         sD.outputToFile(newDomain)
     }
 
+    private fun addNumberComparisons() {
+        val comparisons : MutableSet<OwlAssertion> = mutableSetOf()
+
+        for (n in numbers)
+            for (m in numbers)
+                if (n <= m)
+                    comparisons.add(
+                        OwlAssertion(leqRelation, listOf(n,m))
+                    )
+
+        addAssertions(comparisons)
+    }
+
     fun addToProblem(oldProblem : File, newProblem : File) {
         val sP = SplitProgram(oldProblem)
+
+        // calculate the comparison relationship between numbers
+        addNumberComparisons()
 
         sP.addInitialAssertions(assertions)
 
@@ -70,6 +91,7 @@ class PDDLInjector {
         val assertions = translator.addAssertions(ont, addDataProperties)
 
         addAssertions(assertions)
+
     }
 
 }
