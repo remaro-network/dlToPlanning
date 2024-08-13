@@ -49,7 +49,7 @@ class SplitDomain(val domain : File) {
             derivedRules.add("$r\n")
 
         // compute necessary declarations and add all of them to the domain
-        val declarations = requiredPredicateDeclarations(rules)
+        val declarations = requiredPredicateDeclarations(rules).sorted()
         val lastLine = predicates.removeLast()
         predicates.add("")
         declarations.forEach {
