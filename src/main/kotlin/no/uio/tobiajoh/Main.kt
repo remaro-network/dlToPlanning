@@ -28,8 +28,6 @@ class Main : CliktCommand() {
 
     private val ignoreDataProperties by option("--ignore-data-props",
         help = "Set flag to ignore data properties in ABox when translating to PDDL problem.").flag()
-    
-    private val rI = PDDLInjector()
 
     override fun run() {
         if (owlFile == null || !owlFile!!.exists()) {
@@ -82,64 +80,21 @@ class Main : CliktCommand() {
             return
         }
 
+        val rI = PDDLInjector()
+
+        rI.loadOWLFile(owlFile!!, !ignoreDataProperties)
+
         if (insertTBox)
-            putTBoxIntoPDDL(
-                owlFile!!,
+            rI.addToDomain(
                 inputDomainFile!!,
                 outputDomainFile!!
             )
-
-
+        
         if (insertABox)
-            putABoxIntoPDDL(
-                owlFile!!,
+            rI.addToProblem(
                 inputProblemFile!!,
                 outputProblemFile!!
             )
-
-    }
-
-    private fun putTBoxIntoPDDL(owlFile : File,
-                                inputPDDLDomain : File,
-                                outputPDDLDomain : File) {
-        val manager = OWLManager.createOWLOntologyManager()
-
-        val ont = manager.loadOntologyFromOntologyDocument(owlFile)
-
-        val translator = OntologyTranslator()
-        val rules = translator.addRules(ont)
-
-        //val usedConstants = rules.flatMap { it.usedConstants }.union(assertions.flatMap { it.usedConstants }).toSet()
-        val usedConstants = rules.flatMap { it.usedConstants }.toSet() // individuals from ABox do not need to be declared as constants
-
-
-        rI.addRules(rules)
-        rI.addConstants(usedConstants)
-
-        rI.addToDomain(
-            inputPDDLDomain,
-            outputPDDLDomain
-        )
-    }
-
-    private fun putABoxIntoPDDL(owlFile : File,
-                                inputPDDLProblem : File,
-                                outputPDDLProblem : File) {
-
-        val manager = OWLManager.createOWLOntologyManager()
-        val ont = manager.loadOntologyFromOntologyDocument(owlFile)
-
-        val translator = OntologyTranslator()
-
-        val addDataProperties = !ignoreDataProperties
-        val assertions = translator.addAssertions(ont, addDataProperties)
-
-        rI.addAssertions(assertions)
-
-        rI.addToProblem(
-            inputPDDLProblem,
-            outputPDDLProblem
-        )
     }
 }
 

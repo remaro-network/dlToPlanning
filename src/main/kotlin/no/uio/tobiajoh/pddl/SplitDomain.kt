@@ -1,7 +1,7 @@
 package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.rules.DerivationRule
-import no.uio.tobiajoh.rules.RuleVariable
+import no.uio.tobiajoh.rules.OwlAssertionVariable
 import java.io.File
 import java.util.regex.Pattern
 
@@ -60,7 +60,7 @@ class SplitDomain(val domain : File) {
 
     }
 
-    fun addConstants(constants : Set<RuleVariable>) {
+    fun addConstants(constants : Set<OwlAssertionVariable>) {
         val sortedStringConstants = constants.map{ it.toString()}.sorted()
         sortedStringConstants.forEach { declaredConstants.add(it)}
     }

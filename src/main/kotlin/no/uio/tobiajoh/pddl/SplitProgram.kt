@@ -1,7 +1,7 @@
 package no.uio.tobiajoh.pddl
 
-import no.uio.tobiajoh.rules.RuleAssertion
-import no.uio.tobiajoh.rules.RuleConstant
+import no.uio.tobiajoh.rules.OwlAssertion
+import no.uio.tobiajoh.rules.OwlAssertionConstant
 import java.io.File
 
 
@@ -78,13 +78,13 @@ class SplitProgram(val problem : File) {
         }
     }
 
-    fun addInitialAssertions(assertions: Set<RuleAssertion>) {
+    fun addInitialAssertions(assertions: Set<OwlAssertion>) {
         initialCond.add("") // add empty line to make it easier to find generated assertions
         val sortedAssertions = assertions.map { it.toPDDL() }.sorted()
         sortedAssertions.forEach { initialCond.add(it) }
     }
 
-    fun addObjects(newObjects: Set<RuleConstant>) {
+    fun addObjects(newObjects: Set<OwlAssertionConstant>) {
         // add objects that are not already contained
         val sortedObjects = newObjects.map { it.toString() }.sorted()
         sortedObjects.forEach { o ->

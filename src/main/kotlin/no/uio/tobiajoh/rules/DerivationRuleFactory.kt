@@ -8,7 +8,6 @@ import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom
 import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom
 import org.semanticweb.owlapi.model.OWLFunctionalObjectPropertyAxiom
-import org.semanticweb.owlapi.model.OWLObjectProperty
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom
 import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom
@@ -20,12 +19,12 @@ import org.semanticweb.owlapi.model.SWRLRule
 
 class DerivationRuleFactory {
 
-    private val assertionFactory = RuleAssertionFactory()
+    private val assertionFactory = OwlAssertionFactory()
 
     // lift assertion from class to inferred class
     fun liftAssertion(className: OWLClass) : DerivationRule {
         // select arbitrary name for variable
-        val variable = RuleVariable("?x")
+        val variable = OwlAssertionVariable("?x")
         val head = assertionFactory.inferredRuleAssertion(className, variable)
         val condition = listOf(assertionFactory.ruleAssertion(className, variable))
 
@@ -38,8 +37,8 @@ class DerivationRuleFactory {
     // lift assertion from property to inferred property
     fun liftAssertion(prop: OWLProperty) : DerivationRule {
         // select arbitrary name for variable
-        val variable1 = RuleVariable("?x")
-        val variable2 = RuleVariable("?y")
+        val variable1 = OwlAssertionVariable("?x")
+        val variable2 = OwlAssertionVariable("?y")
 
         val head = assertionFactory.inferredRuleAssertion(prop, variable1, variable2)
         val condition = listOf(assertionFactory.ruleAssertion(prop, variable1, variable2))
@@ -74,16 +73,16 @@ class DerivationRuleFactory {
 
 
     private fun parseSWRLRule(rule: SWRLRule): DerivationRule? {
-        val boundedVariables: MutableSet<RuleVariable> = mutableSetOf()
-        val headVariables: MutableSet<RuleVariable> = mutableSetOf()
+        val boundedVariables: MutableSet<OwlAssertionVariable> = mutableSetOf()
+        val headVariables: MutableSet<OwlAssertionVariable> = mutableSetOf()
 
-        val condition: MutableList<RuleAssertion> = mutableListOf()
+        val condition: MutableList<OwlAssertion> = mutableListOf()
 
         // parse body
         for (element in rule.body){
             val newCondition = assertionFactory.inferredRuleAssertion(element)
             condition.add(newCondition)
-            newCondition.variables.forEach{ if (it !is RuleConstant) boundedVariables.add(it) }
+            newCondition.variables.forEach{ if (it !is OwlAssertionConstant) boundedVariables.add(it) }
         }
 
         // parse head
@@ -118,7 +117,7 @@ class DerivationRuleFactory {
         val conditionClass = axiom.subClass.asOWLClass()
 
         // select arbitrary name for variable
-        val variable = RuleVariable("?x")
+        val variable = OwlAssertionVariable("?x")
 
         val head = assertionFactory.inferredRuleAssertion(headClass, variable)
         val condition = assertionFactory.inferredRuleAssertion(conditionClass, variable)
@@ -140,8 +139,8 @@ class DerivationRuleFactory {
         val conditionProperty = axiom.subProperty.asOWLObjectProperty()
 
         // select names for variables
-        val variable1 = RuleVariable("?x")
-        val variable2 = RuleVariable("?y")
+        val variable1 = OwlAssertionVariable("?x")
+        val variable2 = OwlAssertionVariable("?y")
 
         val head = assertionFactory.inferredRuleAssertion(headProperty, variable1, variable2)
         val condition = assertionFactory.inferredRuleAssertion(conditionProperty, variable1, variable2)
@@ -156,7 +155,7 @@ class DerivationRuleFactory {
     private fun parseDisjointClasses(axiom: OWLDisjointClassesAxiom) : DerivationRule {
         // check if axiom only refers to OWL classes and not complex class descriptions
 
-        val variable = RuleVariable("?x")
+        val variable = OwlAssertionVariable("?x")
         val boundedVariables = setOf(variable)
 
 
@@ -173,7 +172,7 @@ class DerivationRuleFactory {
         // iterate over all possible pairs and create one condition for them
         for (p in incPairs) {
             val classes = p.classesInSignature
-            val condition : MutableList<RuleAssertion> = mutableListOf()
+            val condition : MutableList<OwlAssertion> = mutableListOf()
             for (c in classes)
                 condition.add(assertionFactory.inferredRuleAssertion(c, variable))
             // add condition to the rule
@@ -192,8 +191,8 @@ class DerivationRuleFactory {
         val headClass=axiom.range.asOWLClass()
         val conditionProperty=axiom.property.asOWLObjectProperty()
 
-        val variable1 = RuleVariable("?x")
-        val variable2 = RuleVariable("?y")
+        val variable1 = OwlAssertionVariable("?x")
+        val variable2 = OwlAssertionVariable("?y")
 
         val head = assertionFactory.inferredRuleAssertion(headClass, variable2)
         val condition = assertionFactory.inferredRuleAssertion(conditionProperty, variable1, variable2)
@@ -215,8 +214,8 @@ class DerivationRuleFactory {
         val headClass=axiom.domain.asOWLClass()
         val conditionProperty=axiom.property.asOWLObjectProperty()
 
-        val variable1 = RuleVariable("?x")
-        val variable2 = RuleVariable("?y")
+        val variable1 = OwlAssertionVariable("?x")
+        val variable2 = OwlAssertionVariable("?y")
 
         val head = assertionFactory.inferredRuleAssertion(headClass, variable1)
         val condition = assertionFactory.inferredRuleAssertion(conditionProperty, variable1, variable2)
@@ -230,9 +229,9 @@ class DerivationRuleFactory {
     }
 
     private fun parseFunctionalObjectProperty(axiom: OWLFunctionalObjectPropertyAxiom) : DerivationRule {
-        val variableX = RuleVariable("?x")
-        val variableY = RuleVariable("?y")
-        val variableZ = RuleVariable("?z")
+        val variableX = OwlAssertionVariable("?x")
+        val variableY = OwlAssertionVariable("?y")
+        val variableZ = OwlAssertionVariable("?z")
         val boundedVariables = setOf(variableX, variableY, variableZ)
 
         val conditionProperty=axiom.property.asOWLObjectProperty()
@@ -251,9 +250,9 @@ class DerivationRuleFactory {
     }
 
     private fun parseFunctionalDataProperty(axiom: OWLFunctionalDataPropertyAxiom) : DerivationRule {
-        val variableX = RuleVariable("?x")
-        val variableY = RuleVariable("?y")
-        val variableZ = RuleVariable("?z")
+        val variableX = OwlAssertionVariable("?x")
+        val variableY = OwlAssertionVariable("?y")
+        val variableZ = OwlAssertionVariable("?z")
         val boundedVariables = setOf(variableX, variableY, variableZ)
 
         val conditionProperty=axiom.property.asOWLDataProperty()
@@ -282,8 +281,8 @@ class DerivationRuleFactory {
         val headClass=axiom.domain.asOWLClass()
         val conditionProperty=axiom.property.asOWLDataProperty()
 
-        val variable1 = RuleVariable("?x")
-        val variable2 = RuleVariable("?y")
+        val variable1 = OwlAssertionVariable("?x")
+        val variable2 = OwlAssertionVariable("?y")
 
         val head = assertionFactory.inferredRuleAssertion(headClass, variable1)
         val condition = assertionFactory.inferredRuleAssertion(conditionProperty, variable1, variable2)
