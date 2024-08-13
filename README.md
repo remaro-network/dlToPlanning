@@ -12,15 +12,21 @@ build project by running
 ## Usage
 - run insertion of OWL axioms into PDDL with
   
-  `./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=e<inputPDDLdomain> --outDomain=<outputPDDLdomain> [OPTIONS]`
+  ```
+  ./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> [OPTIONS]
+  ```
   
-  `./OWLToPDDL.sh --owl=<inputOWL> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> [OPTIONS]`
+  ```
+  ./OWLToPDDL.sh --owl=<inputOWL> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> [OPTIONS]
+  ```
 
-  `./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> [OPTIONS]`
+  ```
+  ./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> [OPTIONS]
+  ```
 
-- only modifying PDDL domain by inserting TBox axioms, only modifying PDDL prblem by inserting ABox axioms or both are possible
+- you can only modifying the PDDL domain by inserting TBox axioms, only modifying the PDDL problem by inserting ABox axioms or both
   
-- run `./OWLToPDDL.sh -h`to see all options
+- run `./OWLToPDDL.sh -h` to see all options
  
 ## Planning
 - I recommend using [SYMK planner](https://github.com/speckdavid/symk), as it works quite well so far and should be good for derived predicates [paper: "Symbolic Planning with Axioms"](https://speckdavid.github.io/assets/pdf/speck-etal-icaps2019.pdf)
