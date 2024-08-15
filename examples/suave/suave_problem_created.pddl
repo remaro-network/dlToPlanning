@@ -2,10 +2,11 @@
   (:domain suave)
 
   (:objects 
-    f_generate_search_path f_follow_pipeline f_maintain_motion fd_spiral_low fd_spiral_medium fd_spiral_high fd_all_thrusters fd_recover_thrusters fd_follow_pipeline  0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal 3.25_decimal <_string battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety - object 
+    f_generate_search_path f_follow_pipeline f_maintain_motion fd_spiral_low fd_spiral_medium fd_spiral_high fd_all_thrusters fd_recover_thrusters fd_follow_pipeline  <_string battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety - object 
     a_search_pipeline a_inspect_pipeline - action 
     pipeline - pipeline 
     bluerov - robot 
+    0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal 3.25_decimal - number 
 )
 
   (:init

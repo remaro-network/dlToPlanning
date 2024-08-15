@@ -1,7 +1,12 @@
 package no.uio.tobiajoh.owl
 
 // owl constant, representing a number
-class OwlNumber(val number: Double, name: String) : OwlAssertionConstant(name) {
+class OwlNumber(private val number: Double, name: String) : OwlAssertionConstant(name) {
+
+    companion object {
+        // the type that is used for numbers in pddl files
+        const val PDDLTYPE = "number"
+    }
 
     // operator to compare two numbers
     // note: only indicates, which number is larger, not by how much

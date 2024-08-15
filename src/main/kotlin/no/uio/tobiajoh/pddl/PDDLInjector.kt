@@ -74,7 +74,8 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
         sP.addInitialAssertions(assertions)
 
-        sP.addObjects(objects)
+        sP.addObjects(objects.minus(numbers))
+        sP.addNumbers(numbers)
 
         sP.outputToFile(newProblem)
 

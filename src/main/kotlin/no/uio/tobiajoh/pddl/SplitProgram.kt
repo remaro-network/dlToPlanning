@@ -2,6 +2,7 @@ package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.owl.OwlAssertion
 import no.uio.tobiajoh.owl.OwlAssertionConstant
+import no.uio.tobiajoh.owl.OwlNumber
 import java.io.File
 
 
@@ -90,6 +91,14 @@ class SplitProgram(val problem : File) {
         sortedObjects.forEach { o ->
             if (!objects.containsKey(o))
                 objects[o] = "object"
+        }
+    }
+
+    fun addNumbers(newNumbers: Set<OwlNumber>) {
+        val sortedNumbers = newNumbers.map { it.toString() }.sorted()
+        sortedNumbers.forEach { n ->
+            if (!objects.containsKey(n))
+                objects[n] = OwlNumber.PDDLTYPE
         }
     }
 
