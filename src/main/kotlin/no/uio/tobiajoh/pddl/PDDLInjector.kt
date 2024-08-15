@@ -1,7 +1,7 @@
 package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.OntologyTranslator
-import no.uio.tobiajoh.rules.*
+import no.uio.tobiajoh.owl.*
 import org.semanticweb.owlapi.apibinding.OWLManager
 import java.io.File
 

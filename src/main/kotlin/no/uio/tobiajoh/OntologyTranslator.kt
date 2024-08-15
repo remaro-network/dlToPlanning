@@ -1,9 +1,9 @@
 package no.uio.tobiajoh
 
-import no.uio.tobiajoh.rules.DerivationRule
-import no.uio.tobiajoh.rules.DerivationRuleFactory
-import no.uio.tobiajoh.rules.OwlAssertion
-import no.uio.tobiajoh.rules.OwlAssertionFactory
+import no.uio.tobiajoh.owl.DerivationRule
+import no.uio.tobiajoh.owl.DerivationRuleFactory
+import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionFactory
 import org.semanticweb.owlapi.model.OWLOntology
 
 class OntologyTranslator {

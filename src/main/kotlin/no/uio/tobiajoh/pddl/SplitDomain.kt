@@ -1,8 +1,8 @@
 package no.uio.tobiajoh.pddl
 
-import no.uio.tobiajoh.rules.DerivationRule
-import no.uio.tobiajoh.rules.OwlAssertion
-import no.uio.tobiajoh.rules.OwlAssertionVariable
+import no.uio.tobiajoh.owl.DerivationRule
+import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionVariable
 import java.io.File
 import java.util.regex.Pattern
 

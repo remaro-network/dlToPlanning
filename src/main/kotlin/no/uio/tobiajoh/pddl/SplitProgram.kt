@@ -1,7 +1,7 @@
 package no.uio.tobiajoh.pddl
 
-import no.uio.tobiajoh.rules.OwlAssertion
-import no.uio.tobiajoh.rules.OwlAssertionConstant
+import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionConstant
 import java.io.File
 
 

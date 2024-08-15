@@ -1,4 +1,4 @@
-package no.uio.tobiajoh.rules
+package no.uio.tobiajoh.owl
 
 // represents a derivation rule
 class DerivationRule(

@@ -1,4 +1,4 @@
-package no.uio.tobiajoh.rules
+package no.uio.tobiajoh.owl
 
 
 // an object (variable) that occurs in an assertion in the ontology

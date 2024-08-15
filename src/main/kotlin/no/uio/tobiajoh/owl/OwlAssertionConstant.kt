@@ -1,4 +1,4 @@
-package no.uio.tobiajoh.rules
+package no.uio.tobiajoh.owl
 
 // owl object (variable in assertion) that are referred to but that is a specific object
 // at the same time (i.e., no variable)

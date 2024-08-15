@@ -1,4 +1,4 @@
-package no.uio.tobiajoh.rules
+package no.uio.tobiajoh.owl
 
 
 // one assertion as part of a derivation rule

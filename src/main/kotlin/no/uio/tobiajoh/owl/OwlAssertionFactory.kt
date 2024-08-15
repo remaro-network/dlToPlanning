@@ -1,4 +1,4 @@
-package no.uio.tobiajoh.rules
+package no.uio.tobiajoh.owl
 
 import org.semanticweb.owlapi.model.*
 import uk.ac.manchester.cs.owl.owlapi.*

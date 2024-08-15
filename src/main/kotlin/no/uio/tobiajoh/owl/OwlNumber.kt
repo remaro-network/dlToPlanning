@@ -1,8 +1,4 @@
-package no.uio.tobiajoh.rules
-
-import org.semanticweb.owlapi.model.IRI
-import org.semanticweb.owlapi.model.OWLLiteral
-import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl
+package no.uio.tobiajoh.owl
 
 // owl constant, representing a number
 class OwlNumber(val number: Double, name: String) : OwlAssertionConstant(name) {
