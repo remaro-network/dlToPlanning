@@ -1,11 +1,13 @@
 package no.uio.tobiajoh.owl
 
+import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
 import org.semanticweb.owlapi.model.OWLLiteral
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl
 
 class OwlAssertionConstantFactory {
     val decimal = OWLDatatypeImpl(IRI.create("http://www.w3.org/2001/XMLSchema#decimal"))
+    val df = OWLManager.createOWLOntologyManager().owlDataFactory;
 
     // set of all datatypes that represent numbers (that we can parse)
     val supportedNumberTypes = setOf(decimal)
@@ -25,7 +27,7 @@ class OwlAssertionConstantFactory {
 
     private fun parseNumberLiteral(literalArgument: OWLLiteral, name: String) : OwlNumber {
         return when (literalArgument.datatype) {
-            decimal -> parseDecimal(literalArgument.literal, name)
+            decimal -> parseDecimal(literalArgument, name)
             else -> {
                 assert(false) {"datatype ${literalArgument.datatype} not supported to parse to number"}
                 OwlNumber(0.0, "error")
@@ -33,8 +35,33 @@ class OwlAssertionConstantFactory {
         }
     }
 
-    private fun parseDecimal(d: String, name: String) : OwlNumber{
-        val number = d.toDouble()
+    fun parseNumberFromString(pddlNumber : String) : OwlNumber? {
+        val splitPddlNumber = pddlNumber.split("_")
+
+        if (splitPddlNumber.size != 2) {
+            println("WARNING: can not parse pddl number $pddlNumber")
+            return null
+        }
+
+        val number = splitPddlNumber[0]
+        val type = splitPddlNumber[1]
+
+        val n : Double? = when (type) {
+            "decimal" -> number.toDouble()
+            else -> {
+                println("WARNING: can not parse pddl number $pddlNumber (unsupported type)")
+                null
+            }
+        }
+
+        return if (n != null)
+            OwlNumber(n, "${n}_${type}")
+        else
+            null
+    }
+
+    private fun parseDecimal(literal: OWLLiteral, name: String) : OwlNumber{
+        val number = literal.parseDouble()
         return OwlNumber(number, name)
     }
 }

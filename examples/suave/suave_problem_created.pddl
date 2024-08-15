@@ -6,7 +6,7 @@
     a_search_pipeline a_inspect_pipeline - action 
     pipeline - pipeline 
     bluerov - robot 
-    0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal 3.25_decimal - number 
+    2.0_decimal 3.25_decimal 0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal - number 
 )
 
   (:init
@@ -83,26 +83,34 @@
     (leq 0.25_decimal 0.75_decimal)
     (leq 0.25_decimal 1.0_decimal)
     (leq 0.25_decimal 1.25_decimal)
+    (leq 0.25_decimal 2.0_decimal)
     (leq 0.25_decimal 2.25_decimal)
     (leq 0.25_decimal 3.25_decimal)
     (leq 0.5_decimal 0.5_decimal)
     (leq 0.5_decimal 0.75_decimal)
     (leq 0.5_decimal 1.0_decimal)
     (leq 0.5_decimal 1.25_decimal)
+    (leq 0.5_decimal 2.0_decimal)
     (leq 0.5_decimal 2.25_decimal)
     (leq 0.5_decimal 3.25_decimal)
     (leq 0.75_decimal 0.75_decimal)
     (leq 0.75_decimal 1.0_decimal)
     (leq 0.75_decimal 1.25_decimal)
+    (leq 0.75_decimal 2.0_decimal)
     (leq 0.75_decimal 2.25_decimal)
     (leq 0.75_decimal 3.25_decimal)
     (leq 1.0_decimal 1.0_decimal)
     (leq 1.0_decimal 1.25_decimal)
+    (leq 1.0_decimal 2.0_decimal)
     (leq 1.0_decimal 2.25_decimal)
     (leq 1.0_decimal 3.25_decimal)
     (leq 1.25_decimal 1.25_decimal)
+    (leq 1.25_decimal 2.0_decimal)
     (leq 1.25_decimal 2.25_decimal)
     (leq 1.25_decimal 3.25_decimal)
+    (leq 2.0_decimal 2.0_decimal)
+    (leq 2.0_decimal 2.25_decimal)
+    (leq 2.0_decimal 3.25_decimal)
     (leq 2.25_decimal 2.25_decimal)
     (leq 2.25_decimal 3.25_decimal)
     (leq 3.25_decimal 3.25_decimal)

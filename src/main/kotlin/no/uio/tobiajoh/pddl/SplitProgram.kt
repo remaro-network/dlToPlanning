@@ -102,6 +102,11 @@ class SplitProgram(val problem : File) {
         }
     }
 
+    // return all objects that have the type of owl numbers
+    fun getNumbers() : Set<String> {
+        return objects.filterValues { it==OwlNumber.PDDLTYPE }.keys
+    }
+
     fun outputToFile(outFile: File) {
         outFile.printWriter().use { out ->
             out.println("(define (problem ${problemName})")
@@ -138,4 +143,6 @@ class SplitProgram(val problem : File) {
             out.println(")")
         }
     }
+
+
 }

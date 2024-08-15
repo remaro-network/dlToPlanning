@@ -13,6 +13,10 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     private val assertions : MutableSet<OwlAssertion> = mutableSetOf()
 
+    private val assertionFactory = OwlAssertionFactory()
+    private val assertionConstantFactory  = OwlAssertionConstantFactory()
+
+
     // relation, that is used for the comparison operator
     private val leqRelation = "leq"
 
@@ -46,17 +50,17 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         if (addNumComparisons) {
             val var1 = OwlAssertionVariable("?x")
             val var2 = OwlAssertionVariable("?y")
-            sD.addPredicate(OwlAssertionFactory().ruleAssertion(leqRelation, var1, var2))
+            sD.addPredicate(assertionFactory.ruleAssertion(leqRelation, var1, var2))
         }
 
         sD.outputToFile(newDomain)
     }
 
-    private fun addNumberComparisons() {
+    private fun addNumberComparisons(numbersToCompare : Set<OwlNumber>) {
         val comparisons : MutableSet<OwlAssertion> = mutableSetOf()
 
-        for (n in numbers)
-            for (m in numbers)
+        for (n in numbersToCompare)
+            for (m in numbersToCompare)
                 if (n <= m)
                     comparisons.add(
                         OwlAssertion(leqRelation, listOf(n,m))
@@ -68,9 +72,19 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
     fun addToProblem(oldProblem : File, newProblem : File) {
         val sP = SplitProgram(oldProblem)
 
-        // calculate the comparison relationship between numbers
-        if (addNumComparisons)
-            addNumberComparisons()
+        // calculate the comparison relationship between numbers if desired
+        if (addNumComparisons) {
+            // extract numbers from PDDL problem file and parse them
+            val existingNumbers = sP.getNumbers().mapNotNull { pddlNumber ->
+                assertionConstantFactory.parseNumberFromString(pddlNumber)
+            }
+
+            // compare all numbers declared in  owl assertions and in pddl problem
+            val numbersToCompare = numbers.plus(existingNumbers)
+
+            // add comparison relation
+            addNumberComparisons(numbersToCompare)
+        }
 
         sP.addInitialAssertions(assertions)
 
