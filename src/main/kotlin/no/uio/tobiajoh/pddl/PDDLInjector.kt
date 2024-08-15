@@ -17,9 +17,6 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
     private val assertionConstantFactory  = OwlAssertionConstantFactory()
 
 
-    // relation, that is used for the comparison operator
-    private val leqRelation = "leq"
-
 
     // objects that new objects minus the ones that are already constants
     private val objects get() = assertions.flatMap {
@@ -50,7 +47,8 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         if (addNumComparisons) {
             val var1 = OwlAssertionVariable("?x")
             val var2 = OwlAssertionVariable("?y")
-            sD.addPredicate(assertionFactory.ruleAssertion(leqRelation, var1, var2))
+            sD.addPredicate(assertionFactory.ruleAssertion(OwlNumber.EQUIVALENT, var1, var2))
+            sD.addPredicate(assertionFactory.ruleAssertion(OwlNumber.LESSRELATION, var1, var2))
         }
 
         sD.outputToFile(newDomain)
@@ -60,11 +58,16 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         val comparisons : MutableSet<OwlAssertion> = mutableSetOf()
 
         for (n in numbersToCompare)
-            for (m in numbersToCompare)
-                if (n <= m)
+            for (m in numbersToCompare) {
+                if (n == m)
                     comparisons.add(
-                        OwlAssertion(leqRelation, listOf(n,m))
+                        OwlAssertion(OwlNumber.EQUIVALENT, listOf(n, m))
                     )
+                else if (n < m)
+                    comparisons.add(
+                        OwlAssertion(OwlNumber.LESSRELATION, listOf(n, m))
+                    )
+            }
 
         addAssertions(comparisons)
     }

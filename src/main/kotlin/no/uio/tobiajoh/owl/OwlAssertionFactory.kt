@@ -1,5 +1,6 @@
 package no.uio.tobiajoh.owl
 
+import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.*
 import uk.ac.manchester.cs.owl.owlapi.*
 import java.util.*
@@ -8,6 +9,7 @@ import java.util.*
 class OwlAssertionFactory {
 
     val assertionConstantFactory = OwlAssertionConstantFactory()
+    val df = OWLManager.getOWLDataFactory()
 
 
     fun inconsistentAssertion() : OwlAssertion {
@@ -20,8 +22,6 @@ class OwlAssertionFactory {
     // operates on lifted names for rules
     fun inferredRuleAssertion(ruleAtom : SWRLAtom) : OwlAssertion {
         val variables: MutableList<OwlAssertionVariable> = mutableListOf()
-        val constants: MutableSet<OwlAssertionConstant> = mutableSetOf()
-
 
         val predicate = ruleAtom.predicate
         // parse head
@@ -30,10 +30,12 @@ class OwlAssertionFactory {
                 is OWLClassImpl -> predicate.iri.shortForm
                 is OWLObjectPropertyImpl -> predicate.iri.shortForm
                 is OWLDataPropertyImpl -> predicate.iri.shortForm
+                IRI.create("http://www.w3.org/2003/11/swrlb#lessThan") -> OwlNumber.LESSRELATION
                 is IRI -> predicate.shortForm
                 else -> predicate.toString()
             }
         )
+
         // add variables to set
         ruleAtom.allArguments.map {
             when (it ) {
@@ -124,6 +126,10 @@ class OwlAssertionFactory {
     }
 
     private fun inferredName(name: String) : String {
+        // don't change comparison operator
+        if (name == OwlNumber.EQUIVALENT || name == OwlNumber.LESSRELATION)
+            return name
+
         val capitalizedName = name.replaceFirstChar {
             if (it.isLowerCase()) it.titlecase(Locale.getDefault())
             else it.toString()

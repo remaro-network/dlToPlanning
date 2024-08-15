@@ -59,7 +59,6 @@
 		(inferred-HasValue ?x ?y)
 		(inferred-Inconsistent)
 		(inferred-IsQAtype ?x ?y)
-		(inferred-LessThan ?x ?y)
 		(inferred-O_always_improve ?x ?y)
 		(inferred-O_status ?x ?y)
 		(inferred-O_updatable ?x ?y)
@@ -75,6 +74,7 @@
 		(inferred-TypeF ?x ?y)
 		(inferred-TypeFD ?x ?y)
 		(isQAtype ?x ?y)
+		(lessThan ?x ?y)
 		(o_always_improve ?x ?y)
 		(o_status ?x ?y)
 		(o_updatable ?x ?y)
@@ -86,7 +86,7 @@
 		(solvesO ?x ?y)
 		(typeF ?x ?y)
 		(typeFD ?x ?y)
-		(leq ?x ?y)
+		(equalTo ?x ?y)
     )
 
 
@@ -238,7 +238,7 @@
 				(inferred-FunctionDesign ?fd)
 				(inferred-QAvalue ?mqa)
 				(inferred-QAvalue ?eqa)
-				(inferred-LessThan ?mqav ?eqav)
+				(lessThan ?mqav ?eqav)
 			)
 		)
  	)
