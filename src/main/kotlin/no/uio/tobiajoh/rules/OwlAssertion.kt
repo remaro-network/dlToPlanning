@@ -17,8 +17,8 @@ class OwlAssertion(
     val usedNumbers : Set<OwlNumber> get() = numbers
 
     // return predicate with arity
-    fun usedPredicates() : Map<String, Int> {
-        return mapOf(Pair(relation, variables.size))
+    fun usedPredicate() : Pair<String, Int> {
+        return Pair(relation, variables.size)
     }
 
     override fun toString() : String {

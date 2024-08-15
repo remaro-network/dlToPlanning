@@ -86,6 +86,7 @@
 		(solvesO ?x ?y)
 		(typeF ?x ?y)
 		(typeFD ?x ?y)
+		(leq ?x ?y)
     )
 
 

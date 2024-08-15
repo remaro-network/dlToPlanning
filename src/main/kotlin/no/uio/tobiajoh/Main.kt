@@ -29,6 +29,9 @@ class Main : CliktCommand() {
     private val ignoreDataProperties by option("--ignore-data-props",
         help = "Set flag to ignore data properties in ABox when translating to PDDL problem.").flag()
 
+    private val addNumComparison by option("--add-num-comparisons",
+        help = "Set flag to add comparison relation between numerical data from OWL to PDDL problem.").flag()
+
     override fun run() {
         if (owlFile == null || !owlFile!!.exists()) {
             println("ERROR: Please provide an existing OWL file.")
@@ -80,7 +83,7 @@ class Main : CliktCommand() {
             return
         }
 
-        val rI = PDDLInjector()
+        val rI = PDDLInjector(addNumComparison)
 
         rI.loadOWLFile(owlFile!!, !ignoreDataProperties)
 

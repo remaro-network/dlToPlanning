@@ -1,6 +1,7 @@
 package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.rules.DerivationRule
+import no.uio.tobiajoh.rules.OwlAssertion
 import no.uio.tobiajoh.rules.OwlAssertionVariable
 import java.io.File
 import java.util.regex.Pattern
@@ -56,8 +57,19 @@ class SplitDomain(val domain : File) {
             predicates.add("\t\t$it")
         }
         predicates.add(lastLine)
+    }
 
+    // adds a predicate to the list of declared predicates
+    // predicate is represented as assertion --> contains variables
+    fun addPredicate(assertion : OwlAssertion) {
+        val (pred, _) = assertion.usedPredicate()
 
+        // only add predicate, if it is not already defined
+        if (!definedPredicates().contains(pred)) {
+            val lastLine = predicates.removeLast()
+            predicates.add("\t\t${assertion.toPDDL()}")
+            predicates.add(lastLine)
+        }
     }
 
     fun addConstants(constants : Set<OwlAssertionVariable>) {
@@ -72,7 +84,7 @@ class SplitDomain(val domain : File) {
         // add new predicates to list of predicates
         // we transform all predicates to lower case, as this is the standard notation
         // predicates already defined in domain
-        val existingPredicates = extractPredicates().map { it.lowercase() }
+        val existingPredicates = definedPredicates().map { it.lowercase() }
         // predicates used in derivision rules
         val usedPredicates : MutableMap<String, Int> = mutableMapOf()
         rules.forEach {
@@ -86,7 +98,6 @@ class SplitDomain(val domain : File) {
             val lowerKey = key.lowercase()
             neededPredicatesNames.contains(lowerKey)
         }
-
 
         return neededPredicates.map { predicate ->
             "(" + predicate.key + when(predicate.value) {
@@ -116,7 +127,7 @@ class SplitDomain(val domain : File) {
     }
 
     // returns a set containing all predicates
-    private fun extractPredicates() : Set<String> {
+    private fun definedPredicates() : Set<String> {
         val pred : MutableSet<String> = mutableSetOf()
         for (p in predicates) {
             // add predicate, if it can be identified

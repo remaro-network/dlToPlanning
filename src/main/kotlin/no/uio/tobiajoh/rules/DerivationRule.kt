@@ -55,10 +55,10 @@ class DerivationRule(
 
     // the predicates used in this rule
     fun usedPredicates() : Map<String, Int> {
-        val pred = head.usedPredicates().toMutableMap()
+        val pred = mutableMapOf(head.usedPredicate())
         condition.forEach { disjunct ->
             disjunct.forEach { assertion ->
-                pred += assertion.usedPredicates()
+                pred += assertion.usedPredicate()
             }
         }
         return pred

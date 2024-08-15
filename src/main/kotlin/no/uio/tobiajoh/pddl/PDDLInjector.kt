@@ -1,14 +1,12 @@
 package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.OntologyTranslator
-import no.uio.tobiajoh.rules.DerivationRule
-import no.uio.tobiajoh.rules.OwlAssertion
-import no.uio.tobiajoh.rules.OwlAssertionConstant
+import no.uio.tobiajoh.rules.*
 import org.semanticweb.owlapi.apibinding.OWLManager
 import java.io.File
 
 // class to add rules to an existing PDDL file
-class PDDLInjector {
+class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     private val rules : MutableSet<DerivationRule> = mutableSetOf()
     private val constants : MutableSet<OwlAssertionConstant> = mutableSetOf()
@@ -17,6 +15,7 @@ class PDDLInjector {
 
     // relation, that is used for the comparison operator
     private val leqRelation = "leq"
+
 
     // objects that new objects minus the ones that are already constants
     private val objects get() = assertions.flatMap {
@@ -39,8 +38,16 @@ class PDDLInjector {
     fun addToDomain(oldDomain : File, newDomain : File) {
         val sD = SplitDomain(oldDomain)
 
+        // add rules and constants to domain
         sD.addRules(rules)
         sD.addConstants(constants)
+
+        // introduce numerical comparison, if necessary
+        if (addNumComparisons) {
+            val var1 = OwlAssertionVariable("?x")
+            val var2 = OwlAssertionVariable("?y")
+            sD.addPredicate(OwlAssertionFactory().ruleAssertion(leqRelation, var1, var2))
+        }
 
         sD.outputToFile(newDomain)
     }
@@ -62,7 +69,8 @@ class PDDLInjector {
         val sP = SplitProgram(oldProblem)
 
         // calculate the comparison relationship between numbers
-        addNumberComparisons()
+        if (addNumComparisons)
+            addNumberComparisons()
 
         sP.addInitialAssertions(assertions)
 
