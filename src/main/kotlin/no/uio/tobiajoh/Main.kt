@@ -32,6 +32,12 @@ class Main : CliktCommand() {
     private val addNumComparison by option("--add-num-comparisons",
         help = "Set flag to add comparison relation between numerical data from OWL to PDDL problem.").flag()
 
+    private val saveProblemAdditions by option("--save-problem-additions",
+        help = "Set flag to save the assertions added to the problem file. Necessary to load them later to update " +
+                "problem file without reading ontology again.").flag()
+    private val loadProblemAdditions by option("--load-problem-additions",
+        help = "Set flag to load the assertions to be added to the problem file.").flag()
+
     override fun run() {
         if (owlFile == null || !owlFile!!.exists()) {
             println("ERROR: Please provide an existing OWL file.")
@@ -98,6 +104,12 @@ class Main : CliktCommand() {
                 inputProblemFile!!,
                 outputProblemFile!!
             )
+
+        if (saveProblemAdditions)
+            rI.saveAdditionsOfProblemFile(File("examples/suave/export.temp"))
+
+        if (loadProblemAdditions)
+            rI.loadAdditionsOfProblemFile(File("examples/suave/export.temp"))
     }
 }
 

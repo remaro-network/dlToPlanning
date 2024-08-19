@@ -1,5 +1,6 @@
 package no.uio.tobiajoh.pddl
 
+import io.kotlintest.matchers.match
 import no.uio.tobiajoh.OntologyTranslator
 import no.uio.tobiajoh.owl.*
 import org.semanticweb.owlapi.apibinding.OWLManager
@@ -13,6 +14,12 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     private val assertions : MutableSet<OwlAssertion> = mutableSetOf()
 
+    // assertions to compare numerical values
+    private val numberComparisionAssertions : MutableSet<OwlAssertion> = mutableSetOf()
+
+    // delimiter used for temporal output
+    private val typeDelimiter = "::"
+
     private val assertionFactory = OwlAssertionFactory()
     private val assertionConstantFactory  = OwlAssertionConstantFactory()
 
@@ -24,6 +31,8 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     private val numbers get() = assertions.flatMap { it.usedNumbers }.toSet()
 
+    private val objectsWithoutNumbers get() = objects.minus(numbers)
+
     fun addRules(newRules : Set<DerivationRule>) {
         newRules.forEach {rules.add(it) }
     }
@@ -34,6 +43,10 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     fun addAssertions(newAssertions : Set<OwlAssertion>) {
         newAssertions.forEach {assertions.add(it)}
+    }
+
+    fun addNumComparisonAssertions(newAssertions : Set<OwlAssertion>) {
+        newAssertions.forEach {numberComparisionAssertions.add(it)}
     }
 
     fun addToDomain(oldDomain : File, newDomain : File) {
@@ -54,7 +67,7 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         sD.outputToFile(newDomain)
     }
 
-    private fun addNumberComparisons(numbersToCompare : Set<OwlNumber>) {
+    private fun NumberComparisons(numbersToCompare : Set<OwlNumber>) : Set<OwlAssertion> {
         val comparisons : MutableSet<OwlAssertion> = mutableSetOf()
 
         for (n in numbersToCompare)
@@ -68,11 +81,10 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
                         OwlAssertion(OwlNumber.LESSRELATION, listOf(n, m))
                     )
             }
-
-        addAssertions(comparisons)
+        return comparisons
     }
 
-    fun addToProblem(oldProblem : File, newProblem : File) {
+    fun addToProblem(oldProblem : File, newProblem : File, ) {
         val sP = SplitProgram(oldProblem)
 
         // calculate the comparison relationship between numbers if desired
@@ -86,17 +98,48 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
             val numbersToCompare = numbers.plus(existingNumbers)
 
             // add comparison relation
-            addNumberComparisons(numbersToCompare)
+            val comparisons = NumberComparisons(numbersToCompare)
+            addNumComparisonAssertions(comparisons)
+            sP.addInitialAssertions(comparisons)
         }
 
         sP.addInitialAssertions(assertions)
 
-        sP.addObjects(objects.minus(numbers))
+        sP.addObjects(objectsWithoutNumbers)
         sP.addNumbers(numbers)
 
         sP.outputToFile(newProblem)
 
     }
+
+    // export assertions that are added to problem file --> makes updating problem file without ontology possible
+    fun saveAdditionsOfProblemFile(outputFile : File) {
+        outputFile.printWriter().use {out ->
+            for (a in assertions)
+                out.println("ASSERTION$typeDelimiter$a")
+            for (c in constants)
+                out.println("CONSTANT$typeDelimiter$c")
+        }
+    }
+
+    // read exported assertions and constant to add to problem file
+    fun loadAdditionsOfProblemFile(inputFile : File) {
+        inputFile.forEachLine { line ->
+            println(line)
+
+            val splitLine = line.split(typeDelimiter)
+            if (splitLine.size == 2)
+                when (splitLine[0]) {
+                    "ASSERTION" -> println("ass: ${splitLine[1]}")
+                    "CONSTANT" -> println("const: ${splitLine[1]}")
+                }
+
+
+
+        }
+    }
+
+
 
     // loads content (rules, constants, assertions) from OWL file
     fun loadOWLFile(owlFile: File,

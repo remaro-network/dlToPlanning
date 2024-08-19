@@ -95,6 +95,8 @@ class OwlAssertionFactory {
         return OwlAssertion(relation, mutableListOf(variable1, variable2))
     }
 
+    
+
     fun parseOWLABoxAxiom(axiom : OWLLogicalAxiom, parseDataProperties: Boolean) : OwlAssertion? {
         return when (axiom) {
             is OWLClassAssertionAxiom -> parseClassAssertionAxiom(axiom)
