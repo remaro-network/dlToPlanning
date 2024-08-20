@@ -95,7 +95,16 @@ class OwlAssertionFactory {
         return OwlAssertion(relation, mutableListOf(variable1, variable2))
     }
 
-    
+    // the whole assertion is represented as a string
+    fun ruleAssertion(assertionString : String) : OwlAssertion{
+        val splitString = assertionString.trim().removeSuffix(")").split("(")
+        assert(splitString.size == 2)
+
+        val relation = splitString[0]
+        // take all elements and transform them into variables
+        val vars = splitString[1].split(" ").map { OwlAssertionVariable(it.trim()) }
+        return OwlAssertion(relation, vars)
+    }
 
     fun parseOWLABoxAxiom(axiom : OWLLogicalAxiom, parseDataProperties: Boolean) : OwlAssertion? {
         return when (axiom) {

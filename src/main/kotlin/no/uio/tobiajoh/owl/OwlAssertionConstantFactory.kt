@@ -12,6 +12,10 @@ class OwlAssertionConstantFactory {
     // set of all datatypes that represent numbers (that we can parse)
     val supportedNumberTypes = setOf(decimal)
 
+    fun getOwlAssertionConstant(name : String) : OwlAssertionConstant {
+        return OwlAssertionConstant(name)
+    }
+
     fun parseOWLLiteral(literalArgument: OWLLiteral) : OwlAssertionConstant {
         val dataType = literalArgument.datatype
         val typeName = dataType.iri.shortForm

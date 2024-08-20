@@ -19,6 +19,11 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     // delimiter used for temporal output
     private val typeDelimiter = "::"
+    // numbers and object read from file
+    private val additionalNumbers : MutableSet<OwlNumber> = mutableSetOf()
+    private val additionalObjects : MutableSet<OwlAssertionConstant> = mutableSetOf()
+
+
 
     private val assertionFactory = OwlAssertionFactory()
     private val assertionConstantFactory  = OwlAssertionConstantFactory()
@@ -27,9 +32,9 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     // objects that new objects minus the ones that are already constants
     private val objects get() = assertions.flatMap {
-        it.usedConstants }.toSet().minus(constants)
+        it.usedConstants }.toSet().plus(additionalObjects).minus(constants)
 
-    private val numbers get() = assertions.flatMap { it.usedNumbers }.toSet()
+    private val numbers get() = assertions.flatMap { it.usedNumbers }.toSet().plus(additionalNumbers)
 
     private val objectsWithoutNumbers get() = objects.minus(numbers)
 
@@ -38,11 +43,19 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
     }
 
     fun addConstants(newConstants : Set<OwlAssertionConstant>) {
-        newConstants.forEach {constants.add(it)}
+        newConstants.forEach {addConstant(it)}
+    }
+
+    private fun addConstant(newConstant : OwlAssertionConstant) {
+        constants.add(newConstant)
     }
 
     fun addAssertions(newAssertions : Set<OwlAssertion>) {
-        newAssertions.forEach {assertions.add(it)}
+        newAssertions.forEach {addAssertion(it)}
+    }
+
+    private fun addAssertion(newAssertion : OwlAssertion) {
+        assertions.add(newAssertion)
     }
 
     fun addNumComparisonAssertions(newAssertions : Set<OwlAssertion>) {
@@ -115,27 +128,30 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
     // export assertions that are added to problem file --> makes updating problem file without ontology possible
     fun saveAdditionsOfProblemFile(outputFile : File) {
         outputFile.printWriter().use {out ->
-            for (a in assertions)
+            for (a in assertions.sortedBy { it.toString() })
                 out.println("ASSERTION$typeDelimiter$a")
-            for (c in constants)
-                out.println("CONSTANT$typeDelimiter$c")
+            for (c in objectsWithoutNumbers.sortedBy { it.toString() })
+                out.println("OBJECT$typeDelimiter$c")
+            for (n in numbers.sortedBy { it.value() })
+                out.println("NUMBER$typeDelimiter$n")
         }
     }
 
     // read exported assertions and constant to add to problem file
+    // CAVE: assertions are not fully parsed, e.g. numbers in assertions are just treated as strings
     fun loadAdditionsOfProblemFile(inputFile : File) {
         inputFile.forEachLine { line ->
-            println(line)
-
             val splitLine = line.split(typeDelimiter)
-            if (splitLine.size == 2)
-                when (splitLine[0]) {
-                    "ASSERTION" -> println("ass: ${splitLine[1]}")
-                    "CONSTANT" -> println("const: ${splitLine[1]}")
+            if (splitLine.size == 2) {
+                val lineType = splitLine[0]
+                val lineValue = splitLine[1]
+                when (lineType) {
+                    // assertions are saved as they are, i.e. contained numbers are not parsed
+                    "ASSERTION" -> addAssertion(assertionFactory.ruleAssertion(lineValue))
+                    "OBJECT" -> additionalObjects.add(assertionConstantFactory.getOwlAssertionConstant(lineValue))
+                    "NUMBER" -> additionalNumbers.add(assertionConstantFactory.parseNumberFromString(lineValue)!!)
                 }
-
-
-
+            }
         }
     }
 

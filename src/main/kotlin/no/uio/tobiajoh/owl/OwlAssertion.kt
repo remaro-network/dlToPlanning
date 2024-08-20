@@ -23,9 +23,7 @@ class OwlAssertion(
 
     override fun toString() : String {
         var s = "$relation("
-        for (v in variables) {
-            s += "$v "
-        }
+        s += variables.joinToString(" ")
         return "$s) "
     }
 

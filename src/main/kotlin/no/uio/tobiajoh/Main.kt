@@ -32,15 +32,24 @@ class Main : CliktCommand() {
     private val addNumComparison by option("--add-num-comparisons",
         help = "Set flag to add comparison relation between numerical data from OWL to PDDL problem.").flag()
 
-    private val saveProblemAdditions by option("--save-problem-additions",
-        help = "Set flag to save the assertions added to the problem file. Necessary to load them later to update " +
+    private val saveProblemAdditions by option("--export-problem-additions", "--save-problem-additions",
+        help = "Set flag to export the assertions added to the problem file. Necessary to import them later to update " +
                 "problem file without reading ontology again.").flag()
-    private val loadProblemAdditions by option("--load-problem-additions",
-        help = "Set flag to load the assertions to be added to the problem file.").flag()
+
+    private val loadProblemAdditions by option("--import-problem-additions", "--load-problem-additions",
+        help = "Set flag to import the assertions to be added to the problem file.").flag()
+
+    private val additionsFile by option("--problem-additions",
+        help = "Name for file where the additions to the problem file are stored.").file()
 
     override fun run() {
-        if (owlFile == null || !owlFile!!.exists()) {
+        if (!loadProblemAdditions && (owlFile == null || !owlFile!!.exists())) {
             println("ERROR: Please provide an existing OWL file.")
+            return
+        }
+
+        if (loadProblemAdditions && (additionsFile == null || !additionsFile!!.exists())) {
+            println("ERROR: Please provide an existing file with the exported additions.")
             return
         }
 
@@ -77,7 +86,22 @@ class Main : CliktCommand() {
 
             if (outputProblemFile!!.exists() && !overwriteOutput) {
                 println(
-                    "ERROR: Output file does already exists and can not be replaced." +
+                    "ERROR: Output file for problem does already exists and can not be replaced." +
+                            "Consider changing the name of the output file or setting the \"--replace-output\" flag."
+                )
+                return
+            }
+        }
+
+        if (saveProblemAdditions) {
+            if (additionsFile == null)  {
+                println("ERROR: Please provide an output file to export the additions.")
+                return
+            }
+
+            if (additionsFile!!.exists() && !overwriteOutput) {
+                println(
+                    "ERROR: Output file for exported additions does already exists and can not be replaced." +
                             "Consider changing the name of the output file or setting the \"--replace-output\" flag."
                 )
                 return
@@ -91,7 +115,11 @@ class Main : CliktCommand() {
 
         val rI = PDDLInjector(addNumComparison)
 
-        rI.loadOWLFile(owlFile!!, !ignoreDataProperties)
+        if (loadProblemAdditions)
+            rI.loadAdditionsOfProblemFile(additionsFile!!)
+
+        if (owlFile != null)
+            rI.loadOWLFile(owlFile!!, !ignoreDataProperties)
 
         if (insertTBox)
             rI.addToDomain(
@@ -106,10 +134,7 @@ class Main : CliktCommand() {
             )
 
         if (saveProblemAdditions)
-            rI.saveAdditionsOfProblemFile(File("examples/suave/export.temp"))
-
-        if (loadProblemAdditions)
-            rI.loadAdditionsOfProblemFile(File("examples/suave/export.temp"))
+            rI.saveAdditionsOfProblemFile(additionsFile!!)
     }
 }
 
