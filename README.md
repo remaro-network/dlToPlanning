@@ -3,6 +3,7 @@
 - translates OWL TBox axioms to PDDL derived predicates and inputs them into existing PDDL domain
 - translates OWL ABox axioms to PDDL to assertions and inputs them into existing PDDL problem
 - takes care of introducing new constants and objects, where necessary
+- can introduce comparision between numbers from ontology in planning domain
 
 ## Build
 build project by running
@@ -44,8 +45,8 @@ java -jar build/libs/dlToPlanning-1.0-SNAPSHOT-all.jar --aBox --inProblem=<input
 
 You can also export, while creating the problem and domain file, e.g. the first time the ontology is consulted and to use updates after that:
 ```
-  ./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> --export-problem-additions --problem-additions=<exportedAdditions> [OPTIONS]
-  ```
+./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> --export-problem-additions --problem-additions=<exportedAdditions> [OPTIONS]
+```
 
 ### Effect on Runtime
 Using the update has a significant impact on the runtime. E.g. in one of our tests, reading from ontology required 0.73s, reading from exported file required 0.34s (where only loading the classes took already about 0.20s).
