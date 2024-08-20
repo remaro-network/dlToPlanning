@@ -32,11 +32,11 @@ class Main : CliktCommand() {
     private val addNumComparison by option("--add-num-comparisons",
         help = "Set flag to add comparison relation between numerical data from OWL to PDDL problem.").flag()
 
-    private val saveProblemAdditions by option("--export-problem-additions", "--save-problem-additions",
+    private val saveProblemAdditions by option("--export-problem-additions",
         help = "Set flag to export the assertions added to the problem file. Necessary to import them later to update " +
                 "problem file without reading ontology again.").flag()
 
-    private val loadProblemAdditions by option("--import-problem-additions", "--load-problem-additions",
+    private val loadProblemAdditions by option("--import-problem-additions",
         help = "Set flag to import the assertions to be added to the problem file.").flag()
 
     private val additionsFile by option("--problem-additions",
@@ -108,8 +108,9 @@ class Main : CliktCommand() {
             }
         }
 
-        if (!insertTBox && ! insertABox) {
-            println("WARNING: neither ABox, not TBox are selected to be inserted into PDDL.")
+        if (!insertTBox && ! insertABox && !saveProblemAdditions) {
+            println("WARNING: neither ABox, not TBox are selected to be inserted into PDDL. " +
+                    "And neither is exporting the addition of the problem file.")
             return
         }
 
@@ -132,6 +133,7 @@ class Main : CliktCommand() {
                 inputProblemFile!!,
                 outputProblemFile!!
             )
+
 
         if (saveProblemAdditions)
             rI.saveAdditionsOfProblemFile(additionsFile!!)
