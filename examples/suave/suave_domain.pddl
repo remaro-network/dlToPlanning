@@ -13,6 +13,7 @@
         pipeline
         robot
         action
+        number
     )
 
     (:predicates
