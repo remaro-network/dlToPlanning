@@ -6,7 +6,7 @@
     a_search_pipeline a_inspect_pipeline - action 
     pipeline - pipeline 
     bluerov - robot 
-    2.0_decimal 3.25_decimal 0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal - number 
+    2.0_decimal 3.25_decimal 0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal - owl-number 
 )
 
   (:init
