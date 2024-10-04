@@ -22,11 +22,9 @@
         (pipeline_found ?p - pipeline)
         (pipeline_inspected ?p - pipeline)
 
-        (a_search_pipeline_requires_f ?a - action ?f1 ?f2)
-        (a_inspect_pipeline_requires_f ?a - action ?f1 ?f2)
-
         (robot_started ?r - robot)
 
+        (action_requires ?a - action ?f1 ?f2)
         (fd_available ?fd)
 
 		(Component ?x)
@@ -68,7 +66,7 @@
 		(inferred-Qa_comparison_operator ?x ?y)
 		(inferred-Qa_critical ?x ?y)
 		(inferred-QualityAttributeType ?x)
-		(inferred-RequiredBy ?x ?y)
+		(inferred-RequiresC ?x ?y)
 		(inferred-RequiresO ?x ?y)
 		(inferred-SolvesF ?x ?y)
 		(inferred-SolvesO ?x ?y)
@@ -81,7 +79,7 @@
 		(o_updatable ?x ?y)
 		(qa_comparison_operator ?x ?y)
 		(qa_critical ?x ?y)
-		(requiredBy ?x ?y)
+		(requiresC ?x ?y)
 		(requiresO ?x ?y)
 		(solvesF ?x ?y)
 		(solvesO ?x ?y)
@@ -109,6 +107,15 @@
 	(exists (?y)
  		(and
 			(inferred-C_status ?x ?y)
+		)
+	)
+ )
+
+
+(:derived (inferred-Component ?y) 
+	(exists (?x)
+ 		(and
+			(inferred-RequiresC ?x ?y)
 		)
 	)
  )
@@ -156,14 +163,14 @@
 )
 
 
-(:derived (inferred-Fd_realisability ?fg ?false_boolean) 
+(:derived (inferred-Fd_realisability ?fd ?false_boolean) 
 	(and
 		(= ?false_boolean false_boolean)
 		(exists (?c)
  			(and
 				(inferred-C_status ?c FALSE_string)
 				(inferred-Component ?c)
-				(inferred-RequiredBy ?c ?fg)
+				(inferred-RequiresC ?fd ?c)
 			)
 		)
  	)
@@ -186,7 +193,7 @@
 				(inferred-C_status ?c FALSE_string)
 				(inferred-TypeFD ?fg ?fd)
 				(inferred-Component ?c)
-				(inferred-RequiredBy ?c ?fd)
+				(inferred-RequiresC ?fd ?c)
 			)
 		)
  	)
@@ -331,6 +338,15 @@
 	(exists (?y)
  		(and
 			(inferred-HasQAestimation ?x ?y)
+		)
+	)
+ )
+
+
+(:derived (inferred-FunctionDesign ?x) 
+	(exists (?y)
+ 		(and
+			(inferred-RequiresC ?x ?y)
 		)
 	)
  )
@@ -854,9 +870,9 @@
  )
 
 
-(:derived (inferred-RequiredBy ?x ?y) 
+(:derived (inferred-RequiresC ?x ?y) 
 	(and
-		(requiredBy ?x ?y)
+		(requiresC ?x ?y)
 	)
 )
 
@@ -907,19 +923,22 @@
     )
 
     (:action search_pipeline
-      :parameters (?a - action ?p - pipeline ?r - robot ?f1 ?f2 ?fd1 ?fd2)
+      :parameters (?a - action ?p - pipeline ?r - robot ?fd1 ?fd2)
       :precondition (and
-        (a_search_pipeline_requires_f ?a ?f1 ?f2)
-
-        (Function ?f1)
-        (Function ?f2)
-        (FunctionDesign ?fd1)
-        (FunctionDesign ?fd2)
-        (solvesF ?fd1 ?f1)
-        (solvesF ?fd2 ?f2)
-        (fd_available ?fd1)
-        (fd_available ?fd2)
-
+        (= ?a a_search_pipeline)
+        (exists (?f1 ?f2)
+          (and
+            (action_requires ?a ?f1 ?f2)
+            (Function ?f1)
+            (Function ?f2)
+            (FunctionDesign ?fd1)
+            (FunctionDesign ?fd2)
+            (solvesF ?fd1 ?f1)
+            (solvesF ?fd2 ?f2)
+            (not (inferred-Fd_realisability ?fd1 false_boolean))
+            (not (inferred-Fd_realisability ?fd2 false_boolean))
+          )
+        )
         (robot_started ?r)
       )
       :effect (and
@@ -928,18 +947,22 @@
     )
 
     (:action inspect_pipeline
-      :parameters (?a - action ?p - pipeline ?r - robot ?f1 ?f2 ?fd1 ?fd2)
+      :parameters (?a - action ?p - pipeline ?r - robot ?fd1 ?fd2)
       :precondition (and
-        (a_inspect_pipeline_requires_f ?a ?f1 ?f2)
-
-        (Function ?f1)
-        (Function ?f2)
-        (FunctionDesign ?fd1)
-        (FunctionDesign ?fd2)
-        (solvesF ?fd1 ?f1)
-        (solvesF ?fd2 ?f2)
-        (fd_available ?fd1)
-        (fd_available ?fd2)
+        (= ?a a_inspect_pipeline)
+        (exists (?f1 ?f2)
+          (and
+            (action_requires ?a ?f1 ?f2)
+            (Function ?f1)
+            (Function ?f2)
+            (FunctionDesign ?fd1)
+            (FunctionDesign ?fd2)
+            (solvesF ?fd1 ?f1)
+            (solvesF ?fd2 ?f2)
+            (not (inferred-Fd_realisability ?fd1 false_boolean))
+            (not (inferred-Fd_realisability ?fd2 false_boolean))
+          )
+        )
 
         (robot_started ?r)
         (pipeline_found ?p)
