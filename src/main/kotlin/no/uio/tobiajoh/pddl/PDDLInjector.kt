@@ -121,6 +121,9 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         sP.addObjects(objectsWithoutNumbers)
         sP.addNumbers(numbers)
 
+        // remove the already defined constants from the list of objects
+        sP.removeConstants(constants)
+
         sP.outputToFile(newProblem)
 
     }
@@ -134,6 +137,8 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
                 out.println("OBJECT$typeDelimiter$c")
             for (n in numbers.sortedBy { it.value() })
                 out.println("NUMBER$typeDelimiter$n")
+            for (c in constants.sortedBy { it.toString() })
+                out.println("CONSTANT$typeDelimiter$c")
         }
     }
 
@@ -150,6 +155,7 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
                     "ASSERTION" -> addAssertion(assertionFactory.ruleAssertion(lineValue))
                     "OBJECT" -> additionalObjects.add(assertionConstantFactory.getOwlAssertionConstant(lineValue))
                     "NUMBER" -> additionalNumbers.add(assertionConstantFactory.parseNumberFromString(lineValue)!!)
+                    "CONSTANT" -> constants.add(assertionConstantFactory.getOwlAssertionConstant(lineValue))
                 }
             }
         }
@@ -173,9 +179,13 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         addRules(rules)
         addConstants(usedConstants)
 
-        val assertions = translator.addAssertions(ont, addDataProperties)
 
+        val assertions = translator.addAssertions(ont, addDataProperties)
         addAssertions(assertions)
+
+        // we want to declare every object as a constant --> faster computation for PlanSys
+        addConstants(objectsWithoutNumbers)
+
 
     }
 

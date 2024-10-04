@@ -13,10 +13,10 @@
         pipeline
         robot
         action
-        number
+        owl-number
     )
 
-	(:constants FALSE_string INTERNAL_ERROR_string IN_ERROR_COMPONENT_string IN_ERROR_FR_string IN_ERROR_NFR_string RECOVERED_string false_boolean true_boolean water_visibility)
+	(:constants <_string FALSE_string INTERNAL_ERROR_string IN_ERROR_COMPONENT_string IN_ERROR_FR_string IN_ERROR_NFR_string RECOVERED_string battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy f_follow_pipeline f_generate_search_path f_maintain_motion false_boolean fd_all_thrusters fd_follow_pipeline fd_recover_thrusters fd_spiral_high fd_spiral_low fd_spiral_medium obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety true_boolean water_visibility)
 
     (:predicates
         (pipeline_found ?p - pipeline)

@@ -102,6 +102,14 @@ class SplitProgram(val problem : File) {
         }
     }
 
+    // remove the objects from the object list that are already declared as constants (somewhere else)
+    fun removeConstants(constants: Set<OwlAssertionConstant>) {
+        constants.forEach { c ->
+            val cPddl = c.toString()    // name of constant in Pddl
+            if (objects.containsKey(cPddl))
+                objects.remove(cPddl)
+        }
+    }
     // return all objects that have the type of owl numbers
     fun getNumbers() : Set<String> {
         return objects.filterValues { it==OwlNumber.PDDLTYPE }.keys
@@ -111,6 +119,9 @@ class SplitProgram(val problem : File) {
         outFile.printWriter().use { out ->
             out.println("(define (problem ${problemName})")
             out.println("  (:domain ${domain})\n")
+
+            // filter empty object
+            objects.remove("")
 
             if (objects.isNotEmpty()) {
                 out.print("  (:objects \n")
