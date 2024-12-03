@@ -13,6 +13,7 @@
     pipeline
     robot
     action
+    owl-number
   )
 
   (:predicates

@@ -1,57 +1,25 @@
 (define (problem example-auv)
   (:domain suave)
 
-  (:objects
-    a_search_pipeline a_inspect_pipeline - action
-    pipeline - pipeline
-    bluerov - robot
-    fd_spiral_high qa_water_visibility_high fd_spiral_low qa_water_visibility_low fd_all_thrusters c_thruster_1 qa_search_efficiency_medium performance qa_search_efficiency_high c_thruster_6 qa_motion_efficiency_degraded f_generate_search_path qa_motion_efficiency_normal fd_recover_thrusters f_maintain_motion qa_water_visibility_medium qa_inspect_efficiency_high qa_search_efficiency_low obs_water_visibility fd_spiral_medium fd_follow_pipeline f_follow_pipeline c_thruster_4 c_thruster_3 c_thruster_2 c_thruster_5 safety battery_level energy - object
-    2.0_decimal 3.25_decimal 0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal - owl-number
+  (:objects 
+    f_generate_search_path f_follow_pipeline f_maintain_motion fd_spiral_low fd_spiral_medium fd_spiral_high fd_all_thrusters fd_recover_thrusters fd_follow_pipeline  <_string battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety water_visibility - object 
+    a_search_pipeline a_inspect_pipeline - action 
+    pipeline - pipeline 
+    bluerov - robot 
+    0.25_decimal 0.5_decimal 0.75_decimal 1.0_decimal 1.25_decimal 2.25_decimal 3.25_decimal - number 
 )
 
   (:init
-    (inferred-c_status c_thruster_4 false_string)
-
-    (action_requires a_search_pipeline f_generate_search_path f_maintain_motion)
-    (action_requires a_inspect_pipeline f_follow_pipeline f_maintain_motion)
-
-    (equalTo 0.25_decimal 0.25_decimal)
-    (equalTo 0.5_decimal 0.5_decimal)
-    (equalTo 0.75_decimal 0.75_decimal)
-    (equalTo 1.0_decimal 1.0_decimal)
-    (equalTo 1.25_decimal 1.25_decimal)
-    (equalTo 2.0_decimal 2.0_decimal)
-    (equalTo 2.25_decimal 2.25_decimal)
-    (equalTo 3.25_decimal 3.25_decimal)
-    (lessThan 0.25_decimal 0.5_decimal)
-    (lessThan 0.25_decimal 0.75_decimal)
-    (lessThan 0.25_decimal 1.0_decimal)
-    (lessThan 0.25_decimal 1.25_decimal)
-    (lessThan 0.25_decimal 2.0_decimal)
-    (lessThan 0.25_decimal 2.25_decimal)
-    (lessThan 0.25_decimal 3.25_decimal)
-    (lessThan 0.5_decimal 0.75_decimal)
-    (lessThan 0.5_decimal 1.0_decimal)
-    (lessThan 0.5_decimal 1.25_decimal)
-    (lessThan 0.5_decimal 2.0_decimal)
-    (lessThan 0.5_decimal 2.25_decimal)
-    (lessThan 0.5_decimal 3.25_decimal)
-    (lessThan 0.75_decimal 1.0_decimal)
-    (lessThan 0.75_decimal 1.25_decimal)
-    (lessThan 0.75_decimal 2.0_decimal)
-    (lessThan 0.75_decimal 2.25_decimal)
-    (lessThan 0.75_decimal 3.25_decimal)
-    (lessThan 1.0_decimal 1.25_decimal)
-    (lessThan 1.0_decimal 2.0_decimal)
-    (lessThan 1.0_decimal 2.25_decimal)
-    (lessThan 1.0_decimal 3.25_decimal)
-    (lessThan 1.25_decimal 2.0_decimal)
-    (lessThan 1.25_decimal 2.25_decimal)
-    (lessThan 1.25_decimal 3.25_decimal)
-    (lessThan 2.0_decimal 2.25_decimal)
-    (lessThan 2.0_decimal 3.25_decimal)
-    (lessThan 2.25_decimal 3.25_decimal)
-
+    (fd_available fd_spiral_low)
+    (fd_available fd_spiral_medium)
+    (fd_available fd_spiral_high)
+    (fd_available fd_all_thrusters)
+    (fd_available fd_recover_thrusters)
+    (fd_available fd_follow_pipeline)
+    
+    (a_search_pipeline_requires_f a_search_pipeline f_generate_search_path f_maintain_motion)
+    (a_inspect_pipeline_requires_f a_inspect_pipeline f_follow_pipeline f_maintain_motion)
+    
     (Component c_thruster_1)
     (Component c_thruster_2)
     (Component c_thruster_3)

@@ -6,6 +6,9 @@
       a_inspect_pipeline - action
       pipeline - pipeline
       bluerov - robot
+
+      2.0_decimal - owl-number 
+      3.25_decimal - owl-number 
     )
 
     (:init

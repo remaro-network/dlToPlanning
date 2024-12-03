@@ -1,27 +1,29 @@
-package no.uio.tobiajoh.rules
+package no.uio.tobiajoh.owl
 
 
 // one assertion as part of a derivation rule
-class RuleAssertion(
+class OwlAssertion(
     private val relation: String,
-    public val variables: Set<RuleVariable>) {
+    public val variables: List<OwlAssertionVariable>) {
 
     private var negated = false // flag that indicates if the assertion is negated or not
 
-    private val constants = variables.filterIsInstance<RuleConstant>().toSet()
+    private val constants = variables.filterIsInstance<OwlAssertionConstant>().toSet()
+    private val numbers = variables.filterIsInstance<OwlNumber>().toSet()
+
 
     // introduce getter whose name is in line with other classes
-    val usedConstants : Set<RuleConstant> get() = constants
+    val usedConstants : Set<OwlAssertionConstant> get() = constants
+    val usedNumbers : Set<OwlNumber> get() = numbers
 
     // return predicate with arity
-    fun usedPredicates() : Map<String, Int> {
-        return mapOf(Pair(relation, variables.size))
+    fun usedPredicate() : Pair<String, Int> {
+        return Pair(relation, variables.size)
     }
 
     override fun toString() : String {
         var s = "$relation("
-        for (v in variables)
-            s += variables.toString()
+        s += variables.joinToString(" ")
         return "$s) "
     }
 
@@ -35,7 +37,7 @@ class RuleAssertion(
     // produces PDDL representation, but constants also get turned into corresponding variables
     fun toPDDLAllVariables() : String {
         val vars = variables.joinToString(" ") {v ->
-            if (v is RuleConstant)
+            if (v is OwlAssertionConstant)
                 v.variableName()
             else
                 v.toString()

@@ -1,44 +1,38 @@
-package no.uio.tobiajoh.rules
-
-import arrow.core.extensions.id.applicative.map
-import org.eclipse.jgit.lib.Constants
-import org.semanticweb.owlapi.model.*
-import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl
-import uk.ac.manchester.cs.owl.owlapi.OWLObjectPropertyImpl
+package no.uio.tobiajoh.owl
 
 // represents a derivation rule
 class DerivationRule(
-    private val head : RuleAssertion,
-    singleCondition : List<RuleAssertion>?,
-    private val boundedVariables : Set<RuleVariable>) {
+    private val head : OwlAssertion,
+    singleCondition : List<OwlAssertion>?,
+    private val boundedVariables : Set<OwlAssertionVariable>) {
 
     // our condition is a list, as one can add more arguments in the future
-    private val condition : MutableList<List<RuleAssertion>> =
+    private val condition : MutableList<List<OwlAssertion>> =
         if (singleCondition!=null)
             mutableListOf(singleCondition)
         else
             mutableListOf()
 
     // constructor without bounded variables
-    constructor(head : RuleAssertion,
-                condition : List<RuleAssertion>) : this(
+    constructor(head : OwlAssertion,
+                condition : List<OwlAssertion>) : this(
                     head,
                     condition,
                     setOf(),
                 )
 
     // constructor with only one assertion in condition
-    constructor(head : RuleAssertion,
-                condition : RuleAssertion) : this(
+    constructor(head : OwlAssertion,
+                condition : OwlAssertion) : this(
         head,
         listOf(condition),
         setOf(),
     )
 
     // constructor with only one assertion in condition
-    constructor(head : RuleAssertion,
-                condition : RuleAssertion,
-                boundedVariables : Set<RuleVariable>) : this(
+    constructor(head : OwlAssertion,
+                condition : OwlAssertion,
+                boundedVariables : Set<OwlAssertionVariable>) : this(
         head,
         listOf(condition),
         boundedVariables,
@@ -46,25 +40,25 @@ class DerivationRule(
 
 
     // collects all constants used in the contained assertions
-    val usedConstants : Set<RuleConstant>
+    val usedConstants : Set<OwlAssertionConstant>
         get() = condition.flatMap{ clause ->
             clause.flatMap { it.usedConstants }
         }.toSet().union(usedHeadConstants)
 
-    val usedHeadConstants : Set<RuleConstant>
+    val usedHeadConstants : Set<OwlAssertionConstant>
         get() = head.usedConstants
 
 
-    fun addCondition(newCondition: List<RuleAssertion>) {
+    fun addCondition(newCondition: List<OwlAssertion>) {
         condition.add(newCondition)
     }
 
     // the predicates used in this rule
     fun usedPredicates() : Map<String, Int> {
-        val pred = head.usedPredicates().toMutableMap()
+        val pred = mutableMapOf(head.usedPredicate())
         condition.forEach { disjunct ->
             disjunct.forEach { assertion ->
-                pred += assertion.usedPredicates()
+                pred += assertion.usedPredicate()
             }
         }
         return pred

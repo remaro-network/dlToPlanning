@@ -1,7 +1,8 @@
 package no.uio.tobiajoh.pddl
 
-import no.uio.tobiajoh.rules.RuleAssertion
-import no.uio.tobiajoh.rules.RuleConstant
+import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionConstant
+import no.uio.tobiajoh.owl.OwlNumber
 import java.io.File
 
 
@@ -78,23 +79,49 @@ class SplitProgram(val problem : File) {
         }
     }
 
-    fun addInitialAssertions(assertions: Set<RuleAssertion>) {
+    fun addInitialAssertions(assertions: Set<OwlAssertion>) {
         initialCond.add("") // add empty line to make it easier to find generated assertions
-        assertions.forEach { initialCond.add(it.toPDDL()) }
+        val sortedAssertions = assertions.map { it.toPDDL() }.sorted()
+        sortedAssertions.forEach { initialCond.add(it) }
     }
 
-    fun addObjects(newObjects: Set<RuleConstant>) {
+    fun addObjects(newObjects: Set<OwlAssertionConstant>) {
         // add objects that are not already contained
-        newObjects.forEach { o ->
-            if (!objects.containsKey(o.toString()))
-                objects[o.toString()] = "object"
+        val sortedObjects = newObjects.map { it.toString() }.sorted()
+        sortedObjects.forEach { o ->
+            if (!objects.containsKey(o))
+                objects[o] = "object"
         }
+    }
+
+    fun addNumbers(newNumbers: Set<OwlNumber>) {
+        val sortedNumbers = newNumbers.map { it.toString() }.sorted()
+        sortedNumbers.forEach { n ->
+            if (!objects.containsKey(n))
+                objects[n] = OwlNumber.PDDLTYPE
+        }
+    }
+
+    // remove the objects from the object list that are already declared as constants (somewhere else)
+    fun removeConstants(constants: Set<OwlAssertionConstant>) {
+        constants.forEach { c ->
+            val cPddl = c.toString()    // name of constant in Pddl
+            if (objects.containsKey(cPddl))
+                objects.remove(cPddl)
+        }
+    }
+    // return all objects that have the type of owl numbers
+    fun getNumbers() : Set<String> {
+        return objects.filterValues { it==OwlNumber.PDDLTYPE }.keys
     }
 
     fun outputToFile(outFile: File) {
         outFile.printWriter().use { out ->
             out.println("(define (problem ${problemName})")
             out.println("  (:domain ${domain})\n")
+
+            // filter empty object
+            objects.remove("")
 
             if (objects.isNotEmpty()) {
                 out.print("  (:objects \n")
@@ -127,4 +154,6 @@ class SplitProgram(val problem : File) {
             out.println(")")
         }
     }
+
+
 }

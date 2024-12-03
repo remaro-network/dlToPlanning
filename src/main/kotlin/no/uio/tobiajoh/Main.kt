@@ -28,12 +28,28 @@ class Main : CliktCommand() {
 
     private val ignoreDataProperties by option("--ignore-data-props",
         help = "Set flag to ignore data properties in ABox when translating to PDDL problem.").flag()
-    
-    private val rI = PDDLInjector()
+
+    private val addNumComparison by option("--add-num-comparisons",
+        help = "Set flag to add comparison relation between numerical data from OWL to PDDL problem.").flag()
+
+    private val saveProblemAdditions by option("--export-problem-additions",
+        help = "Set flag to export the assertions added to the problem file. Necessary to import them later to update " +
+                "problem file without reading ontology again.").flag()
+
+    private val loadProblemAdditions by option("--import-problem-additions",
+        help = "Set flag to import the assertions to be added to the problem file.").flag()
+
+    private val additionsFile by option("--problem-additions",
+        help = "Name for file where the additions to the problem file are stored.").file()
 
     override fun run() {
-        if (owlFile == null || !owlFile!!.exists()) {
+        if (!loadProblemAdditions && (owlFile == null || !owlFile!!.exists())) {
             println("ERROR: Please provide an existing OWL file.")
+            return
+        }
+
+        if (loadProblemAdditions && (additionsFile == null || !additionsFile!!.exists())) {
+            println("ERROR: Please provide an existing file with the exported additions.")
             return
         }
 
@@ -70,76 +86,57 @@ class Main : CliktCommand() {
 
             if (outputProblemFile!!.exists() && !overwriteOutput) {
                 println(
-                    "ERROR: Output file does already exists and can not be replaced." +
+                    "ERROR: Output file for problem does already exists and can not be replaced." +
                             "Consider changing the name of the output file or setting the \"--replace-output\" flag."
                 )
                 return
             }
         }
 
-        if (!insertTBox && ! insertABox) {
-            println("WARNING: neither ABox, not TBox are selected to be inserted into PDDL.")
+        if (saveProblemAdditions) {
+            if (additionsFile == null)  {
+                println("ERROR: Please provide an output file to export the additions.")
+                return
+            }
+
+            if (additionsFile!!.exists() && !overwriteOutput) {
+                println(
+                    "ERROR: Output file for exported additions does already exists and can not be replaced." +
+                            "Consider changing the name of the output file or setting the \"--replace-output\" flag."
+                )
+                return
+            }
+        }
+
+        if (!insertTBox && ! insertABox && !saveProblemAdditions) {
+            println("WARNING: neither ABox, not TBox are selected to be inserted into PDDL. " +
+                    "And neither is exporting the addition of the problem file.")
             return
         }
 
+        val rI = PDDLInjector(addNumComparison)
+
+        if (loadProblemAdditions)
+            rI.loadAdditionsOfProblemFile(additionsFile!!)
+
+        if (owlFile != null)
+            rI.loadOWLFile(owlFile!!, !ignoreDataProperties)
+
         if (insertTBox)
-            putTBoxIntoPDDL(
-                owlFile!!,
+            rI.addToDomain(
                 inputDomainFile!!,
                 outputDomainFile!!
             )
-
-
+        
         if (insertABox)
-            putABoxIntoPDDL(
-                owlFile!!,
+            rI.addToProblem(
                 inputProblemFile!!,
                 outputProblemFile!!
             )
 
-    }
 
-    private fun putTBoxIntoPDDL(owlFile : File,
-                                inputPDDLDomain : File,
-                                outputPDDLDomain : File) {
-        val manager = OWLManager.createOWLOntologyManager()
-
-        val ont = manager.loadOntologyFromOntologyDocument(owlFile)
-
-        val translator = OntologyTranslator()
-        val rules = translator.addRules(ont)
-
-        //val usedConstants = rules.flatMap { it.usedConstants }.union(assertions.flatMap { it.usedConstants }).toSet()
-        val usedConstants = rules.flatMap { it.usedConstants }.toSet() // individuals from ABox do not need to be declared as constants
-
-
-        rI.addRules(rules)
-        rI.addConstants(usedConstants)
-
-        rI.addToDomain(
-            inputPDDLDomain,
-            outputPDDLDomain
-        )
-    }
-
-    private fun putABoxIntoPDDL(owlFile : File,
-                                inputPDDL : File,
-                                outputPDDL : File) {
-
-        val manager = OWLManager.createOWLOntologyManager()
-        val ont = manager.loadOntologyFromOntologyDocument(owlFile)
-
-        val translator = OntologyTranslator()
-
-        val addDataProperties = !ignoreDataProperties
-        val assertions = translator.addAssertions(ont, addDataProperties)
-
-        rI.addAssertions(assertions)
-
-        rI.addToProblem(
-            inputPDDL,
-            outputPDDL
-        )
+        if (saveProblemAdditions)
+            rI.saveAdditionsOfProblemFile(additionsFile!!)
     }
 }
 

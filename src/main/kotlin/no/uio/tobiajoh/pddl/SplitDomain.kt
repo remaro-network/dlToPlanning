@@ -1,7 +1,8 @@
 package no.uio.tobiajoh.pddl
 
-import no.uio.tobiajoh.rules.DerivationRule
-import no.uio.tobiajoh.rules.RuleVariable
+import no.uio.tobiajoh.owl.DerivationRule
+import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionVariable
 import java.io.File
 import java.util.regex.Pattern
 
@@ -44,23 +45,36 @@ class SplitDomain(val domain : File) {
     fun addRules(rules : MutableSet<DerivationRule>) {
         // add rules to derived rules
         derivedRules.add("\n")
-        for (r in rules)
-            derivedRules.add("${r.toPDDL(1)}\n")
+        val sortedPDDLRules = rules.map { it.toPDDL() }.sorted()
+        for (r in sortedPDDLRules)
+            derivedRules.add("$r\n")
 
         // compute necessary declarations and add all of them to the domain
-        val declarations = requiredPredicateDeclarations(rules)
+        val declarations = requiredPredicateDeclarations(rules).sorted()
         val lastLine = predicates.removeLast()
         predicates.add("")
         declarations.forEach {
             predicates.add("\t\t$it")
         }
         predicates.add(lastLine)
-
-
     }
 
-    fun addConstants(constants : Set<RuleVariable>) {
-        constants.forEach { declaredConstants.add("$it")}
+    // adds a predicate to the list of declared predicates
+    // predicate is represented as assertion --> contains variables
+    fun addPredicate(assertion : OwlAssertion) {
+        val (pred, _) = assertion.usedPredicate()
+
+        // only add predicate, if it is not already defined
+        if (!definedPredicates().contains(pred)) {
+            val lastLine = predicates.removeLast()
+            predicates.add("\t\t${assertion.toPDDL()}")
+            predicates.add(lastLine)
+        }
+    }
+
+    fun addConstants(constants : Set<OwlAssertionVariable>) {
+        val sortedStringConstants = constants.map{ it.toString()}.sorted()
+        sortedStringConstants.forEach { declaredConstants.add(it)}
     }
 
 
@@ -70,7 +84,7 @@ class SplitDomain(val domain : File) {
         // add new predicates to list of predicates
         // we transform all predicates to lower case, as this is the standard notation
         // predicates already defined in domain
-        val existingPredicates = extractPredicates().map { it.lowercase() }
+        val existingPredicates = definedPredicates().map { it.lowercase() }
         // predicates used in derivision rules
         val usedPredicates : MutableMap<String, Int> = mutableMapOf()
         rules.forEach {
@@ -84,7 +98,6 @@ class SplitDomain(val domain : File) {
             val lowerKey = key.lowercase()
             neededPredicatesNames.contains(lowerKey)
         }
-
 
         return neededPredicates.map { predicate ->
             "(" + predicate.key + when(predicate.value) {
@@ -114,7 +127,7 @@ class SplitDomain(val domain : File) {
     }
 
     // returns a set containing all predicates
-    private fun extractPredicates() : Set<String> {
+    private fun definedPredicates() : Set<String> {
         val pred : MutableSet<String> = mutableSetOf()
         for (p in predicates) {
             // add predicate, if it can be identified

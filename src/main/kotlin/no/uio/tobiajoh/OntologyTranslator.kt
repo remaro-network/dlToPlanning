@@ -1,14 +1,14 @@
 package no.uio.tobiajoh
 
-import no.uio.tobiajoh.rules.DerivationRule
-import no.uio.tobiajoh.rules.DerivationRuleFactory
-import no.uio.tobiajoh.rules.RuleAssertion
-import no.uio.tobiajoh.rules.RuleAssertionFactory
+import no.uio.tobiajoh.owl.DerivationRule
+import no.uio.tobiajoh.owl.DerivationRuleFactory
+import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionFactory
 import org.semanticweb.owlapi.model.OWLOntology
 
 class OntologyTranslator {
     private val rules : MutableSet<DerivationRule> = mutableSetOf()
-    private val assertions : MutableSet<RuleAssertion> = mutableSetOf()
+    private val assertions : MutableSet<OwlAssertion> = mutableSetOf()
 
 
     fun addRules(ont: OWLOntology) : Set<DerivationRule> {
@@ -39,9 +39,9 @@ class OntologyTranslator {
         return rules.toSet()
     }
 
-    fun addAssertions(ont: OWLOntology, addDataProperties : Boolean) : Set<RuleAssertion> {
+    fun addAssertions(ont: OWLOntology, addDataProperties : Boolean) : Set<OwlAssertion> {
 
-        val assertionFactory = RuleAssertionFactory()
+        val assertionFactory = OwlAssertionFactory()
 
         for (a in ont.logicalAxioms)
             assertionFactory.parseOWLABoxAxiom(a, addDataProperties)?.let { assertions.add(it) }
