@@ -1,0 +1,36 @@
+ASSERTION::AlertLevel(al_compromized) 
+ASSERTION::AlertLevel(al_default) 
+ASSERTION::AlertLevel(al_halt) 
+ASSERTION::AlertLevel(al_soft_alert) 
+ASSERTION::Function(f_move) 
+ASSERTION::FunctionDesign(fd_move) 
+ASSERTION::FunctionDesign(fd_move_sensitive) 
+ASSERTION::Sensitive(fd_move_sensitive) 
+ASSERTION::alert_severity(al_compromized 3.0_decimal) 
+ASSERTION::alert_severity(al_default 0.0_decimal) 
+ASSERTION::alert_severity(al_halt 4.0_decimal) 
+ASSERTION::alert_severity(al_soft_alert 1.0_decimal) 
+ASSERTION::maxAlertLevel(fd_move al_compromized) 
+ASSERTION::maxAlertLevel(fd_move_sensitive al_default) 
+ASSERTION::solvesF(fd_move f_move) 
+ASSERTION::solvesF(fd_move_sensitive f_move) 
+NUMBER::0.0_decimal
+NUMBER::1.0_decimal
+NUMBER::3.0_decimal
+NUMBER::4.0_decimal
+CONSTANT::FALSE_string
+CONSTANT::INTERNAL_ERROR_string
+CONSTANT::IN_ERROR_COMPONENT_string
+CONSTANT::IN_ERROR_FR_string
+CONSTANT::IN_ERROR_NFR_string
+CONSTANT::RECOVERED_string
+CONSTANT::al_compromized
+CONSTANT::al_default
+CONSTANT::al_halt
+CONSTANT::al_soft_alert
+CONSTANT::f_move
+CONSTANT::false_boolean
+CONSTANT::fd_move
+CONSTANT::fd_move_sensitive
+CONSTANT::security_system
+CONSTANT::true_boolean

@@ -254,9 +254,9 @@ suave:qa_critical rdf:type owl:DatatypeProperty ;
 #    Classes
 #################################################################
 
-###  http://www.metacontro.org/tiagoPatrol#Sensible
-<http://www.metacontro.org/tiagoPatrol#Sensible> rdf:type owl:Class ;
-                                                 rdfs:comment "class to mark areas, waypoints and actions as sensible" .
+###  http://www.metacontro.org/tiagoPatrol#Sensitive
+<http://www.metacontro.org/tiagoPatrol#Sensitive> rdf:type owl:Class ;
+                                                  rdfs:comment "class to mark areas, waypoints and actions as sensible" .
 
 
 ###  http://www.metacontrol.org/security#AlertLevel
@@ -320,24 +320,27 @@ suave:QualityAttributeType rdf:type owl:Class .
 
 
 ###  http://www.metacontro.org/tiagoPatrol#f_move
-<http://www.metacontro.org/tiagoPatrol#f_move> rdf:type owl:NamedIndividual .
+<http://www.metacontro.org/tiagoPatrol#f_move> rdf:type owl:NamedIndividual ,
+                                                        suave:Function .
 
 
 ###  http://www.metacontro.org/tiagoPatrol#fd_move
-<http://www.metacontro.org/tiagoPatrol#fd_move> rdf:type owl:NamedIndividual ;
+<http://www.metacontro.org/tiagoPatrol#fd_move> rdf:type owl:NamedIndividual ,
+                                                         suave:FunctionDesign ;
                                                 security:maxAlertLevel <http://www.metacontro.org/tiagoPatrol#al_compromized> ;
                                                 suave:solvesF <http://www.metacontro.org/tiagoPatrol#f_move> .
 
 
-###  http://www.metacontro.org/tiagoPatrol#fd_move_sensible
-<http://www.metacontro.org/tiagoPatrol#fd_move_sensible> rdf:type owl:NamedIndividual ;
-                                                         security:maxAlertLevel <http://www.metacontro.org/tiagoPatrol#al_default> ;
-                                                         suave:solvesF <http://www.metacontro.org/tiagoPatrol#f_move> .
+###  http://www.metacontro.org/tiagoPatrol#fd_move_sensitive
+<http://www.metacontro.org/tiagoPatrol#fd_move_sensitive> rdf:type owl:NamedIndividual ,
+                                                                   <http://www.metacontro.org/tiagoPatrol#Sensitive> ,
+                                                                   suave:FunctionDesign ;
+                                                          security:maxAlertLevel <http://www.metacontro.org/tiagoPatrol#al_default> ;
+                                                          suave:solvesF <http://www.metacontro.org/tiagoPatrol#f_move> .
 
 
 ###  http://www.metacontro.org/tiagoPatrol#security_system
-<http://www.metacontro.org/tiagoPatrol#security_system> rdf:type owl:NamedIndividual ;
-                                                        <http://www.metacontro.org/security#hasAlertLevel> <http://www.metacontro.org/tiagoPatrol#al_default> .
+<http://www.metacontro.org/tiagoPatrol#security_system> rdf:type owl:NamedIndividual .
 
 
 [ swrla:isRuleEnabled "true"^^xsd:boolean
