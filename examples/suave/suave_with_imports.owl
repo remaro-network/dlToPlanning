@@ -840,29 +840,167 @@
     <rdf:Description rdf:about="http://ros/mros#fg">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.metacontrol.org/suave#fg">
+    <rdf:Description rdf:about="http://www.metacontro.org/suave#mqa">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.metacontrol.org/suave#mqa">
+    <rdf:Description rdf:about="http://www.metacontro.org/suave#eqa">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.metacontrol.org/suave#eqa">
+    <rdf:Description rdf:about="http://www.metacontro.org/suave#mqav">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.metacontrol.org/suave#mqav">
+    <rdf:Description rdf:about="http://www.metacontro.org/suave#eqav">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.metacontrol.org/suave#fd">
+    <rdf:Description rdf:about="http://www.metacontro.org/suave#fd1">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.metacontrol.org/suave#eqav">
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
-    </rdf:Description>
+    <rdf:Description rdf:about="http://www.metacontrol.org/suave#obs_water_visibility"/>
     <rdf:Description rdf:about="http://ros/navigation#fg">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
     </rdf:Description>
     <rdf:Description rdf:about="http://ros/navigation#o">
         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description>
+        <swrla:isRuleEnabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrla:isRuleEnabled>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:comment>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">water visibility fd</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Imp"/>
+        <swrl:body>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                <rdf:first>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
+                        <swrl:classPredicate rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
+                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fd1"/>
+                    </rdf:Description>
+                </rdf:first>
+                <rdf:rest>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                        <rdf:first>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasQAestimation"/>
+                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fd1"/>
+                                <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#eqa"/>
+                            </rdf:Description>
+                        </rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                <rdf:first>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                        <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#isQAtype"/>
+                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#eqa"/>
+                                        <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
+                                    </rdf:Description>
+                                </rdf:first>
+                                <rdf:rest>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                        <rdf:first>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
+                                                <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasValue"/>
+                                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#eqa"/>
+                                                <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#eqav"/>
+                                            </rdf:Description>
+                                        </rdf:first>
+                                        <rdf:rest>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                <rdf:first>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
+                                                        <swrl:classPredicate rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
+                                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#mqa"/>
+                                                    </rdf:Description>
+                                                </rdf:first>
+                                                <rdf:rest>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                        <rdf:first>
+                                                            <rdf:Description>
+                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#BuiltinAtom"/>
+                                                                <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#equal"/>
+                                                                <swrl:arguments rdf:parseType="Collection">
+                                                                    <rdf:Description rdf:about="http://www.metacontro.org/suave#mqa"/>
+                                                                    <rdf:Description rdf:about="http://www.metacontrol.org/suave#obs_water_visibility"/>
+                                                                </swrl:arguments>
+                                                            </rdf:Description>
+                                                        </rdf:first>
+                                                        <rdf:rest>
+                                                            <rdf:Description>
+                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                                <rdf:first>
+                                                                    <rdf:Description>
+                                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
+                                                                        <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasValue"/>
+                                                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#mqa"/>
+                                                                        <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#mqav"/>
+                                                                    </rdf:Description>
+                                                                </rdf:first>
+                                                                <rdf:rest>
+                                                                    <rdf:Description>
+                                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                                        <rdf:first>
+                                                                            <rdf:Description>
+                                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                                                <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#isQAtype"/>
+                                                                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#mqa"/>
+                                                                                <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
+                                                                            </rdf:Description>
+                                                                        </rdf:first>
+                                                                        <rdf:rest>
+                                                                            <rdf:Description>
+                                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                                                <rdf:first>
+                                                                                    <rdf:Description>
+                                                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#BuiltinAtom"/>
+                                                                                        <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#lessThan"/>
+                                                                                        <swrl:arguments rdf:parseType="Collection">
+                                                                                            <rdf:Description rdf:about="http://www.metacontro.org/suave#mqav"/>
+                                                                                            <rdf:Description rdf:about="http://www.metacontro.org/suave#eqav"/>
+                                                                                        </swrl:arguments>
+                                                                                    </rdf:Description>
+                                                                                </rdf:first>
+                                                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                                            </rdf:Description>
+                                                                        </rdf:rest>
+                                                                    </rdf:Description>
+                                                                </rdf:rest>
+                                                            </rdf:Description>
+                                                        </rdf:rest>
+                                                    </rdf:Description>
+                                                </rdf:rest>
+                                            </rdf:Description>
+                                        </rdf:rest>
+                                    </rdf:Description>
+                                </rdf:rest>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </rdf:rest>
+            </rdf:Description>
+        </swrl:body>
+        <swrl:head>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                <rdf:first>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
+                        <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#fd_realisability"/>
+                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fd1"/>
+                        <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                    </rdf:Description>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:Description>
+        </swrl:head>
     </rdf:Description>
     <rdf:Description>
         <swrla:isRuleEnabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrla:isRuleEnabled>
@@ -1691,7 +1829,7 @@
                     <rdf:Description>
                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
                         <swrl:classPredicate rdf:resource="http://www.metacontrol.org/suave#FunctionGrounding"/>
-                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#fg"/>
+                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fg"/>
                     </rdf:Description>
                 </rdf:first>
                 <rdf:rest>
@@ -1701,8 +1839,8 @@
                             <rdf:Description>
                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
                                 <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasQAvalue"/>
-                                <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#fg"/>
-                                <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#mqa"/>
+                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fg"/>
+                                <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#mqa"/>
                             </rdf:Description>
                         </rdf:first>
                         <rdf:rest>
@@ -1712,7 +1850,7 @@
                                     <rdf:Description>
                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
                                         <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#isQAtype"/>
-                                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#eqa"/>
+                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#eqa"/>
                                         <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
                                     </rdf:Description>
                                 </rdf:first>
@@ -1723,8 +1861,8 @@
                                             <rdf:Description>
                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
                                                 <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasValue"/>
-                                                <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#mqa"/>
-                                                <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#mqav"/>
+                                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#mqa"/>
+                                                <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#mqav"/>
                                             </rdf:Description>
                                         </rdf:first>
                                         <rdf:rest>
@@ -1734,8 +1872,8 @@
                                                     <rdf:Description>
                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
                                                         <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#typeFD"/>
-                                                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#fg"/>
-                                                        <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#fd"/>
+                                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fg"/>
+                                                        <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#fd"/>
                                                     </rdf:Description>
                                                 </rdf:first>
                                                 <rdf:rest>
@@ -1745,8 +1883,8 @@
                                                             <rdf:Description>
                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
                                                                 <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasValue"/>
-                                                                <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#eqa"/>
-                                                                <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#eqav"/>
+                                                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#eqa"/>
+                                                                <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#eqav"/>
                                                             </rdf:Description>
                                                         </rdf:first>
                                                         <rdf:rest>
@@ -1756,8 +1894,8 @@
                                                                     <rdf:Description>
                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
                                                                         <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#hasQAestimation"/>
-                                                                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#fd"/>
-                                                                        <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#eqa"/>
+                                                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fd"/>
+                                                                        <swrl:argument2 rdf:resource="http://www.metacontro.org/suave#eqa"/>
                                                                     </rdf:Description>
                                                                 </rdf:first>
                                                                 <rdf:rest>
@@ -1767,7 +1905,7 @@
                                                                             <rdf:Description>
                                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
                                                                                 <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#isQAtype"/>
-                                                                                <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#mqa"/>
+                                                                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#mqa"/>
                                                                                 <swrl:argument2 rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
                                                                             </rdf:Description>
                                                                         </rdf:first>
@@ -1778,7 +1916,7 @@
                                                                                     <rdf:Description>
                                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
                                                                                         <swrl:classPredicate rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
-                                                                                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#fd"/>
+                                                                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fd"/>
                                                                                     </rdf:Description>
                                                                                 </rdf:first>
                                                                                 <rdf:rest>
@@ -1788,7 +1926,7 @@
                                                                                             <rdf:Description>
                                                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
                                                                                                 <swrl:classPredicate rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
-                                                                                                <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#mqa"/>
+                                                                                                <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#mqa"/>
                                                                                             </rdf:Description>
                                                                                         </rdf:first>
                                                                                         <rdf:rest>
@@ -1798,7 +1936,7 @@
                                                                                                     <rdf:Description>
                                                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
                                                                                                         <swrl:classPredicate rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
-                                                                                                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#eqa"/>
+                                                                                                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#eqa"/>
                                                                                                     </rdf:Description>
                                                                                                 </rdf:first>
                                                                                                 <rdf:rest>
@@ -1809,8 +1947,8 @@
                                                                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#BuiltinAtom"/>
                                                                                                                 <swrl:builtin rdf:resource="http://www.w3.org/2003/11/swrlb#lessThan"/>
                                                                                                                 <swrl:arguments rdf:parseType="Collection">
-                                                                                                                    <rdf:Description rdf:about="http://www.metacontrol.org/suave#mqav"/>
-                                                                                                                    <rdf:Description rdf:about="http://www.metacontrol.org/suave#eqav"/>
+                                                                                                                    <rdf:Description rdf:about="http://www.metacontro.org/suave#mqav"/>
+                                                                                                                    <rdf:Description rdf:about="http://www.metacontro.org/suave#eqav"/>
                                                                                                                 </swrl:arguments>
                                                                                                             </rdf:Description>
                                                                                                         </rdf:first>
@@ -1846,7 +1984,7 @@
                     <rdf:Description>
                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
                         <swrl:propertyPredicate rdf:resource="http://www.metacontrol.org/suave#fg_status"/>
-                        <swrl:argument1 rdf:resource="http://www.metacontrol.org/suave#fg"/>
+                        <swrl:argument1 rdf:resource="http://www.metacontro.org/suave#fg"/>
                         <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">IN_ERROR_NFR</swrl:argument2>
                     </rdf:Description>
                 </rdf:first>

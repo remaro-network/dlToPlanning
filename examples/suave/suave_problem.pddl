@@ -5,7 +5,6 @@
     pipeline - pipeline
     bluerov - robot
     1.0_decimal 3.5_decimal - owl-number
-    1.0_decimal 3.5_decimal - number
   )
 
   (:init

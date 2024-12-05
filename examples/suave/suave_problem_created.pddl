@@ -4,14 +4,50 @@
   (:objects 
     pipeline - pipeline 
     bluerov - robot 
-    1.0_decimal 3.5_decimal - number 
-    0.25_decimal 0.5_decimal 0.75_decimal 1.25_decimal 2.25_decimal 3.25_decimal - owl-number 
+    1.0_decimal 3.5_decimal 0.25_decimal 0.5_decimal 0.75_decimal 1.25_decimal 2.25_decimal 3.25_decimal - owl-number 
 )
 
   (:init
     (system_in_mode f_maintain_motion fd_unground)
     (system_in_mode f_follow_pipeline fd_unground)
     (system_in_mode f_generate_search_path fd_unground)
+    
+    (equalTo 0.25_decimal 0.25_decimal)
+    (equalTo 0.5_decimal 0.5_decimal)
+    (equalTo 0.75_decimal 0.75_decimal)
+    (equalTo 1.0_decimal 1.0_decimal)
+    (equalTo 1.25_decimal 1.25_decimal)
+    (equalTo 2.25_decimal 2.25_decimal)
+    (equalTo 3.25_decimal 3.25_decimal)
+    (equalTo 3.5_decimal 3.5_decimal)
+    (lessThan 0.25_decimal 0.5_decimal)
+    (lessThan 0.25_decimal 0.75_decimal)
+    (lessThan 0.25_decimal 1.0_decimal)
+    (lessThan 0.25_decimal 1.25_decimal)
+    (lessThan 0.25_decimal 2.25_decimal)
+    (lessThan 0.25_decimal 3.25_decimal)
+    (lessThan 0.25_decimal 3.5_decimal)
+    (lessThan 0.5_decimal 0.75_decimal)
+    (lessThan 0.5_decimal 1.0_decimal)
+    (lessThan 0.5_decimal 1.25_decimal)
+    (lessThan 0.5_decimal 2.25_decimal)
+    (lessThan 0.5_decimal 3.25_decimal)
+    (lessThan 0.5_decimal 3.5_decimal)
+    (lessThan 0.75_decimal 1.0_decimal)
+    (lessThan 0.75_decimal 1.25_decimal)
+    (lessThan 0.75_decimal 2.25_decimal)
+    (lessThan 0.75_decimal 3.25_decimal)
+    (lessThan 0.75_decimal 3.5_decimal)
+    (lessThan 1.0_decimal 1.25_decimal)
+    (lessThan 1.0_decimal 2.25_decimal)
+    (lessThan 1.0_decimal 3.25_decimal)
+    (lessThan 1.0_decimal 3.5_decimal)
+    (lessThan 1.25_decimal 2.25_decimal)
+    (lessThan 1.25_decimal 3.25_decimal)
+    (lessThan 1.25_decimal 3.5_decimal)
+    (lessThan 2.25_decimal 3.25_decimal)
+    (lessThan 2.25_decimal 3.5_decimal)
+    (lessThan 3.25_decimal 3.5_decimal)
     
     (Action a_inspect_pipeline)
     (Action a_search_pipeline)

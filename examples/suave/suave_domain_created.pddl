@@ -46,6 +46,7 @@
 		(inferred-Action ?x)
 		(inferred-C_status ?x ?y)
 		(inferred-Component ?x)
+		(inferred-Equal ?x ?y)
 		(inferred-Fd_efficacy ?x ?y)
 		(inferred-Fd_error_log ?x ?y)
 		(inferred-Fd_realisability ?x ?y)
@@ -88,6 +89,7 @@
 		(solvesO ?x ?y)
 		(typeF ?x ?y)
 		(typeFD ?x ?y)
+		(equalTo ?x ?y)
   )
 
 
@@ -189,6 +191,26 @@
 				(inferred-C_status ?c FALSE_string)
 				(inferred-Component ?c)
 				(inferred-RequiresC ?fd ?c)
+			)
+		)
+ 	)
+ )
+
+
+(:derived (inferred-Fd_realisability ?fd1 ?false_boolean) 
+	(and
+		(= ?false_boolean false_boolean)
+		(exists (?eqa ?eqav ?mqa ?obs_water_visibility ?mqav)
+ 			(and
+				(inferred-FunctionDesign ?fd1)
+				(inferred-HasQAestimation ?fd1 ?eqa)
+				(inferred-IsQAtype ?eqa water_visibility)
+				(inferred-HasValue ?eqa ?eqav)
+				(inferred-QAvalue ?mqa)
+				(inferred-Equal ?mqa ?obs_water_visibility)
+				(inferred-HasValue ?mqa ?mqav)
+				(inferred-IsQAtype ?mqa water_visibility)
+				(lessThan ?mqav ?eqav)
 			)
 		)
  	)
