@@ -12,7 +12,6 @@
   (:types
     pipeline
     robot
-    action
     owl-number
   )
 
@@ -22,10 +21,8 @@
 
     (robot_started ?r - robot)
 
-    (action_requires ?a - action ?f1 ?f2)
-    (fd_available ?fd)
-    (inferred-f_activated ?f)
     (system_in_mode ?s ?m)
+    (inferred-f_activated ?f)
   )
 
   (:derived (inferred-f_activated ?f)
@@ -66,12 +63,15 @@
   )
 
   (:action search_pipeline
-    :parameters (?a - action ?p - pipeline ?r - robot ?fd1 ?fd2)
+    :parameters (?p - pipeline ?r - robot)
     :precondition (and
-      (= ?a a_search_pipeline)
-      (exists (?f1 ?f2)
+      (exists (?a ?f1 ?f2 ?fd1 ?fd2)
         (and
-          (action_requires ?a ?f1 ?f2)
+          (inferred-Action ?a)
+          (= ?a a_search_pipeline)
+          (not (= ?f1 ?f2))
+          (inferred-requiresF ?a ?f1)
+          (inferred-requiresF ?a ?f2)
           (Function ?f1)
           (Function ?f2)
           (FunctionDesign ?fd1)
@@ -93,12 +93,15 @@
   )
 
   (:action inspect_pipeline
-    :parameters (?a - action ?p - pipeline ?r - robot ?fd1 ?fd2)
+    :parameters (?p - pipeline ?r - robot)
     :precondition (and
-      (= ?a a_inspect_pipeline)
-      (exists (?f1 ?f2)
+      (exists (?a ?f1 ?f2 ?fd1 ?fd2)
         (and
-          (action_requires ?a ?f1 ?f2)
+          (Action ?a)
+          (= ?a a_inspect_pipeline)
+          (not (= ?f1 ?f2))
+          (inferred-requiresF ?a ?f1)
+          (inferred-requiresF ?a ?f2)
           (Function ?f1)
           (Function ?f2)
           (FunctionDesign ?fd1)
