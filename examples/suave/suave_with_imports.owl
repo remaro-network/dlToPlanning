@@ -98,6 +98,15 @@
     
 
 
+    <!-- http://www.metacontrol.org/suave#requiresF -->
+
+    <owl:ObjectProperty rdf:about="http://www.metacontrol.org/suave#requiresF">
+        <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#Action"/>
+        <rdfs:range rdf:resource="http://www.metacontrol.org/suave#Function"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.metacontrol.org/suave#requiresO -->
 
     <owl:ObjectProperty rdf:about="http://www.metacontrol.org/suave#requiresO">
@@ -385,6 +394,12 @@
     
 
 
+    <!-- http://www.metacontrol.org/suave#Action -->
+
+    <owl:Class rdf:about="http://www.metacontrol.org/suave#Action"/>
+    
+
+
     <!-- http://www.metacontrol.org/suave#Component -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#Component"/>
@@ -435,6 +450,26 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- http://www.metacontrol.org/suave#a_inspect_pipeline -->
+
+    <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#a_inspect_pipeline">
+        <rdf:type rdf:resource="http://www.metacontrol.org/suave#Action"/>
+        <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_follow_pipeline"/>
+        <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_maintain_motion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.metacontrol.org/suave#a_search_pipeline -->
+
+    <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#a_search_pipeline">
+        <rdf:type rdf:resource="http://www.metacontrol.org/suave#Action"/>
+        <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_generate_search_path"/>
+        <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_maintain_motion"/>
+    </owl:NamedIndividual>
     
 
 
@@ -592,6 +627,14 @@
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_search_efficiency_medium"/>
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_water_visibility_medium"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_generate_search_path"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.metacontrol.org/suave#fd_unground -->
+
+    <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#fd_unground">
+        <rdf:type rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
     </owl:NamedIndividual>
     
 
