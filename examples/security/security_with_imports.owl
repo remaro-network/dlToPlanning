@@ -1,0 +1,945 @@
+@prefix : <http://www.metacontro.org/suave#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix suave: <http://www.metacontrol.org/suave#> .
+@prefix swrla: <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix security: <http://www.metacontrol.org/security#> .
+@prefix tiagoPatrol: <http://www.metacontrol.org/tiagoPatrol#> .
+@base <http://www.metacontrol.org/security> .
+
+<http://www.metacontrol.org/security> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled
+swrla:isRuleEnabled rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.metacontro.org/security#hasAlertLevel
+<http://www.metacontro.org/security#hasAlertLevel> rdf:type owl:ObjectProperty ;
+                                                   rdfs:subPropertyOf owl:topObjectProperty ;
+                                                   rdfs:range security:AlertLevel .
+
+
+###  http://www.metacontrol.org/security#maxAlertLevel
+security:maxAlertLevel rdf:type owl:ObjectProperty ;
+                       rdfs:domain suave:FunctionDesign ;
+                       rdfs:range security:AlertLevel .
+
+
+###  http://www.metacontrol.org/suave#fd_error_log
+suave:fd_error_log rdf:type owl:ObjectProperty ;
+                   rdfs:domain suave:FunctionDesign ;
+                   rdfs:range suave:Objective ;
+                   rdfs:comment "contains all objectives for which an FG instance of the FD has failed" .
+
+
+###  http://www.metacontrol.org/suave#hasNFR
+suave:hasNFR rdf:type owl:ObjectProperty ;
+             rdfs:domain suave:Objective ;
+             rdfs:range suave:QAvalue .
+
+
+###  http://www.metacontrol.org/suave#hasQAestimation
+suave:hasQAestimation rdf:type owl:ObjectProperty ;
+                      rdfs:domain suave:FunctionDesign ;
+                      rdfs:range suave:QAvalue .
+
+
+###  http://www.metacontrol.org/suave#hasQAvalue
+suave:hasQAvalue rdf:type owl:ObjectProperty ;
+                 rdfs:domain suave:FunctionGrounding ;
+                 rdfs:range suave:QAvalue .
+
+
+###  http://www.metacontrol.org/suave#isQAtype
+suave:isQAtype rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:QAvalue ;
+               rdfs:range suave:QualityAttributeType .
+
+
+###  http://www.metacontrol.org/suave#requiresC
+suave:requiresC rdf:type owl:ObjectProperty ;
+                rdfs:domain suave:FunctionDesign ;
+                rdfs:range suave:Component .
+
+
+###  http://www.metacontrol.org/suave#requiresO
+suave:requiresO rdf:type owl:ObjectProperty ;
+                rdfs:domain suave:FunctionGrounding ;
+                rdfs:range suave:Objective ;
+                rdfs:comment "A FunctionGrounding may need an Objective to be solved (by someone else) as a requirement to realise its target Objective" .
+
+
+###  http://www.metacontrol.org/suave#solvesF
+suave:solvesF rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain suave:FunctionDesign ;
+              rdfs:range suave:Function ;
+              rdfs:comment "a FunctionDesign solves a Function" .
+
+
+###  http://www.metacontrol.org/suave#solvesO
+suave:solvesO rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain suave:FunctionGrounding ;
+              rdfs:range suave:Objective ;
+              rdfs:comment "A FunctionGrounding is realising an Objective" .
+
+
+###  http://www.metacontrol.org/suave#typeF
+suave:typeF rdf:type owl:ObjectProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain suave:Objective ;
+            rdfs:range suave:Function ;
+            rdfs:comment "relates a FunctionGrounding/Objective with a FunctionDesign/Function" .
+
+
+###  http://www.metacontrol.org/suave#typeFD
+suave:typeFD rdf:type owl:ObjectProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain suave:FunctionGrounding ;
+             rdfs:range suave:FunctionDesign .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.metacontrol.org/security#alert_severity
+security:alert_severity rdf:type owl:DatatypeProperty ;
+                        rdfs:domain security:AlertLevel ;
+                        rdfs:range xsd:decimal .
+
+
+###  http://www.metacontrol.org/suave#c_status
+suave:c_status rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:Component ;
+               rdfs:range [ rdf:type rdfs:Datatype ;
+                            owl:oneOf [ rdf:type rdf:List ;
+                                        rdf:first "FAILURE" ;
+                                        rdf:rest [ rdf:type rdf:List ;
+                                                   rdf:first "OK" ;
+                                                   rdf:rest [ rdf:type rdf:List ;
+                                                              rdf:first "RECOVERED" ;
+                                                              rdf:rest rdf:nil
+                                                            ]
+                                                 ]
+                                      ]
+                          ] ;
+               rdfs:comment "operational status of a component. For the moment \"false\"=\"ERROR\", later we can expand the status to an enumeration" .
+
+
+###  http://www.metacontrol.org/suave#fd_efficacy
+suave:fd_efficacy rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain suave:FunctionDesign ;
+                  rdfs:range xsd:decimal .
+
+
+###  http://www.metacontrol.org/suave#fd_realisability
+suave:fd_realisability rdf:type owl:DatatypeProperty ,
+                                owl:FunctionalProperty ;
+                       rdfs:domain suave:FunctionDesign ;
+                       rdfs:range xsd:boolean .
+
+
+###  http://www.metacontrol.org/suave#fg_status
+suave:fg_status rdf:type owl:DatatypeProperty ,
+                         owl:FunctionalProperty ;
+                rdfs:domain suave:FunctionGrounding ;
+                rdfs:range [ rdf:type rdfs:Datatype ;
+                             owl:oneOf [ rdf:type rdf:List ;
+                                         rdf:first "IN_ERROR_COMPONENT" ;
+                                         rdf:rest [ rdf:type rdf:List ;
+                                                    rdf:first "IN_ERROR_FR" ;
+                                                    rdf:rest [ rdf:type rdf:List ;
+                                                               rdf:first "IN_ERROR_NFR" ;
+                                                               rdf:rest rdf:nil
+                                                             ]
+                                                  ]
+                                       ]
+                           ] .
+
+
+###  http://www.metacontrol.org/suave#hasValue
+suave:hasValue rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:QAvalue ;
+               rdfs:range xsd:decimal .
+
+
+###  http://www.metacontrol.org/suave#o_always_improve
+suave:o_always_improve rdf:type owl:DatatypeProperty ,
+                                owl:FunctionalProperty ;
+                       rdfs:domain suave:Objective ;
+                       rdfs:range xsd:boolean .
+
+
+###  http://www.metacontrol.org/suave#o_status
+suave:o_status rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:Objective ;
+               rdfs:range [ rdf:type rdfs:Datatype ;
+                            owl:oneOf [ rdf:type rdf:List ;
+                                        rdf:first "IN_ERROR_COMPONENT" ;
+                                        rdf:rest [ rdf:type rdf:List ;
+                                                   rdf:first "IN_ERROR_FR" ;
+                                                   rdf:rest [ rdf:type rdf:List ;
+                                                              rdf:first "IN_ERROR_NFR" ;
+                                                              rdf:rest [ rdf:type rdf:List ;
+                                                                         rdf:first "IN_PROGRESS" ;
+                                                                         rdf:rest [ rdf:type rdf:List ;
+                                                                                    rdf:first "UNGROUNDED" ;
+                                                                                    rdf:rest [ rdf:type rdf:List ;
+                                                                                               rdf:first "UNREACHABLE" ;
+                                                                                               rdf:rest rdf:nil
+                                                                                             ]
+                                                                                  ]
+                                                                       ]
+                                                            ]
+                                                 ]
+                                      ]
+                          ] .
+
+
+###  http://www.metacontrol.org/suave#o_updatable
+suave:o_updatable rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain suave:Objective ;
+                  rdfs:range xsd:boolean .
+
+
+###  http://www.metacontrol.org/suave#qa_comparison_operator
+suave:qa_comparison_operator rdf:type owl:DatatypeProperty ,
+                                      owl:FunctionalProperty ;
+                             rdfs:domain suave:QualityAttributeType ;
+                             rdfs:range [ rdf:type rdfs:Datatype ;
+                                          owl:oneOf [ rdf:type rdf:List ;
+                                                      rdf:first "<" ;
+                                                      rdf:rest [ rdf:type rdf:List ;
+                                                                 rdf:first "<=" ;
+                                                                 rdf:rest [ rdf:type rdf:List ;
+                                                                            rdf:first ">" ;
+                                                                            rdf:rest [ rdf:type rdf:List ;
+                                                                                       rdf:first ">=" ;
+                                                                                       rdf:rest rdf:nil
+                                                                                     ]
+                                                                          ]
+                                                               ]
+                                                    ]
+                                        ] .
+
+
+###  http://www.metacontrol.org/suave#qa_critical
+suave:qa_critical rdf:type owl:DatatypeProperty ;
+                  rdfs:domain suave:QualityAttributeType ;
+                  rdfs:range xsd:boolean .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.metacontro.org/tiagoPatrol#Sensitive
+<http://www.metacontro.org/tiagoPatrol#Sensitive> rdf:type owl:Class ;
+                                                  rdfs:comment "class to mark areas, waypoints and actions as sensible" .
+
+
+###  http://www.metacontrol.org/security#AlertLevel
+security:AlertLevel rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#Component
+suave:Component rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#Function
+suave:Function rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#FunctionDesign
+suave:FunctionDesign rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#FunctionGrounding
+suave:FunctionGrounding rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#Objective
+suave:Objective rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#QAvalue
+suave:QAvalue rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#QualityAttributeType
+suave:QualityAttributeType rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.metacontro.org/tiagoPatrol#al_compromized
+<http://www.metacontro.org/tiagoPatrol#al_compromized> rdf:type owl:NamedIndividual ,
+                                                                security:AlertLevel ;
+                                                       security:alert_severity 3.0 .
+
+
+###  http://www.metacontro.org/tiagoPatrol#al_default
+<http://www.metacontro.org/tiagoPatrol#al_default> rdf:type owl:NamedIndividual ,
+                                                            security:AlertLevel ;
+                                                   security:alert_severity 0.0 .
+
+
+###  http://www.metacontro.org/tiagoPatrol#al_halt
+<http://www.metacontro.org/tiagoPatrol#al_halt> rdf:type owl:NamedIndividual ,
+                                                         security:AlertLevel ;
+                                                security:alert_severity 4.0 .
+
+
+###  http://www.metacontro.org/tiagoPatrol#al_soft_alert
+<http://www.metacontro.org/tiagoPatrol#al_soft_alert> rdf:type owl:NamedIndividual ,
+                                                               security:AlertLevel ;
+                                                      security:alert_severity 1.0 .
+
+
+###  http://www.metacontro.org/tiagoPatrol#f_move
+<http://www.metacontro.org/tiagoPatrol#f_move> rdf:type owl:NamedIndividual ,
+                                                        suave:Function .
+
+
+###  http://www.metacontro.org/tiagoPatrol#fd_move
+<http://www.metacontro.org/tiagoPatrol#fd_move> rdf:type owl:NamedIndividual ,
+                                                         suave:FunctionDesign ;
+                                                security:maxAlertLevel <http://www.metacontro.org/tiagoPatrol#al_compromized> ;
+                                                suave:solvesF <http://www.metacontro.org/tiagoPatrol#f_move> .
+
+
+###  http://www.metacontro.org/tiagoPatrol#fd_move_sensitive
+<http://www.metacontro.org/tiagoPatrol#fd_move_sensitive> rdf:type owl:NamedIndividual ,
+                                                                   <http://www.metacontro.org/tiagoPatrol#Sensitive> ,
+                                                                   suave:FunctionDesign ;
+                                                          security:maxAlertLevel <http://www.metacontro.org/tiagoPatrol#al_default> ;
+                                                          suave:solvesF <http://www.metacontro.org/tiagoPatrol#f_move> .
+
+
+###  http://www.metacontro.org/tiagoPatrol#security_system
+<http://www.metacontro.org/tiagoPatrol#security_system> rdf:type owl:NamedIndividual .
+
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+#################################################################
+#    Rules
+#################################################################
+
+<http://ros/mros#c> rdf:type swrl:Variable .
+
+<http://ros/mros#o> rdf:type swrl:Variable .
+
+:fg rdf:type swrl:Variable .
+
+:c rdf:type swrl:Variable .
+
+:fd rdf:type swrl:Variable .
+
+<http://metacontrol.org/tomasys#fg> rdf:type swrl:Variable .
+
+<http://metacontrol.org/tomasys#fd> rdf:type swrl:Variable .
+
+<http://metacontrol.org/tomasys#o> rdf:type swrl:Variable .
+
+<http://ros/mros#fd> rdf:type swrl:Variable .
+
+<http://ros/mros#fg> rdf:type swrl:Variable .
+
+:sal rdf:type swrl:Variable .
+
+:fdal rdf:type swrl:Variable .
+
+:fdals rdf:type swrl:Variable .
+
+:sals rdf:type swrl:Variable .
+
+<http://ros/navigation#fg> rdf:type swrl:Variable .
+
+<http://ros/navigation#o> rdf:type swrl:Variable .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "If a required objective by a FG is in ERROR -> fg in error"^^xsd:string ;
+   rdfs:label "S6c"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:o_status ;
+                           swrl:argument1 <http://ros/mros#o> ;
+                           swrl:argument2 "IN_ERROR_FR"^^xsd:string
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionGrounding ;
+                                      swrl:argument1 <http://ros/mros#fg>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:requiresO ;
+                                                 swrl:argument1 <http://ros/mros#fg> ;
+                                                 swrl:argument2 <http://ros/mros#o>
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://ros/mros#o>
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fg_status ;
+                           swrl:argument1 <http://ros/mros#fg> ;
+                           swrl:argument2 "IN_ERROR_FR"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "fg in error/false -> objective in error/false"^^xsd:string ;
+   rdfs:label "S1c"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fg_status ;
+                           swrl:argument1 <http://ros/mros#fg> ;
+                           swrl:argument2 "IN_ERROR_FR"^^xsd:string
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionGrounding ;
+                                      swrl:argument1 <http://ros/mros#fg>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesO ;
+                                                 swrl:argument1 <http://ros/mros#fg> ;
+                                                 swrl:argument2 <http://ros/mros#o>
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://ros/mros#o>
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:o_status ;
+                           swrl:argument1 <http://ros/mros#o> ;
+                           swrl:argument2 "IN_ERROR_FR"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ rdfs:comment "If a required objective by a FG is in ERROR -> fg in error"^^xsd:string ;
+   rdfs:label "S6b"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionGrounding ;
+                           swrl:argument1 <http://ros/navigation#fg>
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate suave:requiresO ;
+                                      swrl:argument1 <http://ros/navigation#fg> ;
+                                      swrl:argument2 <http://ros/navigation#o>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                 swrl:propertyPredicate suave:o_status ;
+                                                 swrl:argument1 <http://ros/navigation#o> ;
+                                                 swrl:argument2 "IN_ERROR_COMPONENT"^^xsd:string
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://ros/navigation#o>
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fg_status ;
+                           swrl:argument1 <http://ros/navigation#fg> ;
+                           swrl:argument2 "IN_ERROR_COMPONENT"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ rdfs:comment "If a required objective by a FG is in ERROR -> fg in error"^^xsd:string ;
+   rdfs:label "S6a"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionGrounding ;
+                           swrl:argument1 <http://ros/navigation#fg>
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate suave:requiresO ;
+                                      swrl:argument1 <http://ros/navigation#fg> ;
+                                      swrl:argument2 <http://ros/navigation#o>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                 swrl:propertyPredicate suave:o_status ;
+                                                 swrl:argument1 <http://ros/navigation#o> ;
+                                                 swrl:argument2 "IN_ERROR_NFR"^^xsd:string
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://ros/navigation#o>
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fg_status ;
+                           swrl:argument1 <http://ros/navigation#fg> ;
+                           swrl:argument2 "IN_ERROR_NFR"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ rdfs:comment "fg in error/false -> objective in error/false"^^xsd:string ;
+   rdfs:label "S1a"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionGrounding ;
+                           swrl:argument1 <http://ros/navigation#fg>
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate suave:solvesO ;
+                                      swrl:argument1 <http://ros/navigation#fg> ;
+                                      swrl:argument2 <http://ros/navigation#o>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                 swrl:propertyPredicate suave:fg_status ;
+                                                 swrl:argument1 <http://ros/navigation#fg> ;
+                                                 swrl:argument2 "IN_ERROR_COMPONENT"^^xsd:string
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://ros/navigation#o>
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:o_status ;
+                           swrl:argument1 <http://ros/navigation#o> ;
+                           swrl:argument2 "IN_ERROR_COMPONENT"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ rdfs:comment "fg in error/false -> objective in error/false"^^xsd:string ;
+   rdfs:label "S1b"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionGrounding ;
+                           swrl:argument1 <http://ros/navigation#fg>
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                      swrl:propertyPredicate suave:fg_status ;
+                                      swrl:argument1 <http://ros/navigation#fg> ;
+                                      swrl:argument2 "IN_ERROR_NFR"^^xsd:string
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesO ;
+                                                 swrl:argument1 <http://ros/navigation#fg> ;
+                                                 swrl:argument2 <http://ros/navigation#o>
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://ros/navigation#o>
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:o_status ;
+                           swrl:argument1 <http://ros/navigation#o> ;
+                           swrl:argument2 "IN_ERROR_NFR"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "if component recovery, objective updatable"^^xsd:string ;
+   rdfs:label "compRecov"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:c_status ;
+                           swrl:argument1 <http://ros/mros#c> ;
+                           swrl:argument2 "RECOVERED"^^xsd:string
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:Component ;
+                                      swrl:argument1 <http://ros/mros#c>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:ClassAtom ;
+                                                 swrl:classPredicate suave:Objective ;
+                                                 swrl:argument1 <http://ros/mros#o>
+                                               ] ;
+                                     rdf:rest rdf:nil
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:o_updatable ;
+                           swrl:argument1 <http://ros/mros#o> ;
+                           swrl:argument2 "true"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "if component in error required by FG, FG in error"^^xsd:string ;
+   rdfs:label "compErrFG"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionGrounding ;
+                           swrl:argument1 :fg
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                      swrl:propertyPredicate suave:c_status ;
+                                      swrl:argument1 :c ;
+                                      swrl:argument2 "FALSE"^^xsd:string
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:typeFD ;
+                                                 swrl:argument1 :fg ;
+                                                 swrl:argument2 :fd
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Component ;
+                                                            swrl:argument1 :c
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate suave:requiresC ;
+                                                                       swrl:argument1 :fd ;
+                                                                       swrl:argument2 :c
+                                                                     ] ;
+                                                           rdf:rest rdf:nil
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fg_status ;
+                           swrl:argument1 :fg ;
+                           swrl:argument2 "IN_ERROR_COMPONENT"^^xsd:string
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "if component required for FD not working, FD not available"^^xsd:string ;
+   rdfs:label "compError"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:c_status ;
+                           swrl:argument1 :c ;
+                           swrl:argument2 "FALSE"^^xsd:string
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:Component ;
+                                      swrl:argument1 :c
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:requiresC ;
+                                                 swrl:argument1 :fd ;
+                                                 swrl:argument2 :c
+                                               ] ;
+                                     rdf:rest rdf:nil
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_realisability ;
+                           swrl:argument1 :fd ;
+                           swrl:argument2 "false"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "objective in error -> objective added to the fd_error_log of the FD"^^xsd:string ;
+   rdfs:label "S9"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                           swrl:propertyPredicate suave:typeFD ;
+                           swrl:argument1 <http://metacontrol.org/tomasys#fg> ;
+                           swrl:argument2 <http://metacontrol.org/tomasys#fd>
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionGrounding ;
+                                      swrl:argument1 <http://metacontrol.org/tomasys#fg>
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesO ;
+                                                 swrl:argument1 <http://metacontrol.org/tomasys#fg> ;
+                                                 swrl:argument2 <http://metacontrol.org/tomasys#o>
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:Objective ;
+                                                            swrl:argument1 <http://metacontrol.org/tomasys#o>
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:ClassAtom ;
+                                                                       swrl:classPredicate suave:FunctionDesign ;
+                                                                       swrl:argument1 <http://metacontrol.org/tomasys#fd>
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                  swrl:propertyPredicate suave:o_status ;
+                                                                                  swrl:argument1 <http://metacontrol.org/tomasys#o> ;
+                                                                                  swrl:argument2 "INTERNAL_ERROR"^^xsd:string
+                                                                                ] ;
+                                                                      rdf:rest rdf:nil
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_error_log ;
+                           swrl:argument1 <http://metacontrol.org/tomasys#fd> ;
+                           swrl:argument2 <http://metacontrol.org/tomasys#o>
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "objective in error NFR -> objective added to the fd_error_log of the FD"^^xsd:string ;
+   rdfs:label "S9"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionDesign ;
+                           swrl:argument1 <http://ros/mros#fd>
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                      swrl:propertyPredicate suave:o_status ;
+                                      swrl:argument1 <http://ros/mros#o> ;
+                                      swrl:argument2 "IN_ERROR_FR"^^xsd:string
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:ClassAtom ;
+                                                 swrl:classPredicate suave:FunctionGrounding ;
+                                                 swrl:argument1 <http://ros/mros#fg>
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate suave:typeFD ;
+                                                            swrl:argument1 <http://ros/mros#fg> ;
+                                                            swrl:argument2 <http://ros/mros#fd>
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate suave:solvesO ;
+                                                                       swrl:argument1 <http://ros/mros#fg> ;
+                                                                       swrl:argument2 <http://ros/mros#o>
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:ClassAtom ;
+                                                                                  swrl:classPredicate suave:Objective ;
+                                                                                  swrl:argument1 <http://ros/mros#o>
+                                                                                ] ;
+                                                                      rdf:rest rdf:nil
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_error_log ;
+                           swrl:argument1 <http://ros/mros#fd> ;
+                           swrl:argument2 <http://ros/mros#o>
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "sets functional designs as unavailable if the corresponding alert level is too high"^^xsd:string ;
+   rdfs:label "alertLevelToFD"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                           swrl:propertyPredicate <http://www.metacontro.org/security#hasAlertLevel> ;
+                           swrl:argument1 <http://www.metacontro.org/tiagoPatrol#security_system> ;
+                           swrl:argument2 :sal
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate security:maxAlertLevel ;
+                                      swrl:argument1 :fd ;
+                                      swrl:argument2 :fdal
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                 swrl:propertyPredicate security:alert_severity ;
+                                                 swrl:argument1 :fdal ;
+                                                 swrl:argument2 :fdals
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate suave:FunctionDesign ;
+                                                            swrl:argument1 :fd
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                       swrl:propertyPredicate security:alert_severity ;
+                                                                       swrl:argument1 :sal ;
+                                                                       swrl:argument2 :sals
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                                                                  swrl:builtin swrlb:lessThan ;
+                                                                                  swrl:arguments ( :fdals
+                                                                                                   :sals
+                                                                                                 )
+                                                                                ] ;
+                                                                      rdf:rest rdf:nil
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_realisability ;
+                           swrl:argument1 :fd ;
+                           swrl:argument2 "false"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
