@@ -23,8 +23,10 @@
     (sensitive wp2)
     (isat wp1)
     
-    
+    ; difference in behavior
+    ;(hasalertlevel security_system al_soft_alert)
     (hasalertlevel security_system al_soft_alert)
+    
     
     
     (equalTo 0.0_decimal 0.0_decimal)
