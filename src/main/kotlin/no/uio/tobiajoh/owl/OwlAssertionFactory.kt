@@ -1,5 +1,6 @@
 package no.uio.tobiajoh.owl
 
+import no.uio.tobiajoh.pddl.PddlObjects
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.*
 import uk.ac.manchester.cs.owl.owlapi.*
@@ -25,12 +26,20 @@ class OwlAssertionFactory {
 
         val predicate = ruleAtom.predicate
         // parse head
+
         val relation = inferredName(
             when (predicate) {
                 is OWLClassImpl -> predicate.iri.shortForm
-                is OWLObjectPropertyImpl -> predicate.iri.shortForm
+                is OWLObjectPropertyImpl -> {
+                    println(predicate.iri)
+                    if (predicate.iri == IRI.create("http://www.w3.org/2002/07/owl#sameAs"))
+                        PddlObjects.`EQUIVALENTOBJECTS`
+                    else
+                        predicate.iri.shortForm
+                }
                 is OWLDataPropertyImpl -> predicate.iri.shortForm
                 IRI.create("http://www.w3.org/2003/11/swrlb#lessThan") -> OwlNumber.LESSRELATION
+                IRI.create("http://www.w3.org/2003/11/swrlb#equal") -> OwlNumber.EQUIVALENT
                 is IRI -> predicate.shortForm
                 else -> predicate.toString()
             }
@@ -138,7 +147,9 @@ class OwlAssertionFactory {
 
     private fun inferredName(name: String) : String {
         // don't change comparison operator
-        if (name == OwlNumber.EQUIVALENT || name == OwlNumber.LESSRELATION)
+        if (name == OwlNumber.EQUIVALENT ||
+            name == OwlNumber.LESSRELATION ||
+            name == PddlObjects.`EQUIVALENTOBJECTS`)
             return name
 
         val capitalizedName = name.replaceFirstChar {
