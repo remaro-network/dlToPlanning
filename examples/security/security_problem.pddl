@@ -23,12 +23,14 @@
       (connected wp5 wp4)
       (connected wp1 wp5)
 
+
+      ; being at this waypoint is sensitive
       (sensitive wp2)
       (isAt wp1)
 
       ; difference in behavior
-      ;(hasAlertLevel security_system al_soft_alert)
       (hasAlertLevel security_system al_soft_alert)
+      ;(hasAlertLevel security_system al_default)
 
 
     )

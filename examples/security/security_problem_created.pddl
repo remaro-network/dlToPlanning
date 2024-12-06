@@ -20,11 +20,15 @@
     (connected wp5 wp4)
     (connected wp1 wp5)
     
+    
+    ; being at this waypoint is sensitive
     (sensitive wp2)
     (isat wp1)
     
-    
+    ; difference in behavior
     (hasalertlevel security_system al_soft_alert)
+    ;(hasalertlevel security_system al_default)
+    
     
     
     (equalTo 0.0_decimal 0.0_decimal)
