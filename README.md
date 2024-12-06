@@ -28,7 +28,7 @@ build project by running
 ### Options
 - run `./OWLToPDDL.sh -h` to see all options.
 - use `--ignore-data-props` to not export data properties to PDDL
-- use `--add-num-comparisons` to add comparisons between numerical data occuring in the ontology. For numerical data, the special type `owl-numer` is used to represent it
+- use `--add-num-comparisons` to add comparisons between numerical data occuring in the ontology. For numerical data, the special type `owl-numer` is used to represent it. Currently, one has to manually add the type `owl-number` to the input PDDL domain if one uses this feature.
 - use `--replace-output` to replace the PDDL files if they already exists. Per default, the output is not saved if the output file already exists
  
 ## Planning
