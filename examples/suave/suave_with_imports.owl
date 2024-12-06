@@ -11,10 +11,10 @@
      xmlns:swrla="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
      xmlns:swrlb="http://www.w3.org/2003/11/swrlb#">
     <owl:Ontology rdf:about="http://www.metacontrol.org/suave"/>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Annotation properties
@@ -22,16 +22,16 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled -->
 
     <owl:AnnotationProperty rdf:about="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Object Properties
@@ -39,7 +39,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#hasQAestimation -->
@@ -48,7 +48,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
         <rdfs:range rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#isQAtype -->
@@ -58,7 +58,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
         <rdfs:range rdf:resource="http://www.metacontrol.org/suave#QualityAttributeType"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#requiresC -->
@@ -67,7 +67,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
         <rdfs:range rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#requiresF -->
@@ -76,7 +76,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#Action"/>
         <rdfs:range rdf:resource="http://www.metacontrol.org/suave#Function"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#solvesF -->
@@ -87,10 +87,10 @@
         <rdfs:range rdf:resource="http://www.metacontrol.org/suave#Function"/>
         <rdfs:comment>a FunctionDesign solves a Function</rdfs:comment>
     </owl:ObjectProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -98,7 +98,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_status -->
@@ -131,7 +131,7 @@
         </rdfs:range>
         <rdfs:comment>operational status of a component. For the moment &quot;false&quot;=&quot;ERROR&quot;, later we can expand the status to an enumeration</rdfs:comment>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_efficacy -->
@@ -141,7 +141,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_realisability -->
@@ -151,7 +151,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#hasValue -->
@@ -161,7 +161,7 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_comparison_operator -->
@@ -199,7 +199,7 @@
             </rdfs:Datatype>
         </rdfs:range>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_critical -->
@@ -208,10 +208,10 @@
         <rdfs:domain rdf:resource="http://www.metacontrol.org/suave#QualityAttributeType"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Classes
@@ -219,46 +219,46 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#Action -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#Action"/>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#Component -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#Component"/>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#Function -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#Function"/>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#FunctionDesign -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#FunctionDesign"/>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#QAvalue -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#QAvalue"/>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#QualityAttributeType -->
 
     <owl:Class rdf:about="http://www.metacontrol.org/suave#QualityAttributeType"/>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Individuals
@@ -266,7 +266,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#a_inspect_pipeline -->
@@ -276,7 +276,7 @@
         <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_follow_pipeline"/>
         <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_maintain_motion"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#a_search_pipeline -->
@@ -286,7 +286,7 @@
         <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_generate_search_path"/>
         <suave:requiresF rdf:resource="http://www.metacontrol.org/suave#f_maintain_motion"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#battery_level -->
@@ -295,7 +295,7 @@
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#QualityAttributeType"/>
         <suave:qa_comparison_operator>&lt;</suave:qa_comparison_operator>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_thruster_1 -->
@@ -303,7 +303,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#c_thruster_1">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_thruster_2 -->
@@ -311,7 +311,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#c_thruster_2">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_thruster_3 -->
@@ -319,7 +319,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#c_thruster_3">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_thruster_4 -->
@@ -327,7 +327,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#c_thruster_4">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_thruster_5 -->
@@ -335,7 +335,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#c_thruster_5">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#c_thruster_6 -->
@@ -343,7 +343,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#c_thruster_6">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Component"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#energy -->
@@ -351,7 +351,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#energy">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#QualityAttributeType"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#f_follow_pipeline -->
@@ -359,7 +359,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#f_follow_pipeline">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Function"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#f_generate_search_path -->
@@ -367,7 +367,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#f_generate_search_path">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Function"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#f_maintain_motion -->
@@ -375,7 +375,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#f_maintain_motion">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#Function"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_all_thrusters -->
@@ -391,7 +391,7 @@
         <suave:requiresC rdf:resource="http://www.metacontrol.org/suave#c_thruster_6"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_maintain_motion"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_follow_pipeline -->
@@ -401,7 +401,7 @@
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_inspect_efficiency_high"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_follow_pipeline"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_recover_thrusters -->
@@ -411,7 +411,7 @@
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_motion_efficiency_degraded"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_maintain_motion"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_spiral_high -->
@@ -422,7 +422,7 @@
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_water_visibility_high"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_generate_search_path"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_spiral_low -->
@@ -433,7 +433,7 @@
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_water_visibility_low"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_generate_search_path"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_spiral_medium -->
@@ -444,7 +444,7 @@
         <suave:hasQAestimation rdf:resource="http://www.metacontrol.org/suave#qa_water_visibility_medium"/>
         <suave:solvesF rdf:resource="http://www.metacontrol.org/suave#f_generate_search_path"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#fd_unground -->
@@ -452,7 +452,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#fd_unground">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#FunctionDesign"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#obs_water_visibility -->
@@ -461,7 +461,7 @@
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#QAvalue"/>
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#performance -->
@@ -469,7 +469,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#performance">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#QualityAttributeType"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_inspect_efficiency_high -->
@@ -479,7 +479,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#performance"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_motion_efficiency_degraded -->
@@ -489,7 +489,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#performance"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.75</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_motion_efficiency_normal -->
@@ -499,7 +499,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#performance"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_search_efficiency_high -->
@@ -509,7 +509,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#performance"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_search_efficiency_low -->
@@ -519,7 +519,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#performance"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.25</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_search_efficiency_medium -->
@@ -529,7 +529,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#performance"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.5</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_water_visibility_high -->
@@ -539,7 +539,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.25</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_water_visibility_low -->
@@ -549,7 +549,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.25</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#qa_water_visibility_medium -->
@@ -559,7 +559,7 @@
         <suave:isQAtype rdf:resource="http://www.metacontrol.org/suave#water_visibility"/>
         <suave:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.25</suave:hasValue>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#safety -->
@@ -567,7 +567,7 @@
     <owl:NamedIndividual rdf:about="http://www.metacontrol.org/suave#safety">
         <rdf:type rdf:resource="http://www.metacontrol.org/suave#QualityAttributeType"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.metacontrol.org/suave#water_visibility -->
@@ -615,10 +615,10 @@
     <rdf:Description>
         <swrla:isRuleEnabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrla:isRuleEnabled>
     </rdf:Description>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Rules
@@ -848,4 +848,3 @@
 
 
 <!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
-

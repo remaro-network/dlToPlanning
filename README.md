@@ -25,8 +25,11 @@ build project by running
   ```
   ./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> [OPTIONS]
   ```
-  
+### Options
 - run `./OWLToPDDL.sh -h` to see all options.
+- use `--ignore-data-props` to not export data properties to PDDL
+- use `--add-num-comparisons` to add comparisons between numerical data occuring in the ontology. For numerical data, the special type `owl-numer` is used to represent it. Currently, one has to manually add the type `owl-number` to the input PDDL domain if one uses this feature.
+- use `--replace-output` to replace the PDDL files if they already exists. Per default, the output is not saved if the output file already exists
  
 ## Planning
 - I recommend using [SYMK planner](https://github.com/speckdavid/symk), as it works quite well so far and should be good for derived predicates [paper: "Symbolic Planning with Axioms"](https://speckdavid.github.io/assets/pdf/speck-etal-icaps2019.pdf)

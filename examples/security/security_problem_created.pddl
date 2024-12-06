@@ -1,9 +1,9 @@
 (define (problem tiago)
   (:domain security)
 
-  (:objects 
-    wp1 wp2 wp3 wp4 wp5 - waypoint 
-    0.0_decimal 1.0_decimal 3.0_decimal 4.0_decimal - owl-number 
+  (:objects
+    wp1 wp2 wp3 wp4 wp5 - waypoint
+    0.0_decimal 1.0_decimal 3.0_decimal 4.0_decimal - owl-number
 )
 
   (:init
@@ -13,22 +13,25 @@
     (connected wp3 wp4)
     (connected wp4 wp5)
     (connected wp5 wp1)
-    
+
     (connected wp2 wp1)
     (connected wp3 wp2)
     (connected wp4 wp3)
     (connected wp5 wp4)
     (connected wp1 wp5)
-    
+
+
+    ; being at this waypoint is sensitive
     (sensitive wp2)
     (isat wp1)
-    
+
     ; difference in behavior
-    ;(hasalertlevel security_system al_soft_alert)
     (hasalertlevel security_system al_soft_alert)
+    ;(hasalertlevel security_system al_default)
+
+
     
-    
-    
+
     (equalTo 0.0_decimal 0.0_decimal)
     (equalTo 1.0_decimal 1.0_decimal)
     (equalTo 3.0_decimal 3.0_decimal)
@@ -39,7 +42,7 @@
     (lessThan 1.0_decimal 3.0_decimal)
     (lessThan 1.0_decimal 4.0_decimal)
     (lessThan 3.0_decimal 4.0_decimal)
-    
+
     (AlertLevel al_compromized)
     (AlertLevel al_default)
     (AlertLevel al_halt)
