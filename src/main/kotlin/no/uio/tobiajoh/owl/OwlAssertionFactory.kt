@@ -27,13 +27,20 @@ class OwlAssertionFactory {
         val predicate = ruleAtom.predicate
         // parse head
 
+        // is set, if the assertion should be negated
+        var negate = false
+
         val relation = inferredName(
             when (predicate) {
                 is OWLClassImpl -> predicate.iri.shortForm
                 is OWLObjectPropertyImpl -> {
-                    println(predicate.iri)
+                    //println(predicate.iri)
                     if (predicate.iri == IRI.create("http://www.w3.org/2002/07/owl#sameAs"))
-                        PddlObjects.`EQUIVALENTOBJECTS`
+                        PddlObjects.EQUIVALENTOBJECTS
+                    else if (predicate.iri == IRI.create("http://www.w3.org/2002/07/owl#differentFrom")) {
+                        negate = true   // different is negated equivalence
+                        PddlObjects.EQUIVALENTOBJECTS
+                    }
                     else
                         predicate.iri.shortForm
                 }
@@ -52,14 +59,18 @@ class OwlAssertionFactory {
                 is SWRLIndividualArgumentImpl -> OwlAssertionConstant((it.individual as OWLNamedIndividual).iri.shortForm)
                 is SWRLLiteralArgument -> parseOWLLiteral(it.literal)
                 else -> {
-                    println("${it.javaClass} $it")
                     OwlAssertionVariable(it.toString())
                 }
             }
         }.forEach { variable ->
             variables.add( variable )
         }
-        return OwlAssertion(relation, variables)
+
+        val assertion = OwlAssertion(relation, variables)
+        if (negate)
+            assertion.negate()
+
+        return assertion
     }
 
     // parses one data argument into a constant
