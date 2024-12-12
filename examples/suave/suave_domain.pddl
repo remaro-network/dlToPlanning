@@ -20,22 +20,6 @@
     (pipeline_inspected ?p - pipeline)
 
     (robot_started ?r - robot)
-
-    (system_in_mode ?s ?m)
-    (inferred-f_activated ?f)
-  )
-
-  (:derived (inferred-f_activated ?f)
-    (and
-      (Function ?f)
-      (exists (?fd)
-        (and
-          (FunctionDesign ?fd)
-          (system_in_mode ?f ?fd)
-          (not (= ?fd fd_unground))
-        )
-      )
-    )
   )
 
   (:action start_robot
@@ -50,15 +34,33 @@
   (:action reconfigure
     :parameters (?f ?fd_initial ?fd_goal)
     :precondition (and
+      (not (= ?fd_initial ?fd_goal))
+
       (Function ?f)
       (FunctionDesign ?fd_initial)
+      (functionGrounding ?f ?fd_initial)
+
+      (solvesF ?fd_goal ?f)
       (FunctionDesign ?fd_goal)
-      (system_in_mode ?f ?fd_initial)
-      (not (= ?fd_initial ?fd_goal))
+      (not (inferred-Fd_realisability ?fd_goal false_boolean))
     )
     :effect (and
-      (not (system_in_mode ?f ?fd_initial))
-      (system_in_mode ?f ?fd_goal)
+      (not (functionGrounding ?f ?fd_initial))
+      (functionGrounding ?f ?fd_goal)
+    )
+  )
+
+  (:action reconfigure
+    :parameters (?f ?fd_goal)
+    :precondition (and
+      (Function ?f)
+      (solvesF ?fd_goal ?f)
+      (FunctionDesign ?fd_goal)
+      (not (inferred-Fd_realisability ?fd_goal false_boolean))
+      (not (exists (?fd) (and (solvesF ?fd ?f) (FunctionDesign ?fd) (functionGrounding ?f ?fd))))
+    )
+    :effect (and
+      (functionGrounding ?f ?fd_goal)
     )
   )
 
@@ -72,19 +74,11 @@
           (not (= ?f1 ?f2))
           (inferred-requiresF ?a ?f1)
           (inferred-requiresF ?a ?f2)
-          (Function ?f1)
-          (Function ?f2)
-          (FunctionDesign ?fd1)
-          (FunctionDesign ?fd2)
-          (solvesF ?fd1 ?f1)
-          (solvesF ?fd2 ?f2)
-          (not (inferred-Fd_realisability ?fd1 false_boolean))
-          (not (inferred-Fd_realisability ?fd2 false_boolean))
-          (system_in_mode ?f1 ?fd1)
-          (system_in_mode ?f2 ?fd2)
+          (inferred-F_active ?f1 true_boolean)
+          (inferred-F_active ?f2 true_boolean)
         )
       )
-      (not (inferred-f_activated f_follow_pipeline))
+      (not (inferred-F_active f_follow_pipeline true_boolean))
       (robot_started ?r)
     )
     :effect (and
@@ -102,19 +96,11 @@
           (not (= ?f1 ?f2))
           (inferred-requiresF ?a ?f1)
           (inferred-requiresF ?a ?f2)
-          (Function ?f1)
-          (Function ?f2)
-          (FunctionDesign ?fd1)
-          (FunctionDesign ?fd2)
-          (solvesF ?fd1 ?f1)
-          (solvesF ?fd2 ?f2)
-          (not (inferred-Fd_realisability ?fd1 false_boolean))
-          (not (inferred-Fd_realisability ?fd2 false_boolean))
-          (system_in_mode ?f1 ?fd1)
-          (system_in_mode ?f2 ?fd2)
+          (inferred-F_active ?f1 true_boolean)
+          (inferred-F_active ?f2 true_boolean)
         )
       )
-      (not (inferred-f_activated f_generate_search_path))
+      (not (inferred-F_active f_generate_search_path true_boolean))
       (robot_started ?r)
       (pipeline_found ?p)
     )
