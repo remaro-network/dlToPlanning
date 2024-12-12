@@ -43,6 +43,18 @@
       (solvesF ?fd_goal ?f)
       (FunctionDesign ?fd_goal)
       (not (inferred-Fd_realisability ?fd_goal false_boolean))
+
+      (or (= ?fd_goal fd_unground)
+        (not
+          (exists (?fd)
+            (and
+              (solvesF ?fd ?f)
+              (not (inferred-Fd_realisability ?fd false_boolean))
+              (inferred-Fd_better_utility  ?fd ?fd_goal)
+            )
+          )
+        )
+      )
     )
     :effect (and
       (not (functionGrounding ?f ?fd_initial))
@@ -57,7 +69,26 @@
       (solvesF ?fd_goal ?f)
       (FunctionDesign ?fd_goal)
       (not (inferred-Fd_realisability ?fd_goal false_boolean))
-      (not (exists (?fd) (and (solvesF ?fd ?f) (FunctionDesign ?fd) (functionGrounding ?f ?fd))))
+      (not
+        (exists (?fd)
+          (and
+            (solvesF ?fd ?f)
+            (FunctionDesign ?fd)
+            (functionGrounding ?f ?fd)
+          )
+        )
+      )
+      (or (= ?fd_goal fd_unground)
+        (not
+          (exists (?fd)
+            (and
+              (solvesF ?fd ?f)
+              (not (inferred-Fd_realisability ?fd false_boolean))
+              (inferred-Fd_better_utility  ?fd ?fd_goal)
+            )
+          )
+        )
+      )
     )
     :effect (and
       (functionGrounding ?f ?fd_goal)

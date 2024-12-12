@@ -8,6 +8,7 @@
   )
 
   (:init
+    ;(hasValue obs_water_visibility 2.5_decimal)
   )
 
   (:goal (and
