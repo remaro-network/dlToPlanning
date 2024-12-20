@@ -13,6 +13,7 @@ class SplitDomain(val domain : File) {
 
     // the file will be split in these four parts, which will be edited separately
     var beforePredicates : MutableList<String> = mutableListOf()
+    var definedTypes : MutableSet<String> = mutableSetOf()
     var predicates : MutableList<String> = mutableListOf()
     var declaredConstants : MutableList<String> = mutableListOf()
     var derivedRules : MutableList<String> = mutableListOf()
@@ -24,13 +25,36 @@ class SplitDomain(val domain : File) {
         var parsebrackets = 0
         domain.forEachLine { line ->
             if (parseStatus == ParseStatus.BEFORE) {
-                if (line.contains(":predicates")) {
+                if (line.contains(":types")) {
+                    parseStatus = ParseStatus.TYPES
+                    parsebrackets = bracketCount(line)
+
+                    // extract types
+                    line.trim().lowercase().removeSuffix(")").split(" ").forEach {
+                        if (!it.contains(":types")&& it.trim() != "")
+                            definedTypes.add(it.trim())
+                    }
+
+                    if (parsebrackets == 0)
+                        parseStatus = ParseStatus.BEFORE
+                }
+                else if (line.contains(":predicates")) {
                     parseStatus = ParseStatus.PREDICATE
                     parsebrackets = bracketCount(line)
                     predicates += line
                 }
                 else
                     beforePredicates += line
+            }
+            else if (parseStatus ==ParseStatus.TYPES) {
+                // extract types
+                line.trim().lowercase().removeSuffix(")").split(" ").forEach {
+                    if (!it.contains(":types") && it.trim() != "")
+                        definedTypes.add(it.trim())
+                }
+                parsebrackets += bracketCount(line)
+                if (parsebrackets == 0)
+                    parseStatus = ParseStatus.BEFORE
             }
             else if (parseStatus == ParseStatus.PREDICATE) {
                 predicates += line
@@ -41,6 +65,8 @@ class SplitDomain(val domain : File) {
             else if (parseStatus == ParseStatus.AFTER)
                 rest += line
         }
+
+        println(definedTypes)
     }
 
     fun addRules(rules : MutableSet<DerivationRule>) {
@@ -115,11 +141,17 @@ class SplitDomain(val domain : File) {
     fun outputToFile(out : File) {
         out.writeText(
             beforePredicates.joinToString("\n", "", "\n") +
-            declaredConstants.joinToString( " \n\t", "\t(:constants ", ")\n\n")   +
+            definedTypes.joinToString("\n\t\t", "\t(:types\n\t\t", "\n\t)\n\n") +
+            declaredConstants.joinToString( " \n\t\t", "\t(:constants\n\t\t", "\n\t)\n\n")   +
             predicates.joinToString("\n", "", "\n") +
             derivedRules.joinToString("\n", "", "\n") +
             rest.joinToString("\n", "", "\n")
         )
+    }
+
+    fun addTypeDeclaration(type: String) {
+        if (type != "object")
+            definedTypes.add(type)
     }
 
     // returns a set containing all predicates
@@ -152,8 +184,10 @@ class SplitDomain(val domain : File) {
     private fun bracketCount(s : String) : Int {
         return s.count {it == '('} - s.count { it == ')'}
     }
+
+
 }
 
 enum class ParseStatus {
-    BEFORE, PREDICATE, AFTER
+    BEFORE, TYPES, PREDICATE, AFTER
 }

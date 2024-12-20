@@ -75,6 +75,7 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
             val var2 = OwlAssertionVariable("?y")
             sD.addPredicate(assertionFactory.ruleAssertion(OwlNumber.EQUIVALENT, var1, var2))
             sD.addPredicate(assertionFactory.ruleAssertion(OwlNumber.LESSRELATION, var1, var2))
+            sD.addTypeDeclaration(OwlNumber.PDDLTYPE)
         }
 
         sD.outputToFile(newDomain)
