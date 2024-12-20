@@ -12,9 +12,6 @@
   (:types
     pipeline
     robot
-    owl-number
-    function
-    function-design
   )
 
   (:predicates

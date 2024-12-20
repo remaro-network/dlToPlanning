@@ -149,9 +149,11 @@ class SplitDomain(val domain : File) {
         )
     }
 
-    fun addTypeDeclaration(type: String) {
-        if (type != "object")
-            definedTypes.add(type)
+    fun addTypeDeclarations(types: Set<String>) {
+        types.sorted().forEach { type ->
+            if (type != "object")
+                definedTypes.add(type)
+        }
     }
 
     // returns a set containing all predicates

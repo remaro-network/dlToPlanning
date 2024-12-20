@@ -38,6 +38,8 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
 
     private val objectsWithoutNumbers get() = objects.minus(numbers)
 
+    private val pddlTypes get() = constants.flatMap { setOf(it.getPddlType()) }.toSet()
+
     fun addRules(newRules : Set<DerivationRule>) {
         newRules.forEach {rules.add(it) }
     }
@@ -69,13 +71,16 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         sD.addRules(rules)
         sD.addConstants(constants)
 
+        // add types for all constants to domain
+        sD.addTypeDeclarations(pddlTypes)
+
         // introduce numerical comparison, if necessary
         if (addNumComparisons) {
             val var1 = OwlAssertionVariable("?x")
             val var2 = OwlAssertionVariable("?y")
             sD.addPredicate(assertionFactory.ruleAssertion(OwlNumber.EQUIVALENT, var1, var2))
             sD.addPredicate(assertionFactory.ruleAssertion(OwlNumber.LESSRELATION, var1, var2))
-            sD.addTypeDeclaration(OwlNumber.PDDLTYPE)
+            sD.addTypeDeclarations(setOf(OwlNumber.PDDLTYPE))
         }
 
         sD.outputToFile(newDomain)
