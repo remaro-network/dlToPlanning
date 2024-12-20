@@ -34,7 +34,7 @@
   )
 
   (:action reconfigure
-    :parameters (?f ?fd_initial ?fd_goal)
+    :parameters (?f - function ?fd_initial ?fd_goal - function-design)
     :precondition (and
       (not (= ?fd_initial ?fd_goal))
 
@@ -65,7 +65,7 @@
   )
 
   (:action reconfigure
-    :parameters (?f ?fd_goal)
+    :parameters (?f - function ?fd_goal - function-design)
     :precondition (and
       (Function ?f)
       (solvesF ?fd_goal ?f)
@@ -100,7 +100,7 @@
   (:action search_pipeline
     :parameters (?p - pipeline ?r - robot)
     :precondition (and
-      (exists (?a ?f1 ?f2 ?fd1 ?fd2)
+      (exists (?a - object ?f1 ?f2 - function ?fd1 ?fd2 - function-design)
         (and
           (inferred-Action ?a)
           (= ?a a_search_pipeline)
@@ -122,7 +122,7 @@
   (:action inspect_pipeline
     :parameters (?p - pipeline ?r - robot)
     :precondition (and
-      (exists (?a ?f1 ?f2 ?fd1 ?fd2)
+      (exists (?a - object ?f1 ?f2 - function ?fd1 ?fd2 - function-design)
         (and
           (Action ?a)
           (= ?a a_inspect_pipeline)

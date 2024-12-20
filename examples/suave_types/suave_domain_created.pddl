@@ -17,8 +17,8 @@
     function-design
   )
 
-	(:constants fd_all_thrusters fd_follow_pipeline fd_recover_thrusters fd_spiral_high fd_spiral_low fd_spiral_medium fd_unground - function-design 
-	f_follow_pipeline f_generate_search_path f_maintain_motion - function 
+	(:constants f_follow_pipeline f_generate_search_path f_maintain_motion - function 
+	fd_all_thrusters fd_follow_pipeline fd_recover_thrusters fd_spiral_high fd_spiral_low fd_spiral_medium fd_unground - function-design 
 	<_string FALSE_string a_inspect_pipeline a_search_pipeline battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy false_boolean obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_performance_zero qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety true_boolean water_visibility - object)
 
   (:predicates
@@ -627,7 +627,7 @@
   )
 
   (:action reconfigure
-    :parameters (?f ?fd_initial ?fd_goal)
+    :parameters (?f - function ?fd_initial ?fd_goal - function-design)
     :precondition (and
       (not (= ?fd_initial ?fd_goal))
 
@@ -658,7 +658,7 @@
   )
 
   (:action reconfigure
-    :parameters (?f ?fd_goal)
+    :parameters (?f - function ?fd_goal - function-design)
     :precondition (and
       (Function ?f)
       (solvesF ?fd_goal ?f)
@@ -693,7 +693,7 @@
   (:action search_pipeline
     :parameters (?p - pipeline ?r - robot)
     :precondition (and
-      (exists (?a ?f1 ?f2 ?fd1 ?fd2)
+      (exists (?a - object ?f1 ?f2 - function ?fd1 ?fd2 - function-design)
         (and
           (inferred-Action ?a)
           (= ?a a_search_pipeline)
@@ -715,7 +715,7 @@
   (:action inspect_pipeline
     :parameters (?p - pipeline ?r - robot)
     :precondition (and
-      (exists (?a ?f1 ?f2 ?fd1 ?fd2)
+      (exists (?a - object ?f1 ?f2 - function ?fd1 ?fd2 - function-design)
         (and
           (Action ?a)
           (= ?a a_inspect_pipeline)
