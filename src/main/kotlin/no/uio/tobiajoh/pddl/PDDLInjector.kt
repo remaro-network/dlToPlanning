@@ -173,8 +173,13 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
         val translator = OntologyTranslator()
         val rules = translator.addRules(ont)
 
+        val typedConstants = translator.addPddlTypes(ont)
+
         //val usedConstants = rules.flatMap { it.usedConstants }.union(assertions.flatMap { it.usedConstants }).toSet()
-        val usedConstants = rules.flatMap { it.usedConstants }.toSet() // individuals from ABox do not need to be declared as constants
+        // use typed constants, if available, otherwise use default
+        val usedConstants = typedConstants.union(
+            rules.flatMap { it.usedConstants }.toSet()
+        )// individuals from ABox do not need to be declared as constants
 
         addRules(rules)
         addConstants(usedConstants)

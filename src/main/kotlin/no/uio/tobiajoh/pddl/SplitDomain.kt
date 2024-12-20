@@ -2,6 +2,7 @@ package no.uio.tobiajoh.pddl
 
 import no.uio.tobiajoh.owl.DerivationRule
 import no.uio.tobiajoh.owl.OwlAssertion
+import no.uio.tobiajoh.owl.OwlAssertionConstant
 import no.uio.tobiajoh.owl.OwlAssertionVariable
 import java.io.File
 import java.util.regex.Pattern
@@ -72,8 +73,11 @@ class SplitDomain(val domain : File) {
         }
     }
 
-    fun addConstants(constants : Set<OwlAssertionVariable>) {
-        val sortedStringConstants = constants.map{ it.toString()}.sorted()
+    fun addConstants(constants : Set<OwlAssertionConstant>) {
+        val sortedStringConstants = constants.groupBy { it.getPddlType() }.map{ (type, const) ->
+            // append all constants of same type; sort them by name; append type at the end
+            const.sortedBy { it.toString() }.joinToString(" ", "", " - " + type)
+        }
         sortedStringConstants.forEach { declaredConstants.add(it)}
     }
 
@@ -109,21 +113,13 @@ class SplitDomain(val domain : File) {
     }
 
     fun outputToFile(out : File) {
-        /*if (out.exists()) {
-            println("ERROR: new domain file already exists. File does not get replaced.")
-            return
-        }
-        else {
-
-         */
-            out.writeText(
-                beforePredicates.joinToString("\n", "", "\n") +
-                declaredConstants.joinToString( " ", "\t(:constants ", ")\n\n")   +
-                predicates.joinToString("\n", "", "\n") +
-                derivedRules.joinToString("\n", "", "\n") +
-                rest.joinToString("\n", "", "\n")
-            )
-        //}
+        out.writeText(
+            beforePredicates.joinToString("\n", "", "\n") +
+            declaredConstants.joinToString( " \n\t", "\t(:constants ", ")\n\n")   +
+            predicates.joinToString("\n", "", "\n") +
+            derivedRules.joinToString("\n", "", "\n") +
+            rest.joinToString("\n", "", "\n")
+        )
     }
 
     // returns a set containing all predicates

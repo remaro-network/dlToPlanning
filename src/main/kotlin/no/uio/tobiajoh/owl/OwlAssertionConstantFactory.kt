@@ -2,7 +2,9 @@ package no.uio.tobiajoh.owl
 
 import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.IRI
+import org.semanticweb.owlapi.model.OWLIndividual
 import org.semanticweb.owlapi.model.OWLLiteral
+import org.semanticweb.owlapi.model.OWLNamedIndividual
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl
 
 class OwlAssertionConstantFactory {
@@ -14,6 +16,12 @@ class OwlAssertionConstantFactory {
 
     fun getOwlAssertionConstant(name : String) : OwlAssertionConstant {
         return OwlAssertionConstant(name)
+    }
+
+    fun parseOWLIndividualWithType(ind: OWLNamedIndividual, pddlType: String) : OwlAssertionConstant{
+        val a = OwlAssertionConstant(ind.iri.shortForm)
+        a.setPddlType(pddlType)
+        return a
     }
 
     fun parseOWLLiteral(literalArgument: OWLLiteral) : OwlAssertionConstant {

@@ -1,15 +1,20 @@
 package no.uio.tobiajoh
 
-import no.uio.tobiajoh.owl.DerivationRule
-import no.uio.tobiajoh.owl.DerivationRuleFactory
-import no.uio.tobiajoh.owl.OwlAssertion
-import no.uio.tobiajoh.owl.OwlAssertionFactory
-import org.semanticweb.owlapi.model.OWLOntology
+import no.uio.tobiajoh.owl.*
+import org.semanticweb.owlapi.apibinding.OWLManager
+import org.semanticweb.owlapi.model.*
+import org.semanticweb.owlapi.search.Filters.AxiomFilter
+import org.semanticweb.owlapi.util.OWLAxiomSearchFilter
 
 class OntologyTranslator {
     private val rules : MutableSet<DerivationRule> = mutableSetOf()
     private val assertions : MutableSet<OwlAssertion> = mutableSetOf()
 
+    private val owlDataFactory : OWLDataFactory = OWLManager.createOWLOntologyManager().owlDataFactory;
+
+    private val pddlTypeClass : OWLClass = owlDataFactory.getOWLClass("http://www.metacontrol.org/pddl#PddlType")
+    private val hasPddlTypeRelation  = owlDataFactory.getOWLObjectProperty("http://www.metacontrol.org/pddl#hasPddlType")
+    private val pddlNameRelation  = owlDataFactory.getOWLDataProperty("http://www.metacontrol.org/pddl#pddlName")
 
     fun addRules(ont: OWLOntology) : Set<DerivationRule> {
 
@@ -17,15 +22,18 @@ class OntologyTranslator {
 
         // lift all class assertions
         for (c in ont.classesInSignature())
-            rules.add(ruleFactory.liftAssertion(c))
+            if (c != pddlTypeClass)
+                rules.add(ruleFactory.liftAssertion(c))
 
         // lift all object property assertions
         for (p in ont.objectPropertiesInSignature)
-            rules.add(ruleFactory.liftAssertion(p))
+            if (p != hasPddlTypeRelation)
+                rules.add(ruleFactory.liftAssertion(p))
 
         // lift all data property assertions
         for (p in ont.dataPropertiesInSignature)
-            rules.add(ruleFactory.liftAssertion(p))
+            if (p != pddlNameRelation)
+                rules.add(ruleFactory.liftAssertion(p))
 
 
         // translate TBox-axioms
@@ -47,5 +55,46 @@ class OntologyTranslator {
             assertionFactory.parseOWLABoxAxiom(a, addDataProperties)?.let { assertions.add(it) }
 
         return assertions.toSet()
+    }
+
+    fun addPddlTypes(ont: OWLOntology): Set<OwlAssertionConstant> {
+        // set to collect all typed constants
+        val constants : MutableSet<OwlAssertionConstant> = mutableSetOf()
+
+        // collect all individuals that represent a pddl type and its pddl name
+        // collect all individuals that are assigned a pddl type
+
+        val typeToName : MutableMap<OWLIndividual, String> = mutableMapOf()
+        val indToType : MutableMap<OWLIndividual, OWLIndividual> = mutableMapOf()
+
+
+        for (a in ont.axioms) {
+            when (a) {
+                is OWLDataPropertyAssertionAxiom ->
+                    if (a.property == pddlNameRelation){
+                        // definition of name of type
+                        val pddlType = a.subject
+                        val pddlTypeName = a.`object`.literal
+                        typeToName.put(pddlType, pddlTypeName)
+                    }
+                is OWLObjectPropertyAssertionAxiom ->
+                    if (a.property == hasPddlTypeRelation) {
+                        // definition of pddl type of individual
+                        val individual = a.subject
+                        val pddlType = a.`object`
+                        indToType.put(individual, pddlType)
+                    }
+            }
+        }
+
+        for (ind in indToType.keys) {
+            val c = OwlAssertionConstantFactory().parseOWLIndividualWithType(
+                ind.asOWLNamedIndividual(),
+                typeToName.getOrDefault(indToType[ind], "object") // if no definition found --> default pddl type
+            )
+            constants.add( c )
+        }
+
+        return constants
     }
 }
