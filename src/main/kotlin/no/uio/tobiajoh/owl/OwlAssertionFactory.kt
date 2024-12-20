@@ -136,20 +136,32 @@ class OwlAssertionFactory {
 
     }
 
-    private fun parseClassAssertionAxiom(axiom : OWLClassAssertionAxiom) : OwlAssertion {
+    private fun parseClassAssertionAxiom(axiom : OWLClassAssertionAxiom) : OwlAssertion? {
+        // don't create rule, if class is only for PDDL type definitions
+        if (axiom.classExpression == OwlObjects.pddlTypeClass)
+            return null
+
         val owlClass = axiom.classExpression.asOWLClass()
         val individual = axiom.individual.asOWLNamedIndividual().iri.shortForm
         return this.ruleAssertion(owlClass, OwlAssertionConstant(individual))
     }
 
-    private fun parseObjectPropertyAxiom(axiom : OWLObjectPropertyAssertionAxiom) : OwlAssertion {
+    private fun parseObjectPropertyAxiom(axiom : OWLObjectPropertyAssertionAxiom) : OwlAssertion? {
+        // don't create rule, if property is only for PDDL type definitions
+        if (axiom.property == OwlObjects.hasPddlTypeRelation)
+            return null
+
         val owlProperty = axiom.property.asOWLObjectProperty()
         val owlSubject = axiom.subject.asOWLNamedIndividual().iri.shortForm
         val owlObject = axiom.`object`.asOWLNamedIndividual().iri.shortForm
         return this.ruleAssertion(owlProperty, OwlAssertionConstant(owlSubject), OwlAssertionConstant(owlObject))
     }
 
-    private fun parseDataPropertyAxiom(axiom : OWLDataPropertyAssertionAxiom) : OwlAssertion {
+    private fun parseDataPropertyAxiom(axiom : OWLDataPropertyAssertionAxiom) : OwlAssertion? {
+        // don't create rule, if class is only for PDDL type definitions
+        if (axiom.property == OwlObjects.pddlNameRelation)
+            return null
+
         val owlProperty = axiom.property.asOWLDataProperty().iri.shortForm
         val owlSubject = axiom.subject.asOWLNamedIndividual().iri.shortForm
         val literal = parseOWLLiteral(axiom.`object`)

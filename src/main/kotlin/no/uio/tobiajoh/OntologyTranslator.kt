@@ -10,11 +10,7 @@ class OntologyTranslator {
     private val rules : MutableSet<DerivationRule> = mutableSetOf()
     private val assertions : MutableSet<OwlAssertion> = mutableSetOf()
 
-    private val owlDataFactory : OWLDataFactory = OWLManager.createOWLOntologyManager().owlDataFactory;
 
-    private val pddlTypeClass : OWLClass = owlDataFactory.getOWLClass("http://www.metacontrol.org/pddl#PddlType")
-    private val hasPddlTypeRelation  = owlDataFactory.getOWLObjectProperty("http://www.metacontrol.org/pddl#hasPddlType")
-    private val pddlNameRelation  = owlDataFactory.getOWLDataProperty("http://www.metacontrol.org/pddl#pddlName")
 
     fun addRules(ont: OWLOntology) : Set<DerivationRule> {
 
@@ -22,17 +18,17 @@ class OntologyTranslator {
 
         // lift all class assertions
         for (c in ont.classesInSignature())
-            if (c != pddlTypeClass)
+            if (c != OwlObjects.pddlTypeClass)
                 rules.add(ruleFactory.liftAssertion(c))
 
         // lift all object property assertions
         for (p in ont.objectPropertiesInSignature)
-            if (p != hasPddlTypeRelation)
+            if (p != OwlObjects.hasPddlTypeRelation)
                 rules.add(ruleFactory.liftAssertion(p))
 
         // lift all data property assertions
         for (p in ont.dataPropertiesInSignature)
-            if (p != pddlNameRelation)
+            if (p != OwlObjects.pddlNameRelation)
                 rules.add(ruleFactory.liftAssertion(p))
 
 
@@ -71,14 +67,14 @@ class OntologyTranslator {
         for (a in ont.axioms) {
             when (a) {
                 is OWLDataPropertyAssertionAxiom ->
-                    if (a.property == pddlNameRelation){
+                    if (a.property == OwlObjects.pddlNameRelation){
                         // definition of name of type
                         val pddlType = a.subject
                         val pddlTypeName = a.`object`.literal
                         typeToName.put(pddlType, pddlTypeName)
                     }
                 is OWLObjectPropertyAssertionAxiom ->
-                    if (a.property == hasPddlTypeRelation) {
+                    if (a.property == OwlObjects.hasPddlTypeRelation) {
                         // definition of pddl type of individual
                         val individual = a.subject
                         val pddlType = a.`object`

@@ -188,6 +188,10 @@ class DerivationRuleFactory {
             return null
         }
 
+        // don't create rule, if class is only for PDDL type definitions
+        if (axiom.range == OwlObjects.pddlTypeClass)
+            return null
+
         val headClass=axiom.range.asOWLClass()
         val conditionProperty=axiom.property.asOWLObjectProperty()
 
@@ -210,6 +214,10 @@ class DerivationRuleFactory {
             println("WARNING: complex range axioms are not supported yet. axiom: $axiom")
             return null
         }
+
+        // don't create rule, if class is only for PDDL type definitions
+        if (axiom.domain == OwlObjects.pddlTypeClass)
+            return null
 
         val headClass=axiom.domain.asOWLClass()
         val conditionProperty=axiom.property.asOWLObjectProperty()
@@ -277,6 +285,10 @@ class DerivationRuleFactory {
             println("WARNING: complex range axioms are not supported yet. axiom: $axiom")
             return null
         }
+
+        // don't create rule, if class is only for PDDL type definitions
+        if (axiom.domain == OwlObjects.pddlTypeClass)
+            return null
 
         val headClass=axiom.domain.asOWLClass()
         val conditionProperty=axiom.property.asOWLDataProperty()

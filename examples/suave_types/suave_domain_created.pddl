@@ -17,9 +17,9 @@
     function-design
   )
 
-	(:constants f_follow_pipeline f_generate_search_path f_maintain_motion - function 
-	fd_all_thrusters fd_follow_pipeline fd_recover_thrusters fd_spiral_high fd_spiral_low fd_spiral_medium fd_unground - function-design 
-	<_string FALSE_string a_inspect_pipeline a_search_pipeline battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy false_boolean function-design_string function_string obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_performance_zero qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety true_boolean type_function type_function_design water_visibility - object)
+	(:constants fd_all_thrusters fd_follow_pipeline fd_recover_thrusters fd_spiral_high fd_spiral_low fd_spiral_medium fd_unground - function-design 
+	f_follow_pipeline f_generate_search_path f_maintain_motion - function 
+	<_string FALSE_string a_inspect_pipeline a_search_pipeline battery_level c_thruster_1 c_thruster_2 c_thruster_3 c_thruster_4 c_thruster_5 c_thruster_6 energy false_boolean obs_water_visibility performance qa_inspect_efficiency_high qa_motion_efficiency_degraded qa_motion_efficiency_normal qa_performance_zero qa_search_efficiency_high qa_search_efficiency_low qa_search_efficiency_medium qa_water_visibility_high qa_water_visibility_low qa_water_visibility_medium safety true_boolean water_visibility - object)
 
   (:predicates
     (pipeline_found ?p - pipeline)
@@ -53,13 +53,10 @@
 		(inferred-Function ?x)
 		(inferred-FunctionDesign ?x)
 		(inferred-FunctionGrounding ?x ?y)
-		(inferred-HasPddlType ?x ?y)
 		(inferred-HasQAestimation ?x ?y)
 		(inferred-HasValue ?x ?y)
 		(inferred-Inconsistent)
 		(inferred-IsQAtype ?x ?y)
-		(inferred-PddlName ?x ?y)
-		(inferred-PddlType ?x)
 		(inferred-QAvalue ?x)
 		(inferred-Qa_comparison_operator ?x ?y)
 		(inferred-Qa_critical ?x ?y)
@@ -507,24 +504,6 @@
 		(isQAtype ?x ?y)
 	)
 )
-
-
-(:derived (inferred-PddlType ?x) 
-	(exists (?y)
- 		(and
-			(inferred-HasPddlType ?x ?y)
-		)
-	)
- )
-
-
-(:derived (inferred-PddlType ?x) 
-	(exists (?y)
- 		(and
-			(inferred-PddlName ?x ?y)
-		)
-	)
- )
 
 
 (:derived (inferred-QAvalue ?x) 
