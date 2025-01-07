@@ -4,7 +4,7 @@
   (:objects 
     pipeline - pipeline 
     bluerov - robot 
-    1.0_decimal 1.5_decimal 3.5_decimal - owl-number 
+    1.0_decimal 1.5_decimal 3.5_decimal - numerical-object
 )
 
   (:init
