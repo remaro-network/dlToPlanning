@@ -1,9 +1,9 @@
 package no.uio.tobiajoh.pddl
 
-import io.kotlintest.matchers.match
 import no.uio.tobiajoh.OntologyTranslator
 import no.uio.tobiajoh.owl.*
 import org.semanticweb.owlapi.apibinding.OWLManager
+import org.semanticweb.owlapi.util.AutoIRIMapper
 import java.io.File
 
 // class to add rules to an existing PDDL file
@@ -172,9 +172,23 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
     // loads content (rules, constants, assertions) from OWL file
     fun loadOWLFile(owlFile: File,
                     addDataProperties: Boolean) {
+
         val manager = OWLManager.createOWLOntologyManager()
 
-        val ont = manager.loadOntologyFromOntologyDocument(owlFile)
+
+        // search for imported ontologies
+        val owlDirectory = owlFile.parentFile
+        val searchRecursive = true     // indicates that we recursively serach in sub-directories for ontologies
+        val iriMapper = AutoIRIMapper(owlDirectory, searchRecursive)
+
+        manager.setIRIMappers(setOf(iriMapper))     // add mapper to manager to find imports when loading
+
+
+        // ontology without imported axioms
+        val simpleOnt = manager.loadOntologyFromOntologyDocument(owlFile)
+
+        val axiomsIncludingImports = simpleOnt.importsClosure.flatMap { ont -> ont.axioms }
+        val ont = manager.createOntology(axiomsIncludingImports)
 
         val translator = OntologyTranslator()
         val rules = translator.addRules(ont)
