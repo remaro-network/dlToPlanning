@@ -16,7 +16,6 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# set(py_cmd "python build.py release")
 execute_process(
   COMMAND ./gradlew shadowJar
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}

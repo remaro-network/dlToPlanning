@@ -57,10 +57,10 @@ Using the update has a significant impact on the runtime. E.g. in one of our tes
 ### ROS
 
 ```bash
-ros2 run owl_to_pddl owl_to_pddl.py --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> [OPTIONS]
+ros2 run owl_to_pddl owl_to_pddl.py --ros-args -p owl_file:=<inputOWL> -p in_domain_file:=<inputPDDLdomain> -p out_domain_file:==<outputPDDLdomain> -p in_problem_file:=<inputPDDLproblem> -p out_problem_file:=<outputPDDLproblem> -p replace_output:=<true|false> -p add_numbers:=<true|false> -p ignore_data_properties:=<true|false>
 ```
 
 Example:
 ```bash
-ros2 run owl_to_pddl owl_to_pddl.py --owl=examples/suave/suave_with_imports.owl --tBox --inDomain=examples/suave/suave_domain.pddl --outDomain=examples/suave/suave_domain_created.pddl --aBox --inProblem=examples/suave/suave_problem.pddl --outProblem=examples/suave/suave_problem_created.pddl --replace-output
+ros2 run owl_to_pddl owl_to_pddl.py --ros-args -p owl_file:=examples/suave/suave_with_imports.owl -p in_domain_file:=examples/suave/suave_domain.pddl -p out_domain_file:=examples/suave/suave_domain_created.pddl -p in_problem_file:=examples/suave/suave_problem.pddl -p out_problem_file:=examples/suave/suave_problem_created.pddl
 ```
