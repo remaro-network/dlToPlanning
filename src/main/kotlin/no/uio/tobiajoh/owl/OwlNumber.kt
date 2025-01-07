@@ -5,7 +5,7 @@ class OwlNumber(private val number: Double, name: String) : OwlAssertionConstant
 
     companion object {
         // the type that is used for numbers in pddl files
-        const val PDDLTYPE = "owl-number"
+        const val PDDLTYPE = "numerical-object"
         // relation, that is used for the comparison operator in pddl files
         const val EQUIVALENT = "equalTo"
         const val LESSRELATION = "lessThan"
