@@ -7,7 +7,13 @@
         :disjunctive-preconditions
     )
     
-	(:constants )
+	(:types
+		
+	)
+
+	(:constants
+		
+	)
 
     (:predicates
         (robot ?x)

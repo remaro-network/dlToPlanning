@@ -1,0 +1,110 @@
+ASSERTION::Action(a_inspect_pipeline) 
+ASSERTION::Action(a_search_pipeline) 
+ASSERTION::Component(c_thruster_1) 
+ASSERTION::Component(c_thruster_2) 
+ASSERTION::Component(c_thruster_3) 
+ASSERTION::Component(c_thruster_4) 
+ASSERTION::Component(c_thruster_5) 
+ASSERTION::Component(c_thruster_6) 
+ASSERTION::Function(f_follow_pipeline) 
+ASSERTION::Function(f_generate_search_path) 
+ASSERTION::Function(f_maintain_motion) 
+ASSERTION::FunctionDesign(fd_all_thrusters) 
+ASSERTION::FunctionDesign(fd_follow_pipeline) 
+ASSERTION::FunctionDesign(fd_recover_thrusters) 
+ASSERTION::FunctionDesign(fd_spiral_high) 
+ASSERTION::FunctionDesign(fd_spiral_low) 
+ASSERTION::FunctionDesign(fd_spiral_medium) 
+ASSERTION::FunctionDesign(fd_unground) 
+ASSERTION::QAvalue(obs_water_visibility) 
+ASSERTION::QAvalue(qa_inspect_efficiency_high) 
+ASSERTION::QAvalue(qa_motion_efficiency_degraded) 
+ASSERTION::QAvalue(qa_motion_efficiency_normal) 
+ASSERTION::QAvalue(qa_search_efficiency_high) 
+ASSERTION::QAvalue(qa_search_efficiency_low) 
+ASSERTION::QAvalue(qa_search_efficiency_medium) 
+ASSERTION::QAvalue(qa_water_visibility_high) 
+ASSERTION::QAvalue(qa_water_visibility_low) 
+ASSERTION::QAvalue(qa_water_visibility_medium) 
+ASSERTION::QualityAttributeType(battery_level) 
+ASSERTION::QualityAttributeType(energy) 
+ASSERTION::QualityAttributeType(performance) 
+ASSERTION::QualityAttributeType(safety) 
+ASSERTION::QualityAttributeType(water_visibility) 
+ASSERTION::hasQAestimation(fd_all_thrusters qa_motion_efficiency_normal) 
+ASSERTION::hasQAestimation(fd_follow_pipeline qa_inspect_efficiency_high) 
+ASSERTION::hasQAestimation(fd_recover_thrusters qa_motion_efficiency_degraded) 
+ASSERTION::hasQAestimation(fd_spiral_high qa_search_efficiency_high) 
+ASSERTION::hasQAestimation(fd_spiral_high qa_water_visibility_high) 
+ASSERTION::hasQAestimation(fd_spiral_low qa_search_efficiency_low) 
+ASSERTION::hasQAestimation(fd_spiral_low qa_water_visibility_low) 
+ASSERTION::hasQAestimation(fd_spiral_medium qa_search_efficiency_medium) 
+ASSERTION::hasQAestimation(fd_spiral_medium qa_water_visibility_medium) 
+ASSERTION::hasQAestimation(fd_unground qa_performance_zero) 
+ASSERTION::isQAtype(obs_water_visibility water_visibility) 
+ASSERTION::isQAtype(qa_inspect_efficiency_high performance) 
+ASSERTION::isQAtype(qa_motion_efficiency_degraded performance) 
+ASSERTION::isQAtype(qa_motion_efficiency_normal performance) 
+ASSERTION::isQAtype(qa_performance_zero performance) 
+ASSERTION::isQAtype(qa_search_efficiency_high performance) 
+ASSERTION::isQAtype(qa_search_efficiency_low performance) 
+ASSERTION::isQAtype(qa_search_efficiency_medium performance) 
+ASSERTION::isQAtype(qa_water_visibility_high water_visibility) 
+ASSERTION::isQAtype(qa_water_visibility_low water_visibility) 
+ASSERTION::isQAtype(qa_water_visibility_medium water_visibility) 
+ASSERTION::requiresC(fd_all_thrusters c_thruster_1) 
+ASSERTION::requiresC(fd_all_thrusters c_thruster_2) 
+ASSERTION::requiresC(fd_all_thrusters c_thruster_3) 
+ASSERTION::requiresC(fd_all_thrusters c_thruster_4) 
+ASSERTION::requiresC(fd_all_thrusters c_thruster_5) 
+ASSERTION::requiresC(fd_all_thrusters c_thruster_6) 
+ASSERTION::requiresF(a_inspect_pipeline f_follow_pipeline) 
+ASSERTION::requiresF(a_inspect_pipeline f_maintain_motion) 
+ASSERTION::requiresF(a_search_pipeline f_generate_search_path) 
+ASSERTION::requiresF(a_search_pipeline f_maintain_motion) 
+ASSERTION::solvesF(fd_all_thrusters f_maintain_motion) 
+ASSERTION::solvesF(fd_follow_pipeline f_follow_pipeline) 
+ASSERTION::solvesF(fd_recover_thrusters f_maintain_motion) 
+ASSERTION::solvesF(fd_spiral_high f_generate_search_path) 
+ASSERTION::solvesF(fd_spiral_low f_generate_search_path) 
+ASSERTION::solvesF(fd_spiral_medium f_generate_search_path) 
+ASSERTION::solvesF(fd_unground f_follow_pipeline) 
+ASSERTION::solvesF(fd_unground f_generate_search_path) 
+ASSERTION::solvesF(fd_unground f_maintain_motion) 
+CONSTANT::FALSE_string
+CONSTANT::a_inspect_pipeline
+CONSTANT::a_search_pipeline
+CONSTANT::battery_level
+CONSTANT::c_thruster_1
+CONSTANT::c_thruster_2
+CONSTANT::c_thruster_3
+CONSTANT::c_thruster_4
+CONSTANT::c_thruster_5
+CONSTANT::c_thruster_6
+CONSTANT::energy
+CONSTANT::f_follow_pipeline
+CONSTANT::f_generate_search_path
+CONSTANT::f_maintain_motion
+CONSTANT::false_boolean
+CONSTANT::fd_all_thrusters
+CONSTANT::fd_follow_pipeline
+CONSTANT::fd_recover_thrusters
+CONSTANT::fd_spiral_high
+CONSTANT::fd_spiral_low
+CONSTANT::fd_spiral_medium
+CONSTANT::fd_unground
+CONSTANT::obs_water_visibility
+CONSTANT::performance
+CONSTANT::qa_inspect_efficiency_high
+CONSTANT::qa_motion_efficiency_degraded
+CONSTANT::qa_motion_efficiency_normal
+CONSTANT::qa_performance_zero
+CONSTANT::qa_search_efficiency_high
+CONSTANT::qa_search_efficiency_low
+CONSTANT::qa_search_efficiency_medium
+CONSTANT::qa_water_visibility_high
+CONSTANT::qa_water_visibility_low
+CONSTANT::qa_water_visibility_medium
+CONSTANT::safety
+CONSTANT::true_boolean
+CONSTANT::water_visibility

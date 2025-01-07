@@ -1,0 +1,901 @@
+@prefix : <http://www.metacontro.org/suave#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pddl: <http://www.metacontrol.org/pddl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix suave: <http://www.metacontrol.org/suave#> .
+@prefix swrla: <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@base <http://www.metacontrol.org/suave> .
+
+<http://www.metacontrol.org/suave> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled
+swrla:isRuleEnabled rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.metacontrol.org/pddl#hasPddlType
+pddl:hasPddlType rdf:type owl:ObjectProperty ;
+                 rdfs:domain pddl:PddlType .
+
+
+###  http://www.metacontrol.org/suave#fd_better_utility
+suave:fd_better_utility rdf:type owl:ObjectProperty ;
+                        rdfs:domain suave:FunctionDesign ;
+                        rdfs:range suave:FunctionDesign .
+
+
+###  http://www.metacontrol.org/suave#functionGrounding
+suave:functionGrounding rdf:type owl:ObjectProperty ;
+                        rdfs:domain suave:Function ;
+                        rdfs:range suave:FunctionDesign .
+
+
+###  http://www.metacontrol.org/suave#hasQAestimation
+suave:hasQAestimation rdf:type owl:ObjectProperty ;
+                      rdfs:domain suave:FunctionDesign ;
+                      rdfs:range suave:QAvalue .
+
+
+###  http://www.metacontrol.org/suave#isQAtype
+suave:isQAtype rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:QAvalue ;
+               rdfs:range suave:QualityAttributeType .
+
+
+###  http://www.metacontrol.org/suave#requiresC
+suave:requiresC rdf:type owl:ObjectProperty ;
+                rdfs:domain suave:FunctionDesign ;
+                rdfs:range suave:Component .
+
+
+###  http://www.metacontrol.org/suave#requiresF
+suave:requiresF rdf:type owl:ObjectProperty ;
+                rdfs:domain suave:Action ;
+                rdfs:range suave:Function .
+
+
+###  http://www.metacontrol.org/suave#solvesF
+suave:solvesF rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain suave:FunctionDesign ;
+              rdfs:range suave:Function ;
+              rdfs:comment "a FunctionDesign solves a Function" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.metacontrol.org/pddl#pddlName
+pddl:pddlName rdf:type owl:DatatypeProperty ;
+              rdfs:domain pddl:PddlType .
+
+
+###  http://www.metacontrol.org/suave#c_status
+suave:c_status rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:Component ;
+               rdfs:range [ rdf:type rdfs:Datatype ;
+                            owl:oneOf [ rdf:type rdf:List ;
+                                        rdf:first "FAILURE" ;
+                                        rdf:rest [ rdf:type rdf:List ;
+                                                   rdf:first "OK" ;
+                                                   rdf:rest [ rdf:type rdf:List ;
+                                                              rdf:first "RECOVERED" ;
+                                                              rdf:rest rdf:nil
+                                                            ]
+                                                 ]
+                                      ]
+                          ] ;
+               rdfs:comment "operational status of a component. For the moment \"false\"=\"ERROR\", later we can expand the status to an enumeration" .
+
+
+###  http://www.metacontrol.org/suave#f_active
+suave:f_active rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:Function ;
+               rdfs:range xsd:boolean .
+
+
+###  http://www.metacontrol.org/suave#fd_realisability
+suave:fd_realisability rdf:type owl:DatatypeProperty ,
+                                owl:FunctionalProperty ;
+                       rdfs:domain suave:FunctionDesign ;
+                       rdfs:range xsd:boolean .
+
+
+###  http://www.metacontrol.org/suave#fd_utility
+suave:fd_utility rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain suave:FunctionDesign ;
+                 rdfs:range xsd:decimal .
+
+
+###  http://www.metacontrol.org/suave#hasValue
+suave:hasValue rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain suave:QAvalue ;
+               rdfs:range xsd:decimal .
+
+
+###  http://www.metacontrol.org/suave#qa_comparison_operator
+suave:qa_comparison_operator rdf:type owl:DatatypeProperty ,
+                                      owl:FunctionalProperty ;
+                             rdfs:domain suave:QualityAttributeType ;
+                             rdfs:range [ rdf:type rdfs:Datatype ;
+                                          owl:oneOf [ rdf:type rdf:List ;
+                                                      rdf:first "<" ;
+                                                      rdf:rest [ rdf:type rdf:List ;
+                                                                 rdf:first "<=" ;
+                                                                 rdf:rest [ rdf:type rdf:List ;
+                                                                            rdf:first ">" ;
+                                                                            rdf:rest [ rdf:type rdf:List ;
+                                                                                       rdf:first ">=" ;
+                                                                                       rdf:rest rdf:nil
+                                                                                     ]
+                                                                          ]
+                                                               ]
+                                                    ]
+                                        ] .
+
+
+###  http://www.metacontrol.org/suave#qa_critical
+suave:qa_critical rdf:type owl:DatatypeProperty ;
+                  rdfs:domain suave:QualityAttributeType ;
+                  rdfs:range xsd:boolean .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.metacontrol.org/pddl#PddlType
+pddl:PddlType rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#Action
+suave:Action rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#Component
+suave:Component rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#Function
+suave:Function rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#FunctionDesign
+suave:FunctionDesign rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#QAvalue
+suave:QAvalue rdf:type owl:Class .
+
+
+###  http://www.metacontrol.org/suave#QualityAttributeType
+suave:QualityAttributeType rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.metacontrol.org/pddl#type_function
+pddl:type_function rdf:type owl:NamedIndividual ,
+                            pddl:PddlType ;
+                   pddl:pddlName "function"^^xsd:string .
+
+
+###  http://www.metacontrol.org/pddl#type_function_design
+pddl:type_function_design rdf:type owl:NamedIndividual ,
+                                   pddl:PddlType ;
+                          pddl:pddlName "function-design"^^xsd:string .
+
+
+###  http://www.metacontrol.org/suave#a_inspect_pipeline
+suave:a_inspect_pipeline rdf:type owl:NamedIndividual ,
+                                  suave:Action ;
+                         suave:requiresF suave:f_follow_pipeline ,
+                                         suave:f_maintain_motion .
+
+
+###  http://www.metacontrol.org/suave#a_search_pipeline
+suave:a_search_pipeline rdf:type owl:NamedIndividual ,
+                                 suave:Action ;
+                        suave:requiresF suave:f_generate_search_path ,
+                                        suave:f_maintain_motion .
+
+
+###  http://www.metacontrol.org/suave#battery_level
+suave:battery_level rdf:type owl:NamedIndividual ,
+                             suave:QualityAttributeType ;
+                    suave:qa_comparison_operator "<" .
+
+
+###  http://www.metacontrol.org/suave#c_thruster_1
+suave:c_thruster_1 rdf:type owl:NamedIndividual ,
+                            suave:Component .
+
+
+###  http://www.metacontrol.org/suave#c_thruster_2
+suave:c_thruster_2 rdf:type owl:NamedIndividual ,
+                            suave:Component .
+
+
+###  http://www.metacontrol.org/suave#c_thruster_3
+suave:c_thruster_3 rdf:type owl:NamedIndividual ,
+                            suave:Component .
+
+
+###  http://www.metacontrol.org/suave#c_thruster_4
+suave:c_thruster_4 rdf:type owl:NamedIndividual ,
+                            suave:Component .
+
+
+###  http://www.metacontrol.org/suave#c_thruster_5
+suave:c_thruster_5 rdf:type owl:NamedIndividual ,
+                            suave:Component .
+
+
+###  http://www.metacontrol.org/suave#c_thruster_6
+suave:c_thruster_6 rdf:type owl:NamedIndividual ,
+                            suave:Component .
+
+
+###  http://www.metacontrol.org/suave#energy
+suave:energy rdf:type owl:NamedIndividual ,
+                      suave:QualityAttributeType .
+
+
+###  http://www.metacontrol.org/suave#f_follow_pipeline
+suave:f_follow_pipeline rdf:type owl:NamedIndividual ,
+                                 suave:Function ;
+                        pddl:hasPddlType pddl:type_function .
+
+
+###  http://www.metacontrol.org/suave#f_generate_search_path
+suave:f_generate_search_path rdf:type owl:NamedIndividual ,
+                                      suave:Function ;
+                             pddl:hasPddlType pddl:type_function .
+
+
+###  http://www.metacontrol.org/suave#f_maintain_motion
+suave:f_maintain_motion rdf:type owl:NamedIndividual ,
+                                 suave:Function ;
+                        pddl:hasPddlType pddl:type_function .
+
+
+###  http://www.metacontrol.org/suave#fd_all_thrusters
+suave:fd_all_thrusters rdf:type owl:NamedIndividual ,
+                                suave:FunctionDesign ;
+                       pddl:hasPddlType pddl:type_function_design ;
+                       suave:hasQAestimation suave:qa_motion_efficiency_normal ;
+                       suave:requiresC suave:c_thruster_1 ,
+                                       suave:c_thruster_2 ,
+                                       suave:c_thruster_3 ,
+                                       suave:c_thruster_4 ,
+                                       suave:c_thruster_5 ,
+                                       suave:c_thruster_6 ;
+                       suave:solvesF suave:f_maintain_motion .
+
+
+###  http://www.metacontrol.org/suave#fd_follow_pipeline
+suave:fd_follow_pipeline rdf:type owl:NamedIndividual ,
+                                  suave:FunctionDesign ;
+                         pddl:hasPddlType pddl:type_function_design ;
+                         suave:hasQAestimation suave:qa_inspect_efficiency_high ;
+                         suave:solvesF suave:f_follow_pipeline .
+
+
+###  http://www.metacontrol.org/suave#fd_recover_thrusters
+suave:fd_recover_thrusters rdf:type owl:NamedIndividual ,
+                                    suave:FunctionDesign ;
+                           pddl:hasPddlType pddl:type_function_design ;
+                           suave:hasQAestimation suave:qa_motion_efficiency_degraded ;
+                           suave:solvesF suave:f_maintain_motion .
+
+
+###  http://www.metacontrol.org/suave#fd_spiral_high
+suave:fd_spiral_high rdf:type owl:NamedIndividual ,
+                              suave:FunctionDesign ;
+                     pddl:hasPddlType pddl:type_function_design ;
+                     suave:hasQAestimation suave:qa_search_efficiency_high ,
+                                           suave:qa_water_visibility_high ;
+                     suave:solvesF suave:f_generate_search_path .
+
+
+###  http://www.metacontrol.org/suave#fd_spiral_low
+suave:fd_spiral_low rdf:type owl:NamedIndividual ,
+                             suave:FunctionDesign ;
+                    pddl:hasPddlType pddl:type_function_design ;
+                    suave:hasQAestimation suave:qa_search_efficiency_low ,
+                                          suave:qa_water_visibility_low ;
+                    suave:solvesF suave:f_generate_search_path .
+
+
+###  http://www.metacontrol.org/suave#fd_spiral_medium
+suave:fd_spiral_medium rdf:type owl:NamedIndividual ,
+                                suave:FunctionDesign ;
+                       pddl:hasPddlType pddl:type_function_design ;
+                       suave:hasQAestimation suave:qa_search_efficiency_medium ,
+                                             suave:qa_water_visibility_medium ;
+                       suave:solvesF suave:f_generate_search_path .
+
+
+###  http://www.metacontrol.org/suave#fd_unground
+suave:fd_unground rdf:type owl:NamedIndividual ,
+                           suave:FunctionDesign ;
+                  pddl:hasPddlType pddl:type_function_design ;
+                  suave:hasQAestimation suave:qa_performance_zero ;
+                  suave:solvesF suave:f_follow_pipeline ,
+                                suave:f_generate_search_path ,
+                                suave:f_maintain_motion .
+
+
+###  http://www.metacontrol.org/suave#obs_water_visibility
+suave:obs_water_visibility rdf:type owl:NamedIndividual ,
+                                    suave:QAvalue ;
+                           suave:isQAtype suave:water_visibility .
+
+
+###  http://www.metacontrol.org/suave#performance
+suave:performance rdf:type owl:NamedIndividual ,
+                           suave:QualityAttributeType .
+
+
+###  http://www.metacontrol.org/suave#qa_inspect_efficiency_high
+suave:qa_inspect_efficiency_high rdf:type owl:NamedIndividual ,
+                                          suave:QAvalue ;
+                                 suave:isQAtype suave:performance ;
+                                 suave:hasValue 1.0 .
+
+
+###  http://www.metacontrol.org/suave#qa_motion_efficiency_degraded
+suave:qa_motion_efficiency_degraded rdf:type owl:NamedIndividual ,
+                                             suave:QAvalue ;
+                                    suave:isQAtype suave:performance ;
+                                    suave:hasValue 0.75 .
+
+
+###  http://www.metacontrol.org/suave#qa_motion_efficiency_normal
+suave:qa_motion_efficiency_normal rdf:type owl:NamedIndividual ,
+                                           suave:QAvalue ;
+                                  suave:isQAtype suave:performance ;
+                                  suave:hasValue 1.0 .
+
+
+###  http://www.metacontrol.org/suave#qa_performance_zero
+suave:qa_performance_zero rdf:type owl:NamedIndividual ;
+                          suave:isQAtype suave:performance ;
+                          suave:hasValue 0.0 .
+
+
+###  http://www.metacontrol.org/suave#qa_search_efficiency_high
+suave:qa_search_efficiency_high rdf:type owl:NamedIndividual ,
+                                         suave:QAvalue ;
+                                suave:isQAtype suave:performance ;
+                                suave:hasValue 1.0 .
+
+
+###  http://www.metacontrol.org/suave#qa_search_efficiency_low
+suave:qa_search_efficiency_low rdf:type owl:NamedIndividual ,
+                                        suave:QAvalue ;
+                               suave:isQAtype suave:performance ;
+                               suave:hasValue 0.25 .
+
+
+###  http://www.metacontrol.org/suave#qa_search_efficiency_medium
+suave:qa_search_efficiency_medium rdf:type owl:NamedIndividual ,
+                                           suave:QAvalue ;
+                                  suave:isQAtype suave:performance ;
+                                  suave:hasValue 0.5 .
+
+
+###  http://www.metacontrol.org/suave#qa_water_visibility_high
+suave:qa_water_visibility_high rdf:type owl:NamedIndividual ,
+                                        suave:QAvalue ;
+                               suave:isQAtype suave:water_visibility ;
+                               suave:hasValue 3.25 .
+
+
+###  http://www.metacontrol.org/suave#qa_water_visibility_low
+suave:qa_water_visibility_low rdf:type owl:NamedIndividual ,
+                                       suave:QAvalue ;
+                              suave:isQAtype suave:water_visibility ;
+                              suave:hasValue 1.25 .
+
+
+###  http://www.metacontrol.org/suave#qa_water_visibility_medium
+suave:qa_water_visibility_medium rdf:type owl:NamedIndividual ,
+                                          suave:QAvalue ;
+                                 suave:isQAtype suave:water_visibility ;
+                                 suave:hasValue 2.25 .
+
+
+###  http://www.metacontrol.org/suave#safety
+suave:safety rdf:type owl:NamedIndividual ,
+                      suave:QualityAttributeType .
+
+
+###  http://www.metacontrol.org/suave#water_visibility
+suave:water_visibility rdf:type owl:NamedIndividual ,
+                                suave:QualityAttributeType ;
+                       suave:qa_comparison_operator "<" .
+
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean
+ ] .
+
+#################################################################
+#    Rules
+#################################################################
+
+:c rdf:type swrl:Variable .
+
+:fd rdf:type swrl:Variable .
+
+:fd_better rdf:type swrl:Variable .
+
+:f rdf:type swrl:Variable .
+
+:x rdf:type swrl:Variable .
+
+:x_better rdf:type swrl:Variable .
+
+:qa rdf:type swrl:Variable .
+
+:qav rdf:type swrl:Variable .
+
+:fd1 rdf:type swrl:Variable .
+
+:eqa rdf:type swrl:Variable .
+
+:eqav rdf:type swrl:Variable .
+
+:mqa rdf:type swrl:Variable .
+
+:mqav rdf:type swrl:Variable .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "water visibility"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionDesign ;
+                           swrl:argument1 :fd1
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate suave:hasQAestimation ;
+                                      swrl:argument1 :fd1 ;
+                                      swrl:argument2 :eqa
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:isQAtype ;
+                                                 swrl:argument1 :eqa ;
+                                                 swrl:argument2 suave:water_visibility
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                            swrl:propertyPredicate suave:hasValue ;
+                                                            swrl:argument1 :eqa ;
+                                                            swrl:argument2 :eqav
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:ClassAtom ;
+                                                                       swrl:classPredicate suave:QAvalue ;
+                                                                       swrl:argument1 :mqa
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:SameIndividualAtom ;
+                                                                                  swrl:argument1 :mqa ;
+                                                                                  swrl:argument2 suave:obs_water_visibility
+                                                                                ] ;
+                                                                      rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                 rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                             swrl:propertyPredicate suave:hasValue ;
+                                                                                             swrl:argument1 :mqa ;
+                                                                                             swrl:argument2 :mqav
+                                                                                           ] ;
+                                                                                 rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                            rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                        swrl:propertyPredicate suave:isQAtype ;
+                                                                                                        swrl:argument1 :mqa ;
+                                                                                                        swrl:argument2 suave:water_visibility
+                                                                                                      ] ;
+                                                                                            rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                                       rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                                                                                                   swrl:builtin swrlb:lessThan ;
+                                                                                                                   swrl:arguments ( :mqav
+                                                                                                                                    :eqav
+                                                                                                                                  )
+                                                                                                                 ] ;
+                                                                                                       rdf:rest rdf:nil
+                                                                                                     ]
+                                                                                          ]
+                                                                               ]
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_realisability ;
+                           swrl:argument1 :fd1 ;
+                           swrl:argument2 "false"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "if component required for FD not working, FD not available"^^xsd:string ;
+   rdfs:label "c_error"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:c_status ;
+                           swrl:argument1 :c ;
+                           swrl:argument2 "FALSE"^^xsd:string
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:Component ;
+                                      swrl:argument1 :c
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:requiresC ;
+                                                 swrl:argument1 :fd ;
+                                                 swrl:argument2 :c
+                                               ] ;
+                                     rdf:rest rdf:nil
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_realisability ;
+                           swrl:argument1 :fd ;
+                           swrl:argument2 "false"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "fd_better_utility"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:FunctionDesign ;
+                           swrl:argument1 :fd
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionDesign ;
+                                      swrl:argument1 :fd_better
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:ClassAtom ;
+                                                 swrl:classPredicate suave:Function ;
+                                                 swrl:argument1 :f
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate suave:solvesF ;
+                                                            swrl:argument1 :fd ;
+                                                            swrl:argument2 :f
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate suave:solvesF ;
+                                                                       swrl:argument1 :fd_better ;
+                                                                       swrl:argument2 :f
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                  swrl:propertyPredicate suave:fd_utility ;
+                                                                                  swrl:argument1 :fd ;
+                                                                                  swrl:argument2 :x
+                                                                                ] ;
+                                                                      rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                 rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                             swrl:propertyPredicate suave:fd_utility ;
+                                                                                             swrl:argument1 :fd_better ;
+                                                                                             swrl:argument2 :x_better
+                                                                                           ] ;
+                                                                                 rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                            rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                                                                                        swrl:builtin swrlb:lessThan ;
+                                                                                                        swrl:arguments ( :x
+                                                                                                                         :x_better
+                                                                                                                       )
+                                                                                                      ] ;
+                                                                                            rdf:rest rdf:nil
+                                                                                          ]
+                                                                               ]
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_better_utility ;
+                           swrl:argument1 :fd_better ;
+                           swrl:argument2 :fd
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "f_active"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:Function ;
+                           swrl:argument1 :f
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionDesign ;
+                                      swrl:argument1 :fd
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesF ;
+                                                 swrl:argument1 :fd ;
+                                                 swrl:argument2 :f
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate suave:functionGrounding ;
+                                                            swrl:argument1 :f ;
+                                                            swrl:argument2 :fd
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:DifferentIndividualsAtom ;
+                                                                       swrl:argument1 :fd ;
+                                                                       swrl:argument2 suave:fd_unground
+                                                                     ] ;
+                                                           rdf:rest rdf:nil
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:f_active ;
+                           swrl:argument1 :f ;
+                           swrl:argument2 "true"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "f_follow_pipeline_utility"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:Function ;
+                           swrl:argument1 suave:f_follow_pipeline
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionDesign ;
+                                      swrl:argument1 :fd
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesF ;
+                                                 swrl:argument1 :fd ;
+                                                 swrl:argument2 :f
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate suave:hasQAestimation ;
+                                                            swrl:argument1 :fd ;
+                                                            swrl:argument2 :qa
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate suave:isQAtype ;
+                                                                       swrl:argument1 :qa ;
+                                                                       swrl:argument2 suave:performance
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                  swrl:propertyPredicate suave:hasValue ;
+                                                                                  swrl:argument1 :qa ;
+                                                                                  swrl:argument2 :qav
+                                                                                ] ;
+                                                                      rdf:rest rdf:nil
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_utility ;
+                           swrl:argument1 :fd ;
+                           swrl:argument2 :qav
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "f_generate_search_path_utility"^^xsd:string ;
+   rdfs:label "f_generate_search_path_utility"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:Function ;
+                           swrl:argument1 suave:f_generate_search_path
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionDesign ;
+                                      swrl:argument1 :fd
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesF ;
+                                                 swrl:argument1 :fd ;
+                                                 swrl:argument2 :f
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate suave:hasQAestimation ;
+                                                            swrl:argument1 :fd ;
+                                                            swrl:argument2 :qa
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate suave:isQAtype ;
+                                                                       swrl:argument1 :qa ;
+                                                                       swrl:argument2 suave:performance
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                  swrl:propertyPredicate suave:hasValue ;
+                                                                                  swrl:argument1 :qa ;
+                                                                                  swrl:argument2 :qav
+                                                                                ] ;
+                                                                      rdf:rest rdf:nil
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_utility ;
+                           swrl:argument1 :fd ;
+                           swrl:argument2 :qav
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment ""^^xsd:string ;
+   rdfs:label "f_maintain_motion_utility"^^xsd:string ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate suave:Function ;
+                           swrl:argument1 suave:f_maintain_motion
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:ClassAtom ;
+                                      swrl:classPredicate suave:FunctionDesign ;
+                                      swrl:argument1 :fd
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate suave:solvesF ;
+                                                 swrl:argument1 :fd ;
+                                                 swrl:argument2 :f
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate suave:hasQAestimation ;
+                                                            swrl:argument1 :fd ;
+                                                            swrl:argument2 :qa
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate suave:isQAtype ;
+                                                                       swrl:argument1 :qa ;
+                                                                       swrl:argument2 suave:performance
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                                                                  swrl:propertyPredicate suave:hasValue ;
+                                                                                  swrl:argument1 :qa ;
+                                                                                  swrl:argument2 :qav
+                                                                                ] ;
+                                                                      rdf:rest rdf:nil
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate suave:fd_utility ;
+                           swrl:argument1 :fd ;
+                           swrl:argument2 :qav
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

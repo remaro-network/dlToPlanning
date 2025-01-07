@@ -9,13 +9,16 @@
       :disjunctive-preconditions
     )
 
-    (:types
-        pipeline
-        robot
-        action
-    )
 
-	(:constants FALSE_string INTERNAL_ERROR_string IN_ERROR_COMPONENT_string IN_ERROR_FR_string IN_ERROR_NFR_string RECOVERED_string false_boolean true_boolean water_visibility)
+	(:types
+		pipeline
+		robot
+		action
+	)
+
+	(:constants
+		FALSE_string INTERNAL_ERROR_string IN_ERROR_COMPONENT_string IN_ERROR_FR_string IN_ERROR_NFR_string RECOVERED_string false_boolean true_boolean water_visibility - object
+	)
 
     (:predicates
         (pipeline_found ?p - pipeline)
