@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.metacontro.org/suave#"
-     xml:base="http://www.metacontro.org/suave"
+<rdf:RDF xmlns="http://www.metacontrol.org/suave#"
+     xml:base="http://www.metacontrol.org/suave-specific"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
