@@ -66,7 +66,6 @@ class SplitDomain(val domain : File) {
                 rest += line
         }
 
-        println(definedTypes)
     }
 
     fun addRules(rules : MutableSet<DerivationRule>) {

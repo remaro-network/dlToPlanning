@@ -77,7 +77,6 @@ class PDDLInjectorTest {
         )
     }
 
-
     fun getPddlInjector(owlFile: File,
                         addNumComparison: Boolean,
                         ignoreDataProperties: Boolean) : PDDLInjector {
