@@ -9,15 +9,15 @@
 build project by running
 
   `./gradlew shadowJar`
-  
+
 ## Usage
 - you can only modifying the PDDL domain by inserting TBox axioms, only modifying the PDDL problem by inserting ABox axioms or both
 - run insertion of OWL axioms into PDDL with
-  
+
   ```
   ./OWLToPDDL.sh --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> [OPTIONS]
   ```
-  
+
   ```
   ./OWLToPDDL.sh --owl=<inputOWL> --aBox --inProblem=<inputPDDLproblem> --outProblem=<outputPDDLproblem> [OPTIONS]
   ```
@@ -30,7 +30,7 @@ build project by running
 - use `--ignore-data-props` to not export data properties to PDDL
 - use `--add-num-comparisons` to add comparisons between numerical data occuring in the ontology. For numerical data, the special type `owl-numer` is used to represent it. Currently, one has to manually add the type `owl-number` to the input PDDL domain if one uses this feature.
 - use `--replace-output` to replace the PDDL files if they already exists. Per default, the output is not saved if the output file already exists
- 
+
 ## Planning
 - I recommend using [SYMK planner](https://github.com/speckdavid/symk), as it works quite well so far and should be good for derived predicates [paper: "Symbolic Planning with Axioms"](https://speckdavid.github.io/assets/pdf/speck-etal-icaps2019.pdf)
 
@@ -53,3 +53,14 @@ You can also export, while creating the problem and domain file, e.g. the first 
 
 ### Effect on Runtime
 Using the update has a significant impact on the runtime. E.g. in one of our tests, reading from ontology required 0.73s, reading from exported file required 0.34s (where only loading the classes took already about 0.20s).
+
+### ROS
+
+```bash
+ros2 run owl_to_pddl owl_to_pddl.py --owl=<inputOWL> --tBox --inDomain=<inputPDDLdomain> --outDomain=<outputPDDLdomain> [OPTIONS]
+```
+
+Example:
+```bash
+ros2 run owl_to_pddl owl_to_pddl.py --owl=examples/suave/suave_with_imports.owl --tBox --inDomain=examples/suave/suave_domain.pddl --outDomain=examples/suave/suave_domain_created.pddl --aBox --inProblem=examples/suave/suave_problem.pddl --outProblem=examples/suave/suave_problem_created.pddl --replace-output
+```
