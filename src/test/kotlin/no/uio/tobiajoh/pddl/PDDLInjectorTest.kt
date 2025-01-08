@@ -7,10 +7,20 @@ class PDDLInjectorTest {
 
     @org.junit.jupiter.api.Test
     fun loadOWLFile() {
+        // load simple file
         val owlFile = File("src/test/resources/suave_types/suave_with_imports_types.owl")
         assert(owlFile.exists())
         getPddlInjector(
             owlFile,
+            addNumComparison = false,
+            ignoreDataProperties = true
+        )
+
+        // load file with imports
+        val owlFileImports = File("src/test/resources/ontologyImports/specific.owl")
+        assert(owlFileImports.exists())
+        getPddlInjector(
+            owlFileImports,
             addNumComparison = false,
             ignoreDataProperties = true
         )
@@ -70,7 +80,7 @@ class PDDLInjectorTest {
     fun testDifferentFrom() {
         val owlFile = File("src/test/resources/testDifferentFrom/suave_with_imports.owl")
         assert(owlFile.exists())
-        val rI = getPddlInjector(
+        getPddlInjector(
             owlFile,
             addNumComparison = true,
             ignoreDataProperties = false
