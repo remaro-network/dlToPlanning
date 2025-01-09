@@ -27,7 +27,7 @@ swrla:isRuleEnabled rdf:type owl:AnnotationProperty .
 
 ###  http://www.metacontrol.org/pddl#hasPddlType
 pddl:hasPddlType rdf:type owl:ObjectProperty ;
-                 rdfs:domain pddl:PddlType .
+                 rdfs:range pddl:PddlType .
 
 
 ###  http://www.metacontrol.org/suave#fd_better_utility

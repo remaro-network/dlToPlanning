@@ -1,10 +1,8 @@
 package no.uio.tobiajoh
 
 import no.uio.tobiajoh.owl.*
-import org.semanticweb.owlapi.apibinding.OWLManager
 import org.semanticweb.owlapi.model.*
-import org.semanticweb.owlapi.search.Filters.AxiomFilter
-import org.semanticweb.owlapi.util.OWLAxiomSearchFilter
+
 
 class OntologyTranslator {
     private val rules : MutableSet<DerivationRule> = mutableSetOf()
@@ -57,6 +55,9 @@ class OntologyTranslator {
         // set to collect all typed constants
         val constants : MutableSet<OwlAssertionConstant> = mutableSetOf()
 
+        // the individuals representing a type
+        val pddlTypeIndividuals : MutableSet<OWLIndividual> = mutableSetOf()
+
         // collect all individuals that represent a pddl type and its pddl name
         // collect all individuals that are assigned a pddl type
 
@@ -71,19 +72,26 @@ class OntologyTranslator {
                         // definition of name of type
                         val pddlType = a.subject
                         val pddlTypeName = a.`object`.literal
-                        typeToName.put(pddlType, pddlTypeName)
+                        typeToName[pddlType] = pddlTypeName
+                        pddlTypeIndividuals.add(pddlType)
                     }
                 is OWLObjectPropertyAssertionAxiom ->
                     if (a.property == OwlObjects.hasPddlTypeRelation) {
                         // definition of pddl type of individual
                         val individual = a.subject
                         val pddlType = a.`object`
-                        indToType.put(individual, pddlType)
+                        indToType[individual] = pddlType
+                        pddlTypeIndividuals.add(pddlType)
+                    }
+                is OWLClassAssertionAxiom ->
+                    if (a.classExpression == OwlObjects.pddlTypeClass) {
+                        pddlTypeIndividuals.add(a.individual)
                     }
             }
         }
 
         for (ind in indToType.keys) {
+            assert(pddlTypeIndividuals.contains(ind))   // check, that type was inferred
             val c = OwlAssertionConstantFactory().parseOWLIndividualWithType(
                 ind.asOWLNamedIndividual(),
                 typeToName.getOrDefault(indToType[ind], "object") // if no definition found --> default pddl type
