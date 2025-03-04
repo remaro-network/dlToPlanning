@@ -15,6 +15,10 @@ class OwlNumber(private val number: Double, name: String) : OwlAssertionConstant
         return number
     }
 
+    override fun getPddlType() : String {
+        return  PDDLTYPE
+    }
+
     // operator to compare two numbers
     // note: only indicates, which number is larger, not by how much
     operator fun compareTo(otherNumber: OwlNumber) : Int {

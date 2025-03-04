@@ -15,7 +15,7 @@ open class OwlAssertionConstant(name: String) : OwlAssertionVariable(name)  {
         this.pddlType = pddlType
     }
 
-    fun getPddlType() : String {
+    open fun getPddlType() : String {
         return  pddlType
     }
 }
