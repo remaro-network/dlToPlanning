@@ -91,7 +91,7 @@ class OntologyTranslator {
         }
 
         for (ind in indToType.keys) {
-            assert(pddlTypeIndividuals.contains(ind))   // check, that type was inferred
+            assert(pddlTypeIndividuals.contains(indToType[ind]))   // check, that type was inferred
             val c = OwlAssertionConstantFactory().parseOWLIndividualWithType(
                 ind.asOWLNamedIndividual(),
                 typeToName.getOrDefault(indToType[ind], "object") // if no definition found --> default pddl type

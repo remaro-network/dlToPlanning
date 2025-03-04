@@ -15,9 +15,16 @@ class SplitDomain(val domain : File) {
     var beforePredicates : MutableList<String> = mutableListOf()
     var definedTypes : MutableSet<String> = mutableSetOf()
     var predicates : MutableList<String> = mutableListOf()
-    var declaredConstants : MutableList<String> = mutableListOf()
+    var declaredConstants : MutableList<OwlAssertionConstant> = mutableListOf()
     var derivedRules : MutableList<String> = mutableListOf()
     var rest : MutableList<String> = mutableListOf()
+
+    val sortedConstants get() = run {
+        declaredConstants.groupBy { it.getPddlType() }.map{ (type, const) ->
+            // append all constants of same type; sort them by name; append type at the end
+            const.sortedBy { it.toString() }.joinToString(" ", "", " - " + type)
+        }
+    }
 
     init {
         // very simple parsing of the PDDL file
@@ -38,6 +45,17 @@ class SplitDomain(val domain : File) {
                     if (parsebrackets == 0)
                         parseStatus = ParseStatus.BEFORE
                 }
+                else if (line.contains(":constants")) {
+                    parseStatus = ParseStatus.CONSTANTS
+                    parsebrackets = bracketCount(line)
+
+                    // extract constants
+                    val typedConstants = extractConstants(line)
+                    declaredConstants.addAll(typedConstants)
+
+                    if (parsebrackets == 0)
+                        parseStatus = ParseStatus.BEFORE
+                }
                 else if (line.contains(":predicates")) {
                     parseStatus = ParseStatus.PREDICATE
                     parsebrackets = bracketCount(line)
@@ -52,6 +70,17 @@ class SplitDomain(val domain : File) {
                     if (!it.contains(":types") && it.trim() != "")
                         definedTypes.add(it.trim())
                 }
+                parsebrackets += bracketCount(line)
+                if (parsebrackets == 0)
+                    parseStatus = ParseStatus.BEFORE
+            }
+            else if (parseStatus ==ParseStatus.CONSTANTS) {
+                // extract constants and type of them
+                val typedConstants = extractConstants(line)
+                declaredConstants.addAll(typedConstants)
+
+
+
                 parsebrackets += bracketCount(line)
                 if (parsebrackets == 0)
                     parseStatus = ParseStatus.BEFORE
@@ -99,11 +128,8 @@ class SplitDomain(val domain : File) {
     }
 
     fun addConstants(constants : Set<OwlAssertionConstant>) {
-        val sortedStringConstants = constants.groupBy { it.getPddlType() }.map{ (type, const) ->
-            // append all constants of same type; sort them by name; append type at the end
-            const.sortedBy { it.toString() }.joinToString(" ", "", " - " + type)
-        }
-        sortedStringConstants.forEach { declaredConstants.add(it)}
+
+        constants.forEach { declaredConstants.add(it)}
     }
 
 
@@ -141,7 +167,7 @@ class SplitDomain(val domain : File) {
         out.writeText(
             beforePredicates.joinToString("\n", "", "\n") +
             definedTypes.joinToString("\n\t\t", "\t(:types\n\t\t", "\n\t)\n\n") +
-            declaredConstants.joinToString( " \n\t\t", "\t(:constants\n\t\t", "\n\t)\n\n")   +
+            sortedConstants.joinToString( " \n\t\t", "\t(:constants\n\t\t", "\n\t)\n\n")   +
             predicates.joinToString("\n", "", "\n") +
             derivedRules.joinToString("\n", "", "\n") +
             rest.joinToString("\n", "", "\n")
@@ -186,9 +212,29 @@ class SplitDomain(val domain : File) {
         return s.count {it == '('} - s.count { it == ')'}
     }
 
+    private fun extractConstants(line: String) : List<OwlAssertionConstant> {
+        val lineConstants = mutableSetOf<String>()
+        var nextIsType = false
+        var type = "object"
+        line.trim().lowercase().removeSuffix(")").split(" ").forEach {
+            if (it == "-")
+                nextIsType = true
+            else if (!it.contains(":constants") && it.trim() != "" && !nextIsType)
+                lineConstants.add(it.trim())
+            else if (nextIsType)
+                type= it.trim()
+        }
+
+        return lineConstants.map {
+            val typedConstant = OwlAssertionConstant(it)
+            typedConstant.setPddlType(type)
+            typedConstant
+        }
+    }
+
 
 }
 
 enum class ParseStatus {
-    BEFORE, TYPES, PREDICATE, AFTER
+    BEFORE, TYPES, CONSTANTS, PREDICATE, AFTER
 }
