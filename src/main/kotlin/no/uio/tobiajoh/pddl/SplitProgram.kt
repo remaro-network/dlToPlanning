@@ -19,6 +19,7 @@ class SplitProgram(val problem : File) {
     var section = ""
 
     init {
+
         problem.forEachLine{ line ->
             val trimmedLine = line.trim().lowercase()
 
@@ -30,53 +31,74 @@ class SplitProgram(val problem : File) {
                 trimmedLine.startsWith("(:domain") -> {
                     domain = trimmedLine.substringAfter("(:domain").trim().removeSuffix(")")
                 }
+            }
+        }
 
-                trimmedLine.startsWith("(:objects") -> {
-                    section = "objects"
+
+        extractInitObjectsAndGoal()
+    }
+
+    fun extractInitObjectsAndGoal() {
+        val content = problem.readText()
+
+        // Extract the init section
+        val initStartIndex = content.indexOf("(:init") + 6 // Skip "(:init"
+        val initSection = extractSection(content, initStartIndex)
+
+        // extract objects
+        val initObjectsIndex = content.indexOf("(:objects") + 9 // Skip "(:objects"
+        val objectsSection = extractSection(content, initObjectsIndex)
+
+        for (objectsWithType in objectsSection.split("\n")) {
+            val parts = objectsWithType.trim().split(" ")
+            if (parts.contains("-")) {
+                val typeIndex = parts.indexOf("-")
+                val objectType = parts[typeIndex + 1]
+
+                val objectParts = parts.subList(0, typeIndex)
+                objectParts.forEach { obj ->
+                    objects[obj] = objectType
                 }
-
-                trimmedLine.startsWith("(:init") -> {
-                    section = "init"
-                }
-
-                trimmedLine.startsWith("(:goal") -> {
-                    section = "goal"
-                }
-
-                trimmedLine == ")" -> {
-                    section = ""
-                }
-
-                section == "objects" -> {
-                    val parts = trimmedLine.split(" ")
-                    var currentType = "object"
-                    for (part in parts) {
-                        if (part == "-") continue
-                        if (part.startsWith("(") || part.endsWith(")")) {
-                            currentType = part.removePrefix("(").removeSuffix(")")
-                        } else if (parts.contains("-")) {
-                            val typeIndex = parts.indexOf("-")
-                            val objectParts = parts.subList(0, typeIndex)
-                            currentType = parts[typeIndex + 1]
-                            objectParts.forEach { obj ->
-                                objects[obj] = currentType
-                            }
-                            break
-                        } else {
-                            objects[part] = currentType
-                        }
-                    }
-                }
-
-                section == "init" -> {
-                    initialCond.add(trimmedLine)
-                }
-
-                section == "goal" -> {
-                    goal.add(trimmedLine.removePrefix("(and").removePrefix("(").removeSuffix(")"))
+            }
+            else {
+                parts.forEach { obj ->
+                    objects[obj] = "object"
                 }
             }
         }
+
+
+        // Extract the goal section
+        val goalStartIndex = content.indexOf("(:goal") + 6 // Skip "(:goal"
+        val goalSection = extractSection(content, goalStartIndex)
+
+        initialCond.add(initSection)
+        goal.add(goalSection)
+    }
+
+    // Function to extract content between the matching parentheses
+    fun extractSection(content: String, startIndex: Int): String {
+        var depth = 1
+        val result = StringBuilder()
+
+        for (i in startIndex until content.length) {
+            val char = content[i]
+            when (char) {
+                '(' -> {
+                    if (depth > 0) result.append(char)
+                    depth++
+                }
+                ')' -> {
+                    depth--
+                    if (depth > 0) result.append(char)
+                    if (depth == 0) return result.toString().trim()
+                }
+                else -> {
+                    if (depth > 0) result.append(char)
+                }
+            }
+        }
+        return ""  // This will never be reached if the section is properly formed
     }
 
     fun addInitialAssertions(assertions: Set<OwlAssertion>) {
@@ -144,11 +166,11 @@ class SplitProgram(val problem : File) {
             }
 
             if (goal.isNotEmpty()) {
-                out.println("  (:goal (and")
+                out.println("  (:goal ")
                 goal.forEach {
-                    out.println("    ($it)")
+                    out.println("    $it")
                 }
-                out.println("  ))")
+                out.println("  )")
             }
 
             out.println(")")
