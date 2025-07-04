@@ -67,6 +67,9 @@ class PDDLInjector(val addNumComparisons: Boolean = false) {
     fun addToDomain(oldDomain : File, newDomain : File) {
         val sD = SplitDomain(oldDomain)
 
+        // add all the constants that are defined in domain --> don't repeat them as object definitions in problem
+        constants.addAll(sD.declaredConstants)
+
         // add rules and constants to domain
         sD.addRules(rules)
         sD.addConstants(constants)

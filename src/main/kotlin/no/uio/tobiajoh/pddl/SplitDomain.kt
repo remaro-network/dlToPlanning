@@ -128,8 +128,7 @@ class SplitDomain(val domain : File) {
     }
 
     fun addConstants(constants : Set<OwlAssertionConstant>) {
-
-        constants.forEach { declaredConstants.add(it)}
+        constants.forEach { if (!declaredConstants.contains(it)) declaredConstants.add(it)}
     }
 
 
