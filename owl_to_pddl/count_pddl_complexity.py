@@ -54,24 +54,26 @@ def count_actions(
     return task_actions, reconfig_actions
 
 
-def count_objects(problem_text: str) -> int:
-    """Count objects declared in the (:objects ...) block.
+def _count_declared_symbols(text: str, block_header: str) -> int:
+    """Count symbols declared in a ``(block_header ...)`` block.
 
-    Skips type annotations: tokens that are '-' and the token immediately
-    following '-' are not counted as objects.
+    Works for both the problem ``(:objects ...)`` block and the domain
+    ``(:constants ...)`` block. Skips type annotations: a ``-`` token and the
+    token immediately following it are not counted. Returns 0 if the block is
+    absent.
     """
-    # Find the (:objects block using depth-tracking parenthesis scan
-    lines = problem_text.splitlines()
-    in_objects = False
+    # Find the block using a depth-tracking parenthesis scan
+    lines = text.splitlines()
+    in_block = False
     depth = 0
-    objects_tokens = []
+    symbol_tokens = []
 
     for line in lines:
-        if not in_objects:
-            if '(:objects' in line:
-                in_objects = True
-                # Start from the character after '(:objects'
-                idx = line.index('(:objects') + len('(:objects')
+        if not in_block:
+            if block_header in line:
+                in_block = True
+                # Start from the character after the block header
+                idx = line.index(block_header) + len(block_header)
                 segment = line[idx:]
                 depth = 1
             else:
@@ -86,21 +88,21 @@ def count_objects(problem_text: str) -> int:
             elif ch == ')':
                 depth -= 1
                 if depth == 0:
-                    in_objects = False
+                    in_block = False
                     close_pos = i
                     break
 
         # Only collect tokens up to (not including) the closing ')'
         content = segment[:close_pos] if close_pos is not None else segment
-        objects_tokens.extend(content.split())
+        symbol_tokens.extend(content.split())
 
-        if not in_objects:
+        if not in_block:
             break
 
     # Remove '-' tokens and the type name immediately following each '-'
     count = 0
     skip_next = False
-    for token in objects_tokens:
+    for token in symbol_tokens:
         if skip_next:
             skip_next = False
             continue
@@ -109,6 +111,21 @@ def count_objects(problem_text: str) -> int:
             continue
         count += 1
     return count
+
+
+def count_objects(problem_text: str) -> int:
+    """Count objects declared in the problem (:objects ...) block."""
+    return _count_declared_symbols(problem_text, '(:objects')
+
+
+def count_constants(domain_text: str) -> int:
+    """Count constants declared in the domain (:constants ...) block.
+
+    OWLtoPDDL emits most ontology individuals (FunctionDesigns, Components,
+    QAvalues, ...) as domain constants rather than problem objects, so the
+    evaluation "Objects" metric is the sum of these and the problem objects.
+    """
+    return _count_declared_symbols(domain_text, '(:constants')
 
 
 def count_init_facts(problem_text: str) -> int:
@@ -137,9 +154,11 @@ def format_table(
     derived: int,
     task_actions: list[str],
     reconfig_actions: list[str],
-    objects: int,
+    constants: int,
+    problem_objects: int,
     init_facts: int,
 ) -> str:
+    objects = constants + problem_objects
     lines = [
         'PDDL instance complexity',
         f'  Domain:   {domain_path}',
@@ -148,7 +167,7 @@ def format_table(
         f'  Derived predicates:      {derived}',
         f'  Task actions:            {len(task_actions)}  {task_actions}',
         f'  Reconfiguration actions: {len(reconfig_actions)}  {reconfig_actions}',
-        f'  Objects:                 {objects}',
+        f'  Objects:                 {objects}  ({constants} domain constants + {problem_objects} problem objects)',
         f'  Init facts:              {init_facts}',
     ]
     return '\n'.join(lines)
@@ -181,7 +200,8 @@ def main():
 
     derived = count_derived_predicates(domain_text)
     task_actions, reconfig_actions = count_actions(domain_text, args.reconfig_pattern)
-    objects = count_objects(problem_text)
+    constants = count_constants(domain_text)
+    problem_objects = count_objects(problem_text)
     init_facts = count_init_facts(problem_text)
 
     if args.json:
@@ -189,7 +209,9 @@ def main():
             'derived_predicates': derived,
             'task_actions': task_actions,
             'reconfig_actions': reconfig_actions,
-            'objects': objects,
+            'domain_constants': constants,
+            'problem_objects': problem_objects,
+            'objects': constants + problem_objects,
             'init_facts': init_facts,
         }
         print(json.dumps(result, indent=2))
@@ -197,7 +219,7 @@ def main():
         print(format_table(
             args.domain, args.problem,
             derived, task_actions, reconfig_actions,
-            objects, init_facts,
+            constants, problem_objects, init_facts,
         ))
 
 

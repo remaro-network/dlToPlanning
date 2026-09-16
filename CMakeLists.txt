@@ -13,6 +13,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
   owl_to_pddl/owl_to_pddl.py
+  owl_to_pddl/count_pddl_complexity.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
